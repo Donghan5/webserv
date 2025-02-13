@@ -3,10 +3,12 @@
 /*
 	pesudo maybe
 */
-func startServer(???) {
+void ClassName::startServer(???) {
 	int serverSocket = createSocket();
+	if (serverSocket == -1) throw FailureSocketCreate();
 	while (true) {
 		int clientSocket = acceptConnect();
+		if (clinetSocket == -1) throw FailureSocketAccess();
 		parseRequest();
 
 		if (cgiRequest)
@@ -16,12 +18,12 @@ func startServer(???) {
 	}
 }
 
-func sendHttpResponse() {
+func ClassName::sendHttpResponse() {
 	if (fileNotRead)
 		sendHttpError(404)
 }
 
-func sendHttpError() {
+func ClassName::sendHttpError() {
 	std::endl << msg << errNum << std::endl;
 }
 

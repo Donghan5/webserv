@@ -3,11 +3,22 @@
   "configurations": [
     {
       "name": "C/C++ Runner: Debug Session",
-      "type": "lldb",
+      "type": "cppdbg",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/kimdonghan/webserv",
-      "program": "/Users/kimdonghan/webserv/build/Debug/outDebug"
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "cwd": "/home/donghank/webserv",
+      "program": "/home/donghank/webserv/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
     }
   ]
 }
