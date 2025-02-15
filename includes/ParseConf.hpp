@@ -3,8 +3,8 @@
 #pragma once
 
 #include "HttpConf.hpp"
-#include "EventConf.hpp"
 #include "ServerConf.hpp"
+#include "EventConf.hpp"
 #include "LocationConf.hpp"
 
 #include <iostream>
@@ -12,6 +12,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <cstdlib>
 #include <string>
 
 
@@ -24,15 +25,21 @@ enum e_type_key {
 	KEY_LOCATION,
 	KEY_CLOSING_BRACE,
 	KEY_EVENT,
+	KEY_IF,
 	KEY_UNKNOWN
 };
+
+class HttpConf;
+class ServerConf;
+class LocationConf;
+class EventConf;
 
 class ParseConf {
 	private:
 		std::string _confFileName;
 		std::vector<HttpConf> httpblocks;
-		HttpConf _httpConfig;
-		EventConf _eventConfig;
+		HttpConf *_httpConfig;
+		EventConf *_eventConfig;
 
 		ParseConf(); // default constructor
 
@@ -44,23 +51,23 @@ class ParseConf {
 		ParseConf &operator=(const ParseConf &obj);
 
 		// DEFAULT FUNCITON PARSE ETC...
-		void confParse(const std::string &confFileName);
+		void ParsingConfigure(std::string confFileName);
 		string_vector confReadToken(std::ifstream &file);
 		string_map confParseHandler(string_vector &token);
 
 		// GETTER
 		e_type_key getKeyType(const std::string &key);
-		const HttpConf &getHttpConfig() const;
-		const EventConf &getEventConfig() const;
+		HttpConf *getHttpConfig();
+		EventConf *getEventConfig();
 
 		// handler func
 		void handleHttpBlock(std::ifstream &file);
-		void handleServerBlock(std::ifstream &file, HttpConf &httpConfig);
+		void handleServerBlock(std::ifstream &file, HttpConf *httpConfig);
 		void handleLocationBlock(std::ifstream &file, ServerConf &serverConfig);
 		void handleEventBlock(std::ifstream &file);
 
 		// increment
-		void addHttp(const HttpConf &http);
+		void addHttp(HttpConf *http);
 };
 
 #endif

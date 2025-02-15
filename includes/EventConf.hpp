@@ -11,8 +11,8 @@ class EventConf {
 		int _workerConnections;
 		std::string _useMethods;
 
-		EventConf();
 	public:
+		EventConf();
 		EventConf(int workerConnections, std::string useMethods);
 		EventConf(const EventConf &obj);
 		~EventConf();

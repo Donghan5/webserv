@@ -10,20 +10,21 @@ e_type_key ParseConf::getKeyType(const std::string &key) {
 	else if (key == "server") return KEY_SERVER;
 	else if (key == "location") return KEY_LOCATION;
 	else if (key == "}") return KEY_CLOSING_BRACE;
-	else if (key == "event") return KEY_EVENT;
+	else if (key == "events") return KEY_EVENT;
+	else if (key == "if") return KEY_IF;
 	return KEY_UNKNOWN;
 }
 
-const HttpConf &ParseConf::getHttpConfig(void) const {
+HttpConf *ParseConf::getHttpConfig(void) {
 	return this->_httpConfig;
 }
 
-const EventConf &ParseConf::getEventConfig(void) const {
+EventConf *ParseConf::getEventConfig(void) {
 	return this->_eventConfig;
 }
 
-void	ParseConf::addHttp(const HttpConf &http) {
-	httpblocks.push_back(http);
+void	ParseConf::addHttp(HttpConf *http) {
+	httpblocks.push_back(*http);
 }
 
 /*
@@ -33,11 +34,15 @@ void	ParseConf::addHttp(const HttpConf &http) {
 	@return
 		token: parsed token
 */
-string_vector confReadToken(std::ifstream &file) {
+string_vector ParseConf::confReadToken(std::ifstream &file) {
 	std::string line;
 	string_vector tokens;
 
 	while (std::getline(file, line)) {
+		std::cout << "DEBUG: Read line: [" << line << "] (size: " << line.size() << ")" << std::endl;
+
+		if (line.empty()) continue;
+
 		std::istringstream ss(line);
 		std::string token;
 		while (ss >> token) {
@@ -52,40 +57,92 @@ string_vector confReadToken(std::ifstream &file) {
 void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfig) {
 	string_vector tokens;
 	LocationConf locationConfig;
+	std::ostringstream ifStatement;
+	bool insideIf = false;
 
 	while (!file.eof()) {
 		tokens = confReadToken(file);
 		e_type_key typeToken = getKeyType(tokens[0]);
-		if (!tokens.empty()) continue;
-		if (typeToken == KEY_CLOSING_BRACE) break;
+		if (tokens.empty()) continue;
+		if (typeToken == KEY_CLOSING_BRACE) {
+
+			if (insideIf  == true) {
+				ifStatement << "}";
+				locationConfig.setData("if_statement", ifStatement.str());
+				insideIf = false;
+			}
+			else {
+				std::cout << "Closing brace in location block" << std::endl;
+				break;
+			}
+		}
+		else if (typeToken == KEY_IF) {
+			insideIf = true;
+			ifStatement.str("");
+			for (size_t i (0); i < tokens.size(); i++) {
+				ifStatement << tokens[i] << " ";
+			}
+		}
+		else if (insideIf) {
+			for (size_t i (0); i < tokens.size(); i++) {
+				ifStatement << tokens[i] << " ";
+			}
+		}
 		locationConfig.setData(tokens[0], tokens[1]);
 	}
 	serverConfig.addLocation(locationConfig);
-	std::cout << "Verify Data (location): " << locationConfig.showLocationData() << std::endl;
+	std::cout << "==Verify Data (location)==" << std::endl;
+	locationConfig.showLocationData();
 }
 
 /*
 	Handle multiple Server block
 */
-void ParseConf::handleServerBlock(std::ifstream &file, HttpConfig &httpConfig) {
+void ParseConf::handleServerBlock(std::ifstream &file, HttpConf *httpConfig) {
 	ServerConf serverConfig;
 	string_vector tokens;
+	std::ostringstream ifStatement;
+	bool insideIf = false;
 
 	while (!file.eof()) {
 		tokens = confReadToken(file);
 		e_type_key typeToken = getKeyType(tokens[0]);
-		if (!tokens.empty()) continue;
-		if (typeToken == KEY_CLOSING_BRACE) break;
+		if (tokens.empty()) continue;
+		if (typeToken == KEY_CLOSING_BRACE) {
+			if (insideIf == true) {
+				ifStatement << "}";
+				serverConfig.setData("if_statement", ifStatement.str());
+				insideIf = false;
+			}
+			else {
+				std::cout << "Closing brace in server block" << std::endl;
+				break;
+			}
+		}
 
 		if (typeToken == KEY_LOCATION) {
 			if (tokens.size() < 2) throw std::logic_error("Invalid location block form");
 			handleLocationBlock(file, serverConfig);
-		} else {
+		}
+		else if (typeToken == KEY_IF) {
+			insideIf = true;
+			ifStatement.str("");
+			for (size_t i (0); i < tokens.size(); i++) {
+				ifStatement << tokens[i] << " ";
+			}
+		}
+		else if (insideIf) {
+			for (size_t i (0); i < tokens.size(); i++) {
+				ifStatement << tokens[i] << " ";
+			}
+		}
+		else {
 			serverConfig.setData(tokens[0], tokens[1]);
 		}
 	}
-	httpConfig.addServer(serverConfig);
-	std::cout << "Verify Data (server): " << serverConfig.showServerData() << std::endl;
+	httpConfig->addServer(serverConfig);
+	std::cout << "==Verify Data (server)==" << std::endl;
+	serverConfig.showServerData();
 }
 
 /*
@@ -97,17 +154,21 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 	while (!file.eof()) {
 		tokens = confReadToken(file);
 		e_type_key typeToken = getKeyType(tokens[0]);
-		if (!tokens.empty()) continue;
-		if (typeToken == KEY_CLOSING_BRACE) break;
+		if (tokens.empty()) continue;
+		if (typeToken == KEY_CLOSING_BRACE) {
+			std::cout << "Closing brace in http block" << std::endl;
+			break;
+		}
 
 		if (typeToken == KEY_SERVER) {
 			handleServerBlock(file, this->_httpConfig);
 		} else {
-			_httpConfig.setData(tokens[0], tokens[1]);
+			_httpConfig->setData(tokens[0], tokens[1]);
 		}
 	}
-	this->addHttp(this->_httpConfig);
-	std::cout << "Verify Data (http): " << _httpConfig.showHttpData() << std::endl;
+	this->addHttp(_httpConfig);
+	std::cout << "==Verify Data (http)==" << std::endl;
+	_httpConfig->showHttpData();
 }
 
 /*
@@ -115,16 +176,23 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 */
 void ParseConf::handleEventBlock(std::ifstream &file) {
 	string_vector tokens;
+	bool isEmpty = true;
 
 	while (!file.eof()) {
 		tokens = confReadToken(file);
-		e_type_key typeToken = getKeyType(tokens[0])
+		e_type_key typeToken = getKeyType(tokens[0]);
 		if (tokens.empty()) continue; // tokens vector is empty
 		if (typeToken == KEY_CLOSING_BRACE) break; // end of block
+
+		isEmpty = false;
 		if (tokens[0] == "worker_connections")
-			this->_eventConfig.setWorkerConnections(std::atoi(token[1].c_str()));
+			this->_eventConfig->setWorkerConnections(std::atoi(tokens[1].c_str()));
 		else if (tokens[0] == "use")
-			this->_eventConfig.setUseMethods(token[1]);
+			this->_eventConfig->setUseMethods(tokens[1]);
+	}
+	if (isEmpty == true) {
+		this->_eventConfig->setUseMethods("");
+		this->_eventConfig->setWorkerConnections(0);
 	}
 }
 
@@ -133,16 +201,38 @@ void ParseConf::handleEventBlock(std::ifstream &file) {
 	@param
 		confFileName
 */
-void	ParseConf::confParse(std::string confFileName) {
+void	ParseConf::ParsingConfigure(std::string confFileName) {
 	std::ifstream file(confFileName.c_str());
 
 	if (!file.is_open()) {
 		throw std::runtime_error("Cannot open the file");
 	}
+
+	std::string firstLine;
+	if (std::getline(file, firstLine)) {
+		// if (firstLine.empty()) continue;
+		std::cout << "DEBUG: First line read: [" << firstLine << "]" << std::endl;
+		std::istringstream ss(firstLine);
+		std::string token;
+		string_vector firstTokens;
+		while (ss >> token) {
+			if (token[0] == '#') break;
+			firstTokens.push_back(token);
+		}
+
+		if (!firstTokens.empty()) {
+			e_type_key typeToken = getKeyType(firstTokens[0]);
+			if (typeToken == KEY_EVENT) {
+				std::cout << "DEBUG: Handling first-line EVENTS block" << std::endl;
+				handleEventBlock(file);
+			}
+		}
+	}
+
 	std::string line;
 	while (std::getline(file, line)) {
 		string_vector tokens = confReadToken(file);
-		e_type_key typeToken = getKeyType(tokens[0])
+		e_type_key typeToken = getKeyType(tokens[0]);
 		switch (typeToken) {
 			case KEY_HTTP:
 				handleHttpBlock(file);
@@ -157,14 +247,19 @@ void	ParseConf::confParse(std::string confFileName) {
 }
 
 ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
+	_httpConfig = new HttpConf();
+	_eventConfig = new EventConf(); // Default
 	try {
-		confParse(confFileName);
+		ParsingConfigure(confFileName);
 	} catch (const std::exception &e) {
 		std::cerr << e.what() << std::endl;
 	}
 }
 
-ParseConf::~ParseConf() {}
+ParseConf::~ParseConf() {
+	delete _httpConfig;
+	delete _eventConfig;
+}
 
 ParseConf::ParseConf(const ParseConf &obj) {
 	*this = obj;
@@ -173,8 +268,12 @@ ParseConf::ParseConf(const ParseConf &obj) {
 ParseConf &ParseConf::operator=(const ParseConf &obj) {
 	if (this != &obj) {
 		this->_confFileName = obj._confFileName;
-		this->_httpConfig = obj._httpConfig;
-		this->_eventConfig = obj._eventConfig;
+
+		delete _httpConfig;
+		delete _eventConfig;
+		this->_httpConfig = new HttpConf(*obj._httpConfig);
+		this->_eventConfig = new EventConf(*obj._eventConfig);
+
 		this->httpblocks = obj.httpblocks;
 	}
 	return (*this);

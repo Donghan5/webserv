@@ -1,5 +1,6 @@
 #include "../includes/EventConf.hpp"
 
+EventConf::EventConf(): _workerConnections(0), _useMethods("") {}
 EventConf::EventConf(int workerConnections, std::string useMethods): _workerConnections(workerConnections), _useMethods(useMethods) {};
 
 EventConf::~EventConf() {} // destructor

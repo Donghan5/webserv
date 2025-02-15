@@ -34,7 +34,9 @@ const server_vector &HttpConf::getServerConfig(void) const {
 	Setting the data
 */
 void HttpConf::setData(const std::string &key, const std::string &value) {
-	this->_settings.insert(std::make_pair(key, value));
+	size_t hash = hashTable(key);
+	this->_hashedKeys.push_back(std::make_pair(hash, key));
+	this->_settings[key] = value;
 }
 
 /*
@@ -45,4 +47,22 @@ void HttpConf::showHttpData(void) {
 	for(; it != this->_settings.end(); ++it) {
 		std::cout << "Key: " << it->first << " Value: " << it->second << std::endl;
 	}
+}
+
+size_t HttpConf::hashTable(std::string key) const {
+	size_t hash = 0;
+	for (size_t i (0); i < key.length(); i++) {
+		hash = hash * 31 + static_cast<size_t>(key[i]);
+	}
+	return hash;
+}
+
+std::string HttpConf::getData(std::string key) const {
+	size_t hash = hashTable(key);
+	for (size_t i (0); i < _hashedKeys.size(); i++) {
+		if (_hashedKeys[i].first == hash && _hashedKeys[i].second == key) {
+			return this->_settings.find(key)->second;
+		}
+	}
+	return "";
 }
