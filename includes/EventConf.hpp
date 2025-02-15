@@ -6,6 +6,7 @@
 #include <set>
 
 typedef std::set<std::string> string_set;
+
 class EventConf {
 	private:
 		int _workerConnections;
