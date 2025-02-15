@@ -1,0 +1,62 @@
+INITIALIZE SERVER:
+1. Create server socket
+2. Make socket non-blocking
+3. Bind to port
+4. Create empty lists: poll_list, partial_requests, partial_responses
+
+MAIN SERVER LOOP:
+1. Start listening on server socket
+2. Add server socket to poll_list
+3. While server is running:
+    - Call poll() to check all sockets in poll_list
+    - For each socket that has activity:
+        
+        IF it's the server socket (new connection):
+            - Accept new client connection
+            - Make client socket non-blocking
+            - Add client socket to poll_list for reading
+        
+        IF it's a client socket:
+            IF ready for reading:
+                - Read data from socket
+                - Add data to partial_requests[client]
+                IF have complete HTTP request:
+                    - Process the request
+                    - Store response in partial_responses[client]
+                    - Change socket in poll_list to check for writing
+            
+            IF ready for writing:
+                - Get response from partial_responses[client]
+                - Write as much as possible to socket
+                IF all data written:
+                    - Close connection
+                    - Remove from all lists
+            
+            IF error occurred:
+                - Close connection
+                - Remove from all lists
+
+HANDLE HTTP REQUEST:
+1. Parse request line (GET /path HTTP/1.1)
+2. IF path is "/", use "/index.html"
+3. Check if file exists
+4. IF file exists:
+    - Read file content
+    - Determine content type based on extension
+    - Create HTTP response with headers and content
+5. ELSE:
+    - Return 404 Not Found response
+
+DATA STRUCTURES:
+- poll_list: vector of pollfd structs
+    {
+        fd: socket number
+        events: what to check for (POLLIN/POLLOUT)
+        revents: what actually happened
+    }
+
+- partial_requests: map of socket → string
+    Stores incomplete HTTP requests
+
+- partial_responses: map of socket → string
+    Stores responses being sent
