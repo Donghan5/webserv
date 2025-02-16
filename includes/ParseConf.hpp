@@ -2,6 +2,7 @@
 #define PARSECONF_HPP
 #pragma once
 
+#include "WebServConf.hpp"
 #include "HttpConf.hpp"
 #include "ServerConf.hpp"
 #include "EventConf.hpp"
@@ -37,9 +38,7 @@ class EventConf;
 class ParseConf {
 	private:
 		std::string _confFileName;
-		std::vector<HttpConf> httpblocks;
-		HttpConf *_httpConfig;
-		EventConf *_eventConfig;
+		WebServConf _webconf;
 
 		ParseConf(); // default constructor
 
@@ -57,17 +56,14 @@ class ParseConf {
 
 		// GETTER
 		e_type_key getKeyType(const std::string &key);
-		HttpConf *getHttpConfig();
-		EventConf *getEventConfig();
+		const WebServConf &getWebServConf() const;
+
 
 		// handler func
 		void handleHttpBlock(std::ifstream &file);
 		void handleServerBlock(std::ifstream &file, HttpConf *httpConfig);
 		void handleLocationBlock(std::ifstream &file, ServerConf &serverConfig);
 		void handleEventBlock(std::ifstream &file);
-
-		// increment
-		void addHttp(HttpConf *http);
 };
 
 #endif

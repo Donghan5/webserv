@@ -15,18 +15,6 @@ e_type_key ParseConf::getKeyType(const std::string &key) {
 	return KEY_UNKNOWN;
 }
 
-HttpConf *ParseConf::getHttpConfig(void) {
-	return this->_httpConfig;
-}
-
-EventConf *ParseConf::getEventConfig(void) {
-	return this->_eventConfig;
-}
-
-void	ParseConf::addHttp(HttpConf *http) {
-	httpblocks.push_back(*http);
-}
-
 /*
 	Read and parse token by white spaces
 	@param
@@ -59,6 +47,11 @@ void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfi
 	LocationConf locationConfig;
 	std::ostringstream ifStatement;
 	bool insideIf = false;
+
+	if (tokens.size() > 2) {
+		locationConfig.setPath(tokens[1]);
+		locationConfig.setData("path", tokens[1]);
+	}
 
 	while (!file.eof()) {
 		tokens = confReadToken(file);
@@ -98,7 +91,7 @@ void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfi
 /*
 	Handle multiple Server block
 */
-void ParseConf::handleServerBlock(std::ifstream &file, HttpConf *httpConfig) {
+void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
 	ServerConf serverConfig;
 	string_vector tokens;
 	std::ostringstream ifStatement;
@@ -140,7 +133,7 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf *httpConfig) {
 			serverConfig.setData(tokens[0], tokens[1]);
 		}
 	}
-	httpConfig->addServer(serverConfig);
+	httpConfig.addServer(serverConfig);
 	std::cout << "==Verify Data (server)==" << std::endl;
 	serverConfig.showServerData();
 }
@@ -150,6 +143,7 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf *httpConfig) {
 */
 void ParseConf::handleHttpBlock(std::ifstream &file) {
 	string_vector tokens;
+	HttpConf hconf;
 
 	while (!file.eof()) {
 		tokens = confReadToken(file);
@@ -161,12 +155,12 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 		}
 
 		if (typeToken == KEY_SERVER) {
-			handleServerBlock(file, this->_httpConfig);
+			handleServerBlock(file, hconf);
 		} else {
 			_httpConfig->setData(tokens[0], tokens[1]);
 		}
 	}
-	this->addHttp(_httpConfig);
+	_webconf.addHttpBlock(hconf);
 	std::cout << "==Verify Data (http)==" << std::endl;
 	_httpConfig->showHttpData();
 }
@@ -247,8 +241,6 @@ void	ParseConf::ParsingConfigure(std::string confFileName) {
 }
 
 ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
-	_httpConfig = new HttpConf();
-	_eventConfig = new EventConf(); // Default
 	try {
 		ParsingConfigure(confFileName);
 	} catch (const std::exception &e) {
@@ -256,10 +248,7 @@ ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
 	}
 }
 
-ParseConf::~ParseConf() {
-	delete _httpConfig;
-	delete _eventConfig;
-}
+ParseConf::~ParseConf() {}
 
 ParseConf::ParseConf(const ParseConf &obj) {
 	*this = obj;
@@ -277,4 +266,8 @@ ParseConf &ParseConf::operator=(const ParseConf &obj) {
 		this->httpblocks = obj.httpblocks;
 	}
 	return (*this);
+}
+
+const WebServConf &ParseConf::getWebServConf() const {
+	return _webconf;
 }

@@ -69,3 +69,11 @@ std::string LocationConf::getData(std::string key) const {
 	}
 	return "";
 }
+
+const std::string &LocationConf::getPath(void) const {
+	return _path;
+}
+
+void LocationConf::setPath(const std::string &path) {
+	this->_path = path;
+}

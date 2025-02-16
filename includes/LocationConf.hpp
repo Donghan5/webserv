@@ -16,6 +16,7 @@ class LocationConf {
 	private:
 		string_map _settings;
 		hash_vector _hashedKeys;
+		std::string _path;
 
 	public:
 		LocationConf();
@@ -29,6 +30,11 @@ class LocationConf {
 
 	// hash table
 		size_t hashTable(std::string key) const;
+
+	// get and set the path
+	const std::string &getPath(void) const;
+	void setPath(const std::string &path);
+	
 	// to debug
 		void showLocationData(void);
 };
