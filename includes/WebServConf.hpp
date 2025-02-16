@@ -26,24 +26,31 @@
 #include "ServerConf.hpp"
 #include "LocationConf.hpp"
 
+class HttpConf;
+class EventConf;
+class ServerConf;
+class LocationConf;
+
 typedef std::vector<const ServerConf*> const_server_vector;
 typedef std::vector<const LocationConf*> const_location_vector;
 
 class WebServConf {
 	private:
-		EventConf _eventConf;
+		EventConf _econf;
 		std::vector<HttpConf> _httpblocks;
 
 	public:
 		WebServConf();
+		WebServConf(const WebServConf &obj);
 		~WebServConf();
 
+		WebServConf &operator=(const WebServConf &obj);
 		void addHttpBlock(const HttpConf &hconf);
 		const std::vector<HttpConf> &getHttpBlocks(void) const;
 		const_server_vector findServersByName(std::string serverName) const; // using server_name in block
 		const_location_vector findLocations(std::string path) const;
 
-		EventConf getEventConf(void);
+		EventConf &getEventConf(void);
 
 		std::string getFirstListenValue() const;
 };

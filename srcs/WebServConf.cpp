@@ -2,6 +2,18 @@
 
 WebServConf::WebServConf() {}
 
+WebServConf::WebServConf(const WebServConf &obj) {
+	*this = obj;
+}
+
+WebServConf &WebServConf::operator=(const WebServConf &obj) {
+	if (this != &obj) {
+		_econf = obj._econf;
+		_httpblocks = obj._httpblocks;
+	}
+	return *this;
+}
+
 WebServConf::~WebServConf() {}
 
 void WebServConf::addHttpBlock(const HttpConf &hconf) {
@@ -25,7 +37,7 @@ const_server_vector WebServConf::findServersByName(std::string serverName) const
 		const std::vector<ServerConf> &servers = _httpblocks[i].getServerConfig();
 		for (size_t j (0); j < servers.size(); j++) {
 			if (servers[j].getData("server_name") == serverName) {
-				locations[j].push_back(&servers[j]);
+				result.push_back(&servers[j]);
 			}
 		}
 	}
@@ -34,7 +46,7 @@ const_server_vector WebServConf::findServersByName(std::string serverName) const
 
 const_location_vector WebServConf::findLocations(std::string path) const {
 	const_location_vector result;
-	for (size_t i (0); i < _httpblocks.size; i++) {
+	for (size_t i (0); i < _httpblocks.size(); i++) {
 		const std::vector<ServerConf> &servers = _httpblocks[i].getServerConfig();
 		for (size_t j (0); j < servers.size(); j++) {
 			const std::vector<LocationConf> &locations = servers[j].getLocations();
@@ -49,14 +61,14 @@ const_location_vector WebServConf::findLocations(std::string path) const {
 	return result;
 }
 
-const EventConf &WebServConf::getEventConf(void) {
-	return _eventConf;
+EventConf &WebServConf::getEventConf(void) {
+	return _econf;
 }
 
 std::string WebServConf::getFirstListenValue() const {
-	if (_httpBlocks.empty())
+	if (_httpblocks.empty())
 		return "";
-	const std::vector<ServerConf>& servers = _httpBlocks[0].getServers();
+	const std::vector<ServerConf>& servers = _httpblocks[0].getServerConfig();
 	if (servers.empty())
 		return "";
 	return servers[0].getData("listen");

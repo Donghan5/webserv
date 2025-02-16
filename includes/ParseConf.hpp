@@ -30,6 +30,7 @@ enum e_type_key {
 	KEY_UNKNOWN
 };
 
+class WebServConf;
 class HttpConf;
 class ServerConf;
 class LocationConf;
@@ -38,7 +39,7 @@ class EventConf;
 class ParseConf {
 	private:
 		std::string _confFileName;
-		WebServConf _webconf;
+		WebServConf *_webconf;
 
 		ParseConf(); // default constructor
 
@@ -61,7 +62,7 @@ class ParseConf {
 
 		// handler func
 		void handleHttpBlock(std::ifstream &file);
-		void handleServerBlock(std::ifstream &file, HttpConf *httpConfig);
+		void handleServerBlock(std::ifstream &file, HttpConf &httpConfig);
 		void handleLocationBlock(std::ifstream &file, ServerConf &serverConfig);
 		void handleEventBlock(std::ifstream &file);
 };

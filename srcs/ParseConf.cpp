@@ -157,12 +157,12 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 		if (typeToken == KEY_SERVER) {
 			handleServerBlock(file, hconf);
 		} else {
-			_httpConfig->setData(tokens[0], tokens[1]);
+			hconf.setData(tokens[0], tokens[1]);
 		}
 	}
-	_webconf.addHttpBlock(hconf);
+	_webconf->addHttpBlock(hconf);
 	std::cout << "==Verify Data (http)==" << std::endl;
-	_httpConfig->showHttpData();
+	hconf.showHttpData();
 }
 
 /*
@@ -180,13 +180,13 @@ void ParseConf::handleEventBlock(std::ifstream &file) {
 
 		isEmpty = false;
 		if (tokens[0] == "worker_connections")
-			this->_eventConfig->setWorkerConnections(std::atoi(tokens[1].c_str()));
+			this->_webconf->getEventConf().setWorkerConnections(std::atoi(tokens[1].c_str()));
 		else if (tokens[0] == "use")
-			this->_eventConfig->setUseMethods(tokens[1]);
+			this->_webconf->getEventConf().setUseMethods(tokens[1]);
 	}
 	if (isEmpty == true) {
-		this->_eventConfig->setUseMethods("");
-		this->_eventConfig->setWorkerConnections(0);
+		_webconf->getEventConf().setUseMethods("");
+		_webconf->getEventConf().setWorkerConnections(0);
 	}
 }
 
@@ -241,6 +241,7 @@ void	ParseConf::ParsingConfigure(std::string confFileName) {
 }
 
 ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
+	_webconf = new WebServConf();
 	try {
 		ParsingConfigure(confFileName);
 	} catch (const std::exception &e) {
@@ -248,7 +249,9 @@ ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
 	}
 }
 
-ParseConf::~ParseConf() {}
+ParseConf::~ParseConf() {
+	delete _webconf;
+}
 
 ParseConf::ParseConf(const ParseConf &obj) {
 	*this = obj;
@@ -257,17 +260,12 @@ ParseConf::ParseConf(const ParseConf &obj) {
 ParseConf &ParseConf::operator=(const ParseConf &obj) {
 	if (this != &obj) {
 		this->_confFileName = obj._confFileName;
-
-		delete _httpConfig;
-		delete _eventConfig;
-		this->_httpConfig = new HttpConf(*obj._httpConfig);
-		this->_eventConfig = new EventConf(*obj._eventConfig);
-
-		this->httpblocks = obj.httpblocks;
+		delete _webconf;
+		this->_webconf = new WebServConf(*obj._webconf);
 	}
 	return (*this);
 }
 
 const WebServConf &ParseConf::getWebServConf() const {
-	return _webconf;
+	return *_webconf;
 }
