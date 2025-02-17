@@ -48,7 +48,6 @@ std::string HttpServer::process_request(const std::string& request) {
 				std::stringstream content;
 				content << file.rdbuf();
 				std::string content_str = content.str();
-
 				// Determine content type
 				std::string content_type = "text/plain";
 				if (ends_with(path, ".html")) content_type = "text/html";
