@@ -11,13 +11,11 @@ class LocationConf;
 
 typedef std::vector<LocationConf> location_vector;
 typedef std::map<std::string, std::string> string_map;
-typedef std::vector<std::pair<size_t, std::string> > hash_vector;
 
 class ServerConf {
 	private:
 		location_vector _locations;
 		string_map _settings;
-		hash_vector _hashedKeys;
 
 	public:
 		ServerConf();
@@ -29,10 +27,8 @@ class ServerConf {
 		const location_vector &getLocations() const;
 		void setData(const std::string &key, const std::string &value);
 		const string_map &getData(void) const;
-
-		// Hash table
-		size_t hashTable(std::string key) const;
 		std::string getData(std::string key) const;
+
 		// To DEBUG
 		void showServerData();
 };

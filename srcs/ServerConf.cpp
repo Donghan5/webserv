@@ -25,13 +25,7 @@ const location_vector &ServerConf::getLocations(void) const {
 }
 
 void ServerConf::setData(const std::string &key, const std::string &value) {
-	size_t hash = hashTable(key);
-	this->_hashedKeys.push_back(std::make_pair(hash, key));
-	this->_settings[key] = value;
-}
-
-const string_map &ServerConf::getData(void) const {
-	return this->_settings;
+	this->_settings.insert(std::make_pair(key, value));
 }
 
 /*
@@ -44,21 +38,10 @@ void ServerConf::showServerData(void) {
 	}
 }
 
-size_t ServerConf::hashTable(std::string key) const {
-	size_t hash = 0;
-	for (size_t i (0); i < key.length(); i++) {
-		hash = hash * 31 + static_cast<size_t>(key[i]);
-	}
-	return hash;
-}
-
 std::string ServerConf::getData(std::string key) const {
-	size_t hash = hashTable(key);
-
-	for (size_t i (0); i < _hashedKeys.size(); i++) {
-		if (_hashedKeys[i].first == hash && _hashedKeys[i].second == key) {
-			return this->_settings.find(key)->second;
-		}
+	string_map::const_iterator it = this->_settings.find(key);
+	if (it != _settings.end()) {
+		return it->second;
 	}
 	return "";
 }
