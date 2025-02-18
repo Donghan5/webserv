@@ -1,4 +1,5 @@
 #include "../includes/HttpServer.hpp"
+#include "../includes/ParsedRequest.hpp"
 
     // Helper function to make socket non-blocking
 void HttpServer::make_non_blocking(int fd) {
@@ -27,18 +28,19 @@ bool HttpServer::ends_with(const std::string& str, const std::string& suffix) {
 
 // Process a complete HTTP request
 std::string HttpServer::process_request(const std::string& request) {
-	std::string method = request.substr(0, request.find(' '));
-	std::string path = request.substr(
-		request.find(' ') + 1,
-		request.find(" HTTP/") - request.find(' ') - 1
-	);
+	ParsedRequest parser(request);
+
+	std::string method = parser.getMethod();
+	std::string path = parser.getPath();
+	std::string host = parser.getHost();
 
 	// Default to index.html for root path
 	if (path == "/") {
 		path = "/index.html";
 	}
 
-	std::string full_path = root_dir + path;
+	std::string resolved_root = _webconf.resolveRoot(host, path);
+	std::string full_path = resolved_root + path;
 
 	if (method == "GET") {
 		if (file_exists(full_path)) {
@@ -138,8 +140,8 @@ void HttpServer::close_client(int client_fd) {
 	}
 }
 
-HttpServer::HttpServer(int port_num, const std::string& root)
-	: port(port_num), root_dir(root), running(false) {
+HttpServer::HttpServer(int port_num, const WebServConf &webconf)
+	: port(port_num), _webconf(webconf), running(false) {
 
 	// Create socket
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -176,7 +178,6 @@ void HttpServer::start() {
 	}
 
 	std::cout << "Server started on port " << port << std::endl;
-	std::cout << "Serving files from " << root_dir << std::endl;
 
 	// Add server socket to poll set
 	struct pollfd server_pollfd;

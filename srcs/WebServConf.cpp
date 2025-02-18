@@ -31,7 +31,7 @@ const std::vector<HttpConf> &WebServConf::getHttpBlocks(void) const {
 	@return
 		result: the specific server
 */
-const_server_vector WebServConf::findServersByName(std::string serverName) const {
+const_server_vector WebServConf::findServerByName(std::string serverName) const {
 	const_server_vector result;
 	for (size_t i (0); i < _httpblocks.size(); i++) {
 		const std::vector<ServerConf> &servers = _httpblocks[i].getServerConfig();
@@ -96,7 +96,7 @@ std::string WebServConf::resolveRootFromServer(const ServerConf &serverConf, std
 	}
 
 	std::string serRoot = serverConf.getRootDir();
-	if (!serRoot.empty) {
+	if (!serRoot.empty()) {
 		return serRoot;
 	}
 
@@ -115,15 +115,17 @@ std::string WebServConf::resolveRootFromServer(const ServerConf &serverConf, std
 			i.e.) GET /images/logo.png
 */
 std::string WebServConf::resolveRoot(std::string host, std::string requestPath) const {
+	std::cout << "Verify host: " << host << std::endl;
 	for (size_t i (0); i < _httpblocks.size(); i++) {
 		const std::vector<ServerConf> &servers = _httpblocks[i].getServerByName(host);
-
+		// std::cout << _httpblocks[i].getServerByName(host) << std::endl;
 		for (size_t j (0); j < servers.size(); j++) {
 			if (servers[j].getData("server_name") == host) {
-				return resolveRootFromServer(servers[j], requestPath, host);
+				// std::cout << servers[j].getData("server_name") << std::endl;
+				return resolveRootFromServer(servers[j], requestPath, _httpblocks[i].getData("root"));
 			}
 		}
 	}
-
-	return "./www"; // return default value
+	std::cout << "DEBUG: No matching server_name found. Using default server." << std::endl;
+	return "./www";
 }

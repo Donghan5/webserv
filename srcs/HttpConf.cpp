@@ -59,3 +59,13 @@ std::string HttpConf::getData(std::string key) const {
 std::string HttpConf::getRootDir(void) const {
 	return getData("root");
 }
+
+server_vector HttpConf::getServerByName(const std::string &serverName) const {
+	server_vector result;
+	for (size_t i (0); i < _servers.size(); i++) {
+		if (_servers[i].getData("server_name") == serverName) {
+			result.push_back(_servers[i]);
+		}
+	}
+	return result;
+}

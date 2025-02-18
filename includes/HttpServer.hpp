@@ -17,12 +17,13 @@
 #include <fcntl.h>
 #include <map>
 #include <errno.h>
+#include "WebServConf.hpp"
 
 class HttpServer {
 protected:
     int server_fd;
     int port;
-    std::string root_dir;
+	WebServConf _webconf;
     bool running;
     static const int BUFFER_SIZE = 4096;
     static const int MAX_EVENTS = 100;
@@ -40,7 +41,7 @@ protected:
     void close_client(int client_fd);
 
 public:
-    HttpServer(int port_num = 8080, const std::string& root = "./www");
+    HttpServer(int port_num, const WebServConf &webconf);
     void start();
     void stop();
     ~HttpServer();

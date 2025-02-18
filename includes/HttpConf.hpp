@@ -28,8 +28,9 @@ class HttpConf {
 		void setData(const std::string &key, const std::string &value);
 		const server_vector &getServerConfig(void) const;
 
-		std::string getData(std::string key) const;
 
+		std::string getData(std::string key) const;
+		server_vector getServerByName(const std::string &serverName) const;
 		std::string getRootDir(void) const;
 
 		// to debug

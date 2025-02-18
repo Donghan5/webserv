@@ -47,7 +47,7 @@ class WebServConf {
 		WebServConf &operator=(const WebServConf &obj);
 		void addHttpBlock(const HttpConf &hconf);
 		const std::vector<HttpConf> &getHttpBlocks(void) const;
-		const_server_vector findServersByName(std::string serverName) const; // using server_name in block
+		const_server_vector findServerByName(std::string serverName) const; // using server_name in block
 		const_location_vector findLocations(std::string path) const;
 
 		EventConf &getEventConf(void);
