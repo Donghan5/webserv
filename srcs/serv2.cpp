@@ -42,6 +42,9 @@ std::string HttpServer::process_request(const std::string& request) {
 	std::string resolved_root = _webconf.resolveRoot(host, path);
 	std::string full_path = resolved_root + path;
 
+	std::cout << "Resolved_root: " << resolved_root << std::endl;
+	std::cout << "full_path: " << full_path << std::endl;
+
 	if (method == "GET") {
 		if (file_exists(full_path)) {
 			std::ifstream file(full_path.c_str(), std::ios::binary);
