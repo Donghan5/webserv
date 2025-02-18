@@ -1,0 +1,107 @@
+/* 🌑 Dark mode style */
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+/* header */
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+/* 💾 visit count */
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+/* ⚡button */
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 🕶️ footer */
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
