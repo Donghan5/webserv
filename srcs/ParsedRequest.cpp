@@ -71,9 +71,9 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 		_host = "default";
 	}
 
-	if (_method == "POST" || _method == "PUT") {
+	if (_method == "POST") {
 		if (_headers.find("content-length") != _headers.end()) {
-			int contentLength = std::atoi(getData("Content-Length").c_str());
+			int contentLength = std::atoi(getData("content-length").c_str());
 			if (contentLength < 0) {
 				throw std::logic_error("Invalid Content-Length value");
 			}

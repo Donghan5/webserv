@@ -15,7 +15,7 @@
             <ul>
                 <li><a href="index.html">🏠 HOME</a></li>
                 <li><a href="about.html">ℹ️ ABOUT</a></li>
-                <li><a href="about.html">📞 CONTACT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
             </ul>
         </nav>
     </header>
@@ -23,16 +23,127 @@
     <section class="hero">
         <h2>WELCOME TO WEBSERV ✨</h2>
         <p>THIS WEBSITE SERVED AS WEBSERV</p>
-        <button class="btn-primary" onclick="sayHello()">CLICK</button>
     </section>
 
-	<div class="container">
-		<h1>Visit</h1>
-		<p id="visit-count">Visit count: 0</p>
-		<button class="btn-primary" onclick="sayHello()">CLICK</button>
-	</div>
+    <!-- 📤 POST: 파일 업로드 -->
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <!-- 🗑️ DELETE: 파일 삭제 -->
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <!-- 🔍 GET: 특정 파일 조회 -->
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
     <footer>
         <p>&copy; 2025 WEBSERV PROJECT</p>
     </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFileList() {
+            fetch("/file-list")
+            .then(response => response.json())
+            .then(data => {
+                const fileList = document.getElementById("file-list");
+                fileList.innerHTML = "";
+                data.forEach(file => {
+                    const li = document.createElement("li");
+                    li.textContent = file;
+                    fileList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                alert("❌ Failed to retrieve file list.");
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+    </script>
+
 </body>
 </html>

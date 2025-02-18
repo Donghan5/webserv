@@ -37,7 +37,7 @@ typedef std::vector<const LocationConf*> const_location_vector;
 class WebServConf {
 	private:
 		EventConf _econf;
-		std::vector<HttpConf> _httpblocks;
+		HttpConf *_hconf;
 
 	public:
 		WebServConf();
@@ -45,8 +45,8 @@ class WebServConf {
 		~WebServConf();
 
 		WebServConf &operator=(const WebServConf &obj);
-		void addHttpBlock(const HttpConf &hconf);
-		const std::vector<HttpConf> &getHttpBlocks(void) const;
+		void setHttpBlock(const HttpConf &hconf);
+		const HttpConf &getHttpBlock(void) const;
 		const_server_vector findServerByName(std::string serverName) const; // using server_name in block
 		const_location_vector findLocations(std::string path) const;
 

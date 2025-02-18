@@ -151,7 +151,7 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
 */
 void ParseConf::handleHttpBlock(std::ifstream &file) {
 	string_vector tokens;
-	HttpConf hconf;
+	HttpConf hconf = _webconf->getHttpBlock();
 
 	while (!file.eof()) {
 		tokens = confReadToken(file);
@@ -171,8 +171,8 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 			}
 			hconf.setData(tokens[0], value);
 		}
+		_webconf->setHttpBlock(hconf);
 	}
-	_webconf->addHttpBlock(hconf);
 	std::cout << "==Verify Data (http)==" << std::endl;
 	hconf.showHttpData();
 }

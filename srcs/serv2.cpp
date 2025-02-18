@@ -26,6 +26,30 @@ bool HttpServer::ends_with(const std::string& str, const std::string& suffix) {
 	return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
 }
 
+void HttpServer::handlePostRequest(const std::string &fullPath, const std::string &body) {
+	std::ofstream outFile(fullPath.c_str(), std::ios::binary);
+	if (!outFile.is_open()) {
+		throw std::runtime_error("500 Internal Server Error: Cannot open file");
+	}
+	if (body.empty()) {
+		throw std::runtime_error("400 Bad Request: Empty body");
+	}
+	outFile.write(body.c_str(), body.size());
+	outFile.close();
+}
+
+std::string HttpServer::handleDeleteRequest(const std::string &fullPath) {
+	if (!file_exists(fullPath)) {
+		return "HTTP/1.1 404 Not Found\r\n\r\nFile not found";
+	}
+
+	if (remove(fullPath.c_str()) != 0) {
+		return "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file";
+	}
+
+	return "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully";
+}
+
 // Process a complete HTTP request
 std::string HttpServer::process_request(const std::string& request) {
 	ParsedRequest parser(request);
@@ -76,7 +100,20 @@ std::string HttpServer::process_request(const std::string& request) {
 		} else {
 			return "HTTP/1.1 404 Not Found\r\n\r\nNot Found";
 		}
-	} else {
+	}
+	else if (method == "POST") {
+		try {
+			std::string body = parser.getBody();
+			handlePostRequest(full_path, body);
+			return "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully";
+		} catch (const std::exception &e) {
+			return "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file" + std::string(e.what());
+		}
+	}
+	else if (method == "DELETE") {
+		return handleDeleteRequest(full_path);
+	}
+	else {
 		return "HTTP/1.1 405 Method Not Allowed\r\n\r\nMethod Not Allowed";
 	}
 }

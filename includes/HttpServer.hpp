@@ -36,6 +36,8 @@ protected:
     static bool file_exists(const std::string& path);
     static bool ends_with(const std::string& str, const std::string& suffix);
     std::string process_request(const std::string& request);
+	void handlePostRequest(const std::string &fullPath, const std::string &body);
+	std::string handleDeleteRequest(const std::string &fullPath);
     void handle_client_read(int client_fd);
     void handle_client_write(int client_fd);
     void close_client(int client_fd);

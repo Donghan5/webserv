@@ -1,27 +1,35 @@
 #include "../includes/WebServConf.hpp"
 
-WebServConf::WebServConf() {}
+WebServConf::WebServConf() {
+	_hconf = new HttpConf();
+}
 
 WebServConf::WebServConf(const WebServConf &obj) {
-	*this = obj;
+	_hconf = new HttpConf(*obj._hconf);
+	_econf = obj._econf;
 }
 
 WebServConf &WebServConf::operator=(const WebServConf &obj) {
 	if (this != &obj) {
 		_econf = obj._econf;
-		_httpblocks = obj._httpblocks;
+		delete _hconf;
+		_hconf = new HttpConf(*obj._hconf);
 	}
 	return *this;
 }
 
-WebServConf::~WebServConf() {}
-
-void WebServConf::addHttpBlock(const HttpConf &hconf) {
-	_httpblocks.push_back(hconf);
+WebServConf::~WebServConf() {
+	delete _hconf;
 }
 
-const std::vector<HttpConf> &WebServConf::getHttpBlocks(void) const {
-	return _httpblocks;
+
+const HttpConf &WebServConf::getHttpBlock(void) const {
+	return *_hconf;
+}
+
+void WebServConf::setHttpBlock(const HttpConf &hconf) {
+	delete _hconf;
+	_hconf = new HttpConf(hconf);
 }
 
 /*
@@ -33,12 +41,10 @@ const std::vector<HttpConf> &WebServConf::getHttpBlocks(void) const {
 */
 const_server_vector WebServConf::findServerByName(std::string serverName) const {
 	const_server_vector result;
-	for (size_t i (0); i < _httpblocks.size(); i++) {
-		const std::vector<ServerConf> &servers = _httpblocks[i].getServerConfig();
-		for (size_t j (0); j < servers.size(); j++) {
-			if (servers[j].getData("server_name") == serverName) {
-				result.push_back(&servers[j]);
-			}
+	const std::vector<ServerConf> &servers = _hconf->getServerConfig();
+	for (size_t j (0); j < servers.size(); j++) {
+		if (servers[j].getData("server_name") == serverName) {
+			result.push_back(&servers[j]);
 		}
 	}
 	return result;
@@ -46,18 +52,17 @@ const_server_vector WebServConf::findServerByName(std::string serverName) const 
 
 const_location_vector WebServConf::findLocations(std::string path) const {
 	const_location_vector result;
-	for (size_t i (0); i < _httpblocks.size(); i++) {
-		const std::vector<ServerConf> &servers = _httpblocks[i].getServerConfig();
-		for (size_t j (0); j < servers.size(); j++) {
-			const std::vector<LocationConf> &locations = servers[j].getLocations();
-			for (size_t k (0); k < locations.size(); k++) {
-				const std::string &locPath = locations[k].getData("path");
-				if (locPath == path) {
-					result.push_back(&locations[k]);
-				}
+	const std::vector<ServerConf> &servers = _hconf->getServerConfig();
+	for (size_t j (0); j < servers.size(); j++) {
+		const std::vector<LocationConf> &locations = servers[j].getLocations();
+		for (size_t k (0); k < locations.size(); k++) {
+			const std::string &locPath = locations[k].getData("path");
+			if (locPath == path) {
+				result.push_back(&locations[k]);
 			}
 		}
 	}
+
 	return result;
 }
 
@@ -69,9 +74,7 @@ EventConf &WebServConf::getEventConf(void) {
 	Get the first port
 */
 std::string WebServConf::getFirstListenValue() const {
-	if (_httpblocks.empty())
-		return "";
-	const std::vector<ServerConf>& servers = _httpblocks[0].getServerConfig();
+	const std::vector<ServerConf>& servers = _hconf->getServerConfig();
 	if (servers.empty())
 		return "";
 	return servers[0].getData("listen");
@@ -115,17 +118,14 @@ std::string WebServConf::resolveRootFromServer(const ServerConf &serverConf, std
 			i.e.) GET /images/logo.png
 */
 std::string WebServConf::resolveRoot(std::string host, std::string requestPath) const {
-	std::cout << "Verify host: " << host << std::endl;
-	for (size_t i (0); i < _httpblocks.size(); i++) {
-		const std::vector<ServerConf> &servers = _httpblocks[i].getServerByName(host);
+		const std::vector<ServerConf> &servers = _hconf->getServerByName(host);
 		// std::cout << _httpblocks[i].getServerByName(host) << std::endl;
 		for (size_t j (0); j < servers.size(); j++) {
 			if (servers[j].getData("server_name") == host) {
 				// std::cout << servers[j].getData("server_name") << std::endl;
-				return resolveRootFromServer(servers[j], requestPath, _httpblocks[i].getData("root"));
+				return resolveRootFromServer(servers[j], requestPath, _hconf->getData("root"));
 			}
 		}
-	}
 	std::cout << "DEBUG: No matching server_name found. Using default server." << std::endl;
 	return "./www";
 }
