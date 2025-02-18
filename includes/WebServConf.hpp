@@ -53,6 +53,9 @@ class WebServConf {
 		EventConf &getEventConf(void);
 
 		std::string getFirstListenValue() const;
+
+		std::string resolveRoot(std::string host, std::string requestPath) const;
+		std::string resolveRootFromServer(const ServerConf &serverConf, std::string requestPath, std::string httpRoot) const;
 };
 
 #endif

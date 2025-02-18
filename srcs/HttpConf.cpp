@@ -54,3 +54,8 @@ std::string HttpConf::getData(std::string key) const {
 	}
 	return "";
 }
+
+
+std::string HttpConf::getRootDir(void) const {
+	return getData("root");
+}

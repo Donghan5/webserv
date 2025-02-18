@@ -55,3 +55,7 @@ const std::string &LocationConf::getPath(void) const {
 void LocationConf::setPath(const std::string &path) {
 	this->_path = path;
 }
+
+std::string LocationConf::getRootDir() const {
+	return getData("root");
+}

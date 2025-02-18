@@ -28,6 +28,7 @@ class ServerConf {
 		void setData(const std::string &key, const std::string &value);
 		const string_map &getData(void) const;
 		std::string getData(std::string key) const;
+		std::string getRootDir(void) const;
 
 		// To DEBUG
 		void showServerData();

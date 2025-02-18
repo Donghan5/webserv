@@ -30,6 +30,8 @@ class HttpConf {
 
 		std::string getData(std::string key) const;
 
+		std::string getRootDir(void) const;
+
 		// to debug
 		void showHttpData(void);
 };

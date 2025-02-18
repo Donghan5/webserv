@@ -65,6 +65,9 @@ EventConf &WebServConf::getEventConf(void) {
 	return _econf;
 }
 
+/*
+	Get the first port
+*/
 std::string WebServConf::getFirstListenValue() const {
 	if (_httpblocks.empty())
 		return "";
@@ -74,3 +77,53 @@ std::string WebServConf::getFirstListenValue() const {
 	return servers[0].getData("listen");
 }
 
+/*
+	Resolve root_dir from server
+	@param
+		host: it cames from request of the client (Http header)
+	In process_request function in serv2.cpp
+	host = extract_host(request);
+*/
+std::string WebServConf::resolveRootFromServer(const ServerConf &serverConf, std::string requestPath, std::string httpRoot) const {
+	const location_vector &locations = serverConf.getLocations();
+	for (size_t i (0); i < locations.size(); i++) {
+		if (requestPath.find(locations[i].getPath()) == 0) {
+			std::string locRoot = locations[i].getRootDir();
+			if (!locRoot.empty()) {
+				return locRoot;
+			}
+		}
+	}
+
+	std::string serRoot = serverConf.getRootDir();
+	if (!serRoot.empty) {
+		return serRoot;
+	}
+
+	// have to think about how treat as multiple httph
+	if (!httpRoot.empty()) {
+		return httpRoot;
+	}
+	return "./www"; // return default value (if not set)
+}
+
+/*
+	Find server_name using host(from request)
+	@param
+		host: request host name
+		requestPath: URL root (GET methods)
+			i.e.) GET /images/logo.png
+*/
+std::string WebServConf::resolveRoot(std::string host, std::string requestPath) const {
+	for (size_t i (0); i < _httpblocks.size(); i++) {
+		const std::vector<ServerConf> &servers = _httpblocks[i].getServerByName(host);
+
+		for (size_t j (0); j < servers.size(); j++) {
+			if (servers[j].getData("server_name") == host) {
+				return resolveRootFromServer(servers[j], requestPath, host);
+			}
+		}
+	}
+
+	return "./www"; // return default value
+}

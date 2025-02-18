@@ -45,3 +45,7 @@ std::string ServerConf::getData(std::string key) const {
 	}
 	return "";
 }
+
+std::string ServerConf::getRootDir(void) const {
+	return getData("root");
+}
