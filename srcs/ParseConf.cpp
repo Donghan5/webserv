@@ -81,6 +81,10 @@ void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfi
 				ifStatement << tokens[i] << " ";
 			}
 		}
+		std::string value = tokens[1];
+		if (!value.empty() && value[value.size() - 1] == ';') {
+			value = value.substr(0, value.size() - 1);
+		}
 		locationConfig.setData(tokens[0], tokens[1]);
 	}
 	serverConfig.addLocation(locationConfig);
@@ -130,7 +134,11 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
 			}
 		}
 		else {
-			serverConfig.setData(tokens[0], tokens[1]);
+			std::string value = tokens[1];
+			if (!value.empty() && value[value.size() - 1] == ';') {
+				value = value.substr(0, value.size() - 1);
+			}
+			serverConfig.setData(tokens[0], value);
 		}
 	}
 	httpConfig.addServer(serverConfig);
@@ -157,7 +165,11 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 		if (typeToken == KEY_SERVER) {
 			handleServerBlock(file, hconf);
 		} else {
-			hconf.setData(tokens[0], tokens[1]);
+			std::string value = tokens[1];
+			if (!value.empty() && value[value.size() - 1] == ';') {
+				value = value.substr(0, value.size() - 1);
+			}
+			hconf.setData(tokens[0], value);
 		}
 	}
 	_webconf->addHttpBlock(hconf);
