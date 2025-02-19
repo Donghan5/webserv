@@ -1,6 +1,7 @@
 #include "../includes/HttpServer.hpp"
 #include "../includes/ParsedRequest.hpp"
 
+
     // Helper function to make socket non-blocking
 void HttpServer::make_non_blocking(int fd) {
 	int flags = fcntl(fd, F_GETFL, 0);
@@ -122,14 +123,20 @@ void HttpServer::handle_client_read(int client_fd) {
 	char buffer[BUFFER_SIZE];
 	ssize_t bytes_read = read(client_fd, buffer, BUFFER_SIZE);
 
-	if (bytes_read <= 0) {
-		if (bytes_read == 0 || errno != EAGAIN) {
-			close_client(client_fd);
-		}
-		return;
-	}
+	// if (bytes_read <= 0) {
+	// 	if (bytes_read == 0 || errno != EAGAIN) {
+	// 		close_client(client_fd);
+	// 	}
+	// 	return;
+	// }
 
-	partial_requests[client_fd].append(buffer, bytes_read);
+	while (bytes_read > 0) {
+		partial_requests[client_fd].append(buffer, bytes_read);
+	}
+	if (bytes_read == 0)
+		close_client(client_fd);
+	else if (bytes_read < 0 && errno != EAGAIN)
+		close_client(client_fd);
 
 	// Check if we have a complete HTTP request
 	size_t header_end = partial_requests[client_fd].find("\r\n\r\n");

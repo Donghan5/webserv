@@ -1,5 +1,10 @@
 #include "../includes/ParsedRequest.hpp"
 
+static std::string intToString(int num) {
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
 
 static std::string &trimString(std::string &str) {
 	const std::string whitespace = " \t\r\n";
@@ -10,6 +15,10 @@ static std::string &trimString(std::string &str) {
 		str.clear();
 	} else {
 		str = str.substr(start, end - start + 1);
+	}
+
+	if (!str.empty() && str[str.size() - 1] == '\r') {
+		str.erase(str.size() - 1);
 	}
 	return str;
 }
@@ -45,7 +54,7 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 		throw std::runtime_error("400 Bad Request: Unsupported HTTP version");
 	}
 
-	while (std::getline(stream, line)) {
+	while (std::getline(stream, line) && !line.empty()) {
 		size_t pos = line.find(':');
 		if (pos != std::string::npos) {
 			std::string key = line.substr(0, pos);
@@ -75,13 +84,22 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 		if (_headers.find("content-length") != _headers.end()) {
 			int contentLength = std::atoi(getData("content-length").c_str());
 			if (contentLength < 0) {
-				throw std::logic_error("Invalid Content-Length value");
+				throw std::logic_error("400 Bad Request: Invalid Content-Length Value");
 			}
-			_body.resize(contentLength);
-			stream.read(&_body[0], contentLength); // body 0 is the first address of string
 
-			if (stream.gcount() < contentLength) {
-				throw std::logic_error("400 Bad Request: Incomplete Content-Length");
+			_body.clear();
+			_body.reserve(contentLength);
+
+			char buf;
+			int bytesRead = 0;
+
+			while (bytesRead < contentLength && stream.get(buf)) {
+				_body += buf;
+				bytesRead++;
+			}
+			if (bytesRead < contentLength) {
+				throw std::logic_error(std::string("400 Bad Request: Incomplete Content-Length (expected ") +
+									   std::string(intToString(contentLength)) + ", got " + std::string(intToString(bytesRead)) + ")");
 			}
 		}
 	}
