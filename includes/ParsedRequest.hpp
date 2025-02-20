@@ -8,6 +8,7 @@
 #include <map>
 #include <sstream>
 #include <cstdlib>
+#include <sys/socket.h>
 
 typedef std::map<std::string, std::string> string_map;
 

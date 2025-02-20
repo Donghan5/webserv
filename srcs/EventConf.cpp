@@ -1,4 +1,5 @@
 #include "../includes/EventConf.hpp"
+#include "../includes/Logger.hpp"
 
 EventConf::EventConf(): _workerConnections(0), _useMethods("") {}
 EventConf::EventConf(int workerConnections, std::string useMethods): _workerConnections(workerConnections), _useMethods(useMethods) {};
@@ -23,6 +24,7 @@ EventConf &EventConf::operator=(const EventConf &obj) {
 */
 void EventConf::setWorkerConnections(int workerConnections) {
 	if (workerConnections < 1) {
+		Logger::log(Logger::ERROR, "Invalid worker_connections value");
 		throw std::invalid_argument("worker_connections must be at least 1");
 	}
 	this->_workerConnections = workerConnections;
@@ -36,6 +38,7 @@ void EventConf::setUseMethods(std::string useMethods) {
 	const std::string validMethodsArray[] = {"select", "poll", "kqueue", "eventport", "devpoll"};
 	const string_set validMethods(validMethodsArray, validMethodsArray + 5);
 	if (validMethods.find(useMethods) == validMethods.end()) { // verfy real argument
+		Logger::log(Logger::ERROR, "Invalid argument in event conf");
 		std::invalid_argument("Invalid argument: " + useMethods);
 	}
 	this->_useMethods = useMethods;

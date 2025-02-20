@@ -1,4 +1,5 @@
 #include "../includes/ParsedRequest.hpp"
+#include "../includes/Logger.hpp"
 
 static std::string intToString(int num) {
 	std::ostringstream oss;
@@ -46,12 +47,14 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 	std::string line;
 
 	if (std::getline(stream, line)) {
+		Logger::log(Logger::INFO, "Parsing Request Line: " + line);
 		std::istringstream lineStream(line);
 		lineStream >> _method >> _path >> _version;
 	}
 
 	if (_version != "HTTP/1.1") {
-		throw std::runtime_error("400 Bad Request: Unsupported HTTP version");
+		Logger::log(Logger::ERROR, "400 Bad Request: Unsupported HTTP version");
+		throw std::runtime_error("400 Bad Request\r\n\r\nUnsupported HTTP version");
 	}
 
 	while (std::getline(stream, line) && !line.empty()) {
@@ -82,24 +85,25 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 
 	if (_method == "POST") {
 		if (_headers.find("content-length") != _headers.end()) {
-			int contentLength = std::atoi(getData("content-length").c_str());
-			if (contentLength < 0) {
-				throw std::logic_error("400 Bad Request: Invalid Content-Length Value");
-			}
+			std::string contentLengthStr = getData("content-length");
+			std::cout << "Content length str: " + contentLengthStr << std::endl;
+			if (!contentLengthStr.empty()) {
+				int contentLength = std::atoi(contentLengthStr.c_str());
 
-			_body.clear();
-			_body.reserve(contentLength);
+				size_t bodyStart = request.find("\r\n\r\n");
+				if (bodyStart == std::string::npos) {
+					Logger::log(Logger::ERROR, "400 Bad Request Incomplete headers");
+					throw std::runtime_error("400 Bad Request Incomplete headers");
+				}
+				bodyStart += 4;
 
-			char buf;
-			int bytesRead = 0;
+				_body = request.substr(bodyStart);
 
-			while (bytesRead < contentLength && stream.get(buf)) {
-				_body += buf;
-				bytesRead++;
-			}
-			if (bytesRead < contentLength) {
-				throw std::logic_error(std::string("400 Bad Request: Incomplete Content-Length (expected ") +
-									   std::string(intToString(contentLength)) + ", got " + std::string(intToString(bytesRead)) + ")");
+				if (_body.size() < (size_t)contentLength) {
+					Logger::log(Logger::ERROR, "400 Bad Request: Incomplete Content-Length");
+					throw std::logic_error("400 Bad Request: Incomplete Content-Length");
+				}
+				Logger::log(Logger::INFO, "Successfully received full request body (" + intToString(contentLength) + " bytes)");
 			}
 		}
 	}
@@ -109,6 +113,7 @@ ParsedRequest::ParsedRequest(const std::string &request) {
 	try {
 		parseHttpRequest(request);
 	} catch (const std::exception &e) {
+		Logger::log(Logger::ERROR, "Error detected Request scope");
 		std::cerr << e.what() << std::endl;
 	}
 }
