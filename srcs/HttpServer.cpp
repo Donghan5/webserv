@@ -2,6 +2,7 @@
 #include "../includes/ParsedRequest.hpp"
 #include "../includes/FileHandler.hpp"
 #include "../includes/Logger.hpp"
+#include "../includes/CgiHandler.hpp"
 
 #define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
 #define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"
@@ -53,8 +54,13 @@ std::string HttpServer::process_request(const std::string &request) {
 	std::string resolved_root = _webconf.resolveRoot(host, path);
 	std::string full_path = resolved_root + path;
 
+	Logger::log(Logger::INFO, "Resolved root: " + resolved_root);
 	Logger::log(Logger::INFO, "Directive to: " + full_path);
-
+	std::string extension = path.substr(path.find_last_of("."));
+	if (extension == ".py" || extension == ".php" || extension == ".pl" || extension == ".sh") {
+			CgiHandler cgi(full_path, parser.getHeaders(), parser.getBody());
+			return cgi.executeCgi();
+	}
 	if (method == "GET") {
 		return FileHandler::handleGetRequest(full_path);
 	}

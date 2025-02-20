@@ -27,7 +27,10 @@ string_vector ParseConf::confReadToken(std::ifstream &file) {
 	std::string line;
 	string_vector tokens;
 
+	std::cout << line << std::endl;
 	while (std::getline(file, line)) {
+		std::cout << "DEBUG: Read line: [" << line << "] (size: " << line.size() << ")" << std::endl;
+
 		if (line.empty()) continue;
 
 		std::istringstream ss(line);
@@ -41,123 +44,79 @@ string_vector ParseConf::confReadToken(std::ifstream &file) {
 	return tokens;
 }
 
-void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfig) {
-	string_vector tokens;
-	LocationConf locationConfig;
-	std::ostringstream ifStatement;
-	bool insideIf = false;
+void ParseConf::handleLocationBlock(std::ifstream& file, ServerConf& serverConfig) {
+    LocationConf locationConfig;
+    string_vector tokens = confReadToken(file);
 
-	if (tokens.size() > 2) {
-		locationConfig.setPath(tokens[1]);
-		locationConfig.setData("path", tokens[1]);
-	}
+    if (tokens.size() < 2) {
+        throw std::runtime_error("Invalid location block format");
+    }
 
-	while (!file.eof()) {
-		tokens = confReadToken(file);
-		e_type_key typeToken = getKeyType(tokens[0]);
-		if (tokens.empty()) continue;
-		if (typeToken == KEY_CLOSING_BRACE) {
+    locationConfig.setPath(tokens[1]); // Set path for location block
+    locationConfig.setData("path", tokens[1]);
 
-			if (insideIf  == true) {
-				ifStatement << "}";
-				locationConfig.setData("if_statement", ifStatement.str());
-				insideIf = false;
-			}
-			else {
-				break; // closing brace
-			}
-		}
-		else if (typeToken == KEY_IF) {
-			insideIf = true;
-			ifStatement.str("");
-			for (size_t i (0); i < tokens.size(); i++) {
-				ifStatement << tokens[i] << " ";
-			}
-		}
-		else if (insideIf) {
-			for (size_t i (0); i < tokens.size(); i++) {
-				ifStatement << tokens[i] << " ";
-			}
-		}
-		std::string value = tokens[1];
-		if (!value.empty() && value[value.size() - 1] == ';') {
-			value = value.substr(0, value.size() - 1);
-		}
-		locationConfig.setData(tokens[0], tokens[1]);
-	}
-	serverConfig.addLocation(locationConfig);
+    tokens = confReadToken(file);
+
+    while (true) {
+        tokens = confReadToken(file);
+        if (tokens.empty()) continue;
+
+        e_type_key type = getKeyType(tokens[0]);
+        if (type == KEY_CLOSING_BRACE) break;
+
+        std::string value = tokens.size() > 1 ? tokens[1] : "";
+        if (tokens[0] == "root") {
+            locationConfig.setRootDir(value);
+        } else if (tokens[0] == "index") {
+            locationConfig.setData("index", value);
+        } else if (tokens[0] == "autoindex") {
+            locationConfig.setData("autoindex", value);
+        } else {
+            locationConfig.setData(tokens[0], value);
+        }
+    }
+    serverConfig.addLocation(locationConfig);
+	locationConfig.showLocationData();
 }
 
 /*
 	Handle multiple Server block
 */
 void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
-	ServerConf serverConfig;
-	string_vector tokens;
-	std::ostringstream ifStatement;
-	bool insideIf = false;
+    ServerConf serverConfig;
+    string_vector tokens = confReadToken(file);
 
-	while (!file.eof()) {
-		tokens = confReadToken(file);
-		e_type_key typeToken = getKeyType(tokens[0]);
-		if (tokens.empty()) continue;
-		if (typeToken == KEY_CLOSING_BRACE) {
-			if (insideIf == true) {
-				ifStatement << "}";
-				serverConfig.setData("if_statement", ifStatement.str());
-				insideIf = false;
-			}
-			else {
-				break; // Closing server block
-			}
-		}
+	serverConfig.setData(tokens[0], tokens[1]);
+    while (true) {
+        tokens = confReadToken(file);
+        if (tokens.size() == 0) continue;
 
-		if (typeToken == KEY_LOCATION) {
-			if (tokens.size() < 2) {
-				Logger::log(Logger::ERROR, "Invalid location block form");
-				throw std::logic_error("Invalid location block form");
-			}
-			handleLocationBlock(file, serverConfig);
-		}
-		else if (typeToken == KEY_IF) {
-			insideIf = true;
-			ifStatement.str("");
-			for (size_t i (0); i < tokens.size(); i++) {
-				ifStatement << tokens[i] << " ";
-			}
-		}
-		else if (insideIf) {
-			for (size_t i (0); i < tokens.size(); i++) {
-				ifStatement << tokens[i] << " ";
-			}
-		}
-		else {
-			std::string value = tokens[1];
-			if (!value.empty() && value[value.size() - 1] == ';') {
-				value = value.substr(0, value.size() - 1);
-			}
-			serverConfig.setData(tokens[0], value);
-		}
-	}
-	httpConfig.addServer(serverConfig);
+        e_type_key typeToken = getKeyType(tokens[0]);
+        if (typeToken == KEY_CLOSING_BRACE) break;  // 서버 블록 종료
+
+        if (typeToken == KEY_LOCATION) {
+            handleLocationBlock(file, serverConfig);
+        }
+        serverConfig.setData(tokens[0], tokens[1]);
+    }
+    httpConfig.addServer(serverConfig);
+	serverConfig.showServerData();
 }
+
 
 /*
 	Handle multiple http block
 */
 void ParseConf::handleHttpBlock(std::ifstream &file) {
-	string_vector tokens;
 	HttpConf hconf = _webconf->getHttpBlock();
+	string_vector tokens;
 
-	while (!file.eof()) {
+	while (true) {
 		tokens = confReadToken(file);
 		e_type_key typeToken = getKeyType(tokens[0]);
 		if (tokens.empty()) continue;
-		if (typeToken == KEY_CLOSING_BRACE) {
-			break; // closing brace
-		}
-
-		if (typeToken == KEY_SERVER) {
+		if (typeToken == KEY_CLOSING_BRACE) break; // closing brace
+		else if (typeToken == KEY_SERVER) {
 			handleServerBlock(file, hconf);
 		} else {
 			std::string value = tokens[1];
@@ -168,81 +127,105 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 		}
 		_webconf->setHttpBlock(hconf);
 	}
+	hconf.showHttpData();
 }
 
 /*
 	Handle event block
 */
 void ParseConf::handleEventBlock(std::ifstream &file) {
-	string_vector tokens;
-	bool isEmpty = true;
+    string_vector tokens = confReadToken(file);
 
-	while (!file.eof()) {
-		tokens = confReadToken(file);
-		e_type_key typeToken = getKeyType(tokens[0]);
-		if (tokens.empty()) continue; // tokens vector is empty
-		if (typeToken == KEY_CLOSING_BRACE) break; // end of block
+    bool isEmpty = true;
 
-		isEmpty = false;
-		if (tokens[0] == "worker_connections")
-			this->_webconf->getEventConf().setWorkerConnections(std::atoi(tokens[1].c_str()));
-		else if (tokens[0] == "use")
-			this->_webconf->getEventConf().setUseMethods(tokens[1]);
-	}
-	if (isEmpty == true) {
-		_webconf->getEventConf().setUseMethods("");
-		_webconf->getEventConf().setWorkerConnections(0);
-	}
+    while (true) {
+        tokens = confReadToken(file);
+        if (tokens.size() == 0) continue;
+
+        e_type_key typeToken = getKeyType(tokens[0]);
+        if (typeToken == KEY_CLOSING_BRACE) break; // 블록 종료
+
+        isEmpty = false;
+
+        if (tokens.size() > 1) {
+            std::string value = tokens[1];
+            if (value.size() > 0 && value[value.size() - 1] == ';') {
+                value.erase(value.size() - 1, 1);  // `;` 제거
+            }
+
+            if (tokens[0] == "worker_connections") {
+                if (isdigit(value[0])) {  // 값이 숫자인지 확인
+                    this->_webconf->getEventConf().setWorkerConnections(std::atoi(value.c_str()));
+                } else {
+                    Logger::log(Logger::ERROR, "Invalid argument for worker_connections: " + value);
+                    throw std::runtime_error("Invalid argument in event conf");
+                }
+            } else if (tokens[0] == "use") {
+                if (value.size() > 0) {
+                    this->_webconf->getEventConf().setUseMethods(value);
+                } else {
+                    Logger::log(Logger::ERROR, "Invalid argument for use directive");
+                    throw std::runtime_error("Invalid argument in event conf");
+                }
+            } else {
+                Logger::log(Logger::ERROR, "Unknown directive inside events block: " + tokens[0]);
+            }
+        } else {
+            Logger::log(Logger::ERROR, "Invalid event directive format");
+        }
+    }
+
+    if (isEmpty) {
+        _webconf->getEventConf().setUseMethods("");
+        _webconf->getEventConf().setWorkerConnections(0);
+    }
 }
+
 
 /*
 	Parsing configuration file
 	@param
 		confFileName
 */
-void	ParseConf::ParsingConfigure(std::string confFileName) {
-	std::ifstream file(confFileName.c_str());
+void ParseConf::ParsingConfigure(std::string confFileName) {
+    std::ifstream file(confFileName.c_str());
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open the file");
+    }
 
-	if (!file.is_open()) {
-		Logger::log(Logger::ERROR, "Fail open file");
-		throw std::runtime_error("Cannot open the file");
-	}
+    bool httpBlockFound = false;
+    bool eventBlockProcessed = false;
 
-	std::string firstLine;
-	if (std::getline(file, firstLine)) {
-		std::istringstream ss(firstLine);
-		std::string token;
-		string_vector firstTokens;
-		while (ss >> token) {
-			if (token[0] == '#') break;
-			firstTokens.push_back(token);
-		}
+    while (true) {
+        string_vector tokens = confReadToken(file);
+        if (tokens.size() == 0) break;
 
-		if (!firstTokens.empty()) {
-			e_type_key typeToken = getKeyType(firstTokens[0]);
-			if (typeToken == KEY_EVENT) {
-				handleEventBlock(file);
-			}
-		}
-	}
+        e_type_key type = getKeyType(tokens[0]);
 
-	std::string line;
-	while (std::getline(file, line)) {
-		string_vector tokens = confReadToken(file);
-		e_type_key typeToken = getKeyType(tokens[0]);
-		switch (typeToken) {
-			case KEY_HTTP:
-				handleHttpBlock(file);
-				break;
-			case KEY_EVENT:
-				handleEventBlock(file);
-				break;
-			default:
-				Logger::log(Logger::ERROR, "Invalid top-level directive");
-				throw std::logic_error("Invalid top-level directvie: " + tokens[0]);
-		}
-	}
+        switch (type) {
+            case KEY_EVENT:
+                if (eventBlockProcessed) {
+                    throw std::logic_error("Duplicate 'events' block detected.");
+                }
+                handleEventBlock(file);
+                eventBlockProcessed = true;
+                break;
+            case KEY_HTTP:
+                handleHttpBlock(file);
+                httpBlockFound = true;
+                break;
+            case KEY_LOCATION:
+                throw std::logic_error("Invalid top-level directive: location (must be inside a server block)");
+            default:
+                throw std::logic_error("Invalid top-level directive: " + tokens[0]);
+        }
+    }
+
+    if (!httpBlockFound) {
+        throw std::logic_error("Missing required 'http' block in configuration.");
+    }
 }
+
 
 ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
 	_webconf = new WebServConf();

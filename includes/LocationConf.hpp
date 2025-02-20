@@ -26,6 +26,7 @@ class LocationConf {
 		std::string getData(std::string key) const;
 		const string_map &getSettings() const;
 		std::string getRootDir(void) const;
+		void setRootDir(const std::string &root);
 
 
 	// get and set the path

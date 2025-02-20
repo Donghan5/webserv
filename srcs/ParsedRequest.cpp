@@ -84,6 +84,10 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 	}
 
 	if (_method == "POST") {
+		if (_headers.find("transfer-encoding") != _headers.end() && getData("transfer-encoding") == "chunked") {
+    		Logger::log(Logger::ERROR, "501 Not Implemented: Chunked Transfer-Encoding not supported");
+    		throw std::runtime_error("501 Not Implemented: Chunked Transfer-Encoding not supported");
+		}
 		if (_headers.find("content-length") != _headers.end()) {
 			std::string contentLengthStr = getData("content-length");
 			std::cout << "Content length str: " + contentLengthStr << std::endl;

@@ -1,340 +1,242 @@
-[2025-02-19 21:22:51] INFO: Start Server
-[2025-02-19 21:23:17] INFO: Directive to: ./www/index.html
-[2025-02-19 21:23:17] INFO: 200 OK in get request
-[2025-02-19 21:23:17] INFO: Directive to: ./www/style.css
-[2025-02-19 21:23:17] INFO: 200 OK in get request
-[2025-02-19 21:23:17] INFO: Directive to: ./www/script.js
-[2025-02-19 21:23:17] INFO: 200 OK in get request
-[2025-02-19 21:23:21] INFO: Directive to: ./www/contact.html
-[2025-02-19 21:23:21] INFO: 200 OK in get request
-[2025-02-19 21:23:21] INFO: Directive to: ./www/style.css
-[2025-02-19 21:23:21] INFO: 200 OK in get request
-[2025-02-19 21:25:54] INFO: Directive to: ./www/index.html
-[2025-02-19 21:25:54] INFO: 200 OK in get request
-[2025-02-19 21:25:54] INFO: Directive to: ./www/script.js
-[2025-02-19 21:25:54] INFO: 200 OK in get request
-[2025-02-19 21:25:54] INFO: Directive to: ./www/style.css
-[2025-02-19 21:25:54] INFO: 200 OK in get request
-[2025-02-19 21:26:26] ERROR: 400 Bad Request
-
-Incomplete Content-Length
-[2025-02-19 21:26:26] ERROR: Error detected Request scope
-[2025-02-19 21:26:26] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:26:26] ERROR: 400 Bad request in post request
-[2025-02-19 21:27:21] ERROR: 400 Bad Request
-
-Incomplete Content-Length
-[2025-02-19 21:27:21] ERROR: Error detected Request scope
-[2025-02-19 21:27:21] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:27:21] ERROR: 400 Bad request in post request
-[2025-02-19 21:27:35] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:27:35] ERROR: 404 Error in delete handle
-[2025-02-19 21:31:15] INFO: Start Server
-[2025-02-19 21:31:16] INFO: Directive to: ./www/index.html
-[2025-02-19 21:31:16] INFO: 200 OK in get request
-[2025-02-19 21:31:16] INFO: Directive to: ./www/style.css
-[2025-02-19 21:31:16] INFO: 200 OK in get request
-[2025-02-19 21:31:16] INFO: Directive to: ./www/script.js
-[2025-02-19 21:31:16] INFO: 200 OK in get request
-[2025-02-19 21:31:27] ERROR: 400 Bad Request
-
-Incomplete Content-Length
-[2025-02-19 21:31:27] ERROR: Error detected Request scope
-[2025-02-19 21:31:27] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:31:27] ERROR: 400 Bad request in post request
-[2025-02-19 21:32:18] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:32:18] ERROR: 404 Error in delete handle
-[2025-02-19 21:32:48] INFO: Start Server
-[2025-02-19 21:32:50] INFO: Directive to: ./www/index.html
-[2025-02-19 21:32:50] INFO: 200 OK in get request
-[2025-02-19 21:32:50] INFO: Directive to: ./www/style.css
-[2025-02-19 21:32:50] INFO: 200 OK in get request
-[2025-02-19 21:32:50] INFO: Directive to: ./www/script.js
-[2025-02-19 21:32:50] INFO: 200 OK in get request
-[2025-02-19 21:32:56] ERROR: 400 Bad Request
-
-Incomplete Content-Length
-[2025-02-19 21:32:56] ERROR: Error detected Request scope
-[2025-02-19 21:32:56] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:32:56] ERROR: 400 Bad request in post request
-[2025-02-19 21:43:58] INFO: Start Server
-[2025-02-19 21:44:07] INFO: Directive to: ./www/index.html
-[2025-02-19 21:44:07] INFO: 200 OK in get request
-[2025-02-19 21:44:07] INFO: Directive to: ./www/style.css
-[2025-02-19 21:44:07] INFO: 200 OK in get request
-[2025-02-19 21:44:07] INFO: Directive to: ./www/script.js
-[2025-02-19 21:44:07] INFO: 200 OK in get request
-[2025-02-19 21:44:20] ERROR: 400 Bad Request
-
-Incomplete Content-Length
-[2025-02-19 21:44:20] ERROR: Error detected Request scope
-[2025-02-19 21:44:20] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:44:20] ERROR: 400 Bad request in post request
-[2025-02-19 21:48:21] INFO: Start Server
-[2025-02-19 21:48:28] INFO: Directive to: ./www/index.html
-[2025-02-19 21:48:28] INFO: 200 OK in get request
-[2025-02-19 21:48:28] INFO: Directive to: ./www/style.css
-[2025-02-19 21:48:28] INFO: 200 OK in get request
-[2025-02-19 21:48:28] INFO: Directive to: ./www/script.js
-[2025-02-19 21:48:28] INFO: 200 OK in get request
-[2025-02-19 21:48:33] ERROR: 400 Bad Request
-
-Failed to read full request body
-[2025-02-19 21:48:33] ERROR: Error detected Request scope
-[2025-02-19 21:48:33] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 21:48:33] ERROR: 400 Bad request in post request
-[2025-02-19 22:08:26] INFO: Start Server
-[2025-02-19 22:08:27] INFO: Directive to: ./www/index.html
-[2025-02-19 22:08:27] INFO: 200 OK in get request
-[2025-02-19 22:08:27] INFO: Directive to: ./www/style.css
-[2025-02-19 22:08:27] INFO: 200 OK in get request
-[2025-02-19 22:08:27] INFO: Directive to: ./www/script.js
-[2025-02-19 22:08:27] INFO: 200 OK in get request
-[2025-02-19 22:08:32] ERROR: 400 Bad request
-[2025-02-19 22:08:32] ERROR: Error detected Request scope
-[2025-02-19 22:08:32] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 22:08:32] ERROR: 400 Bad request in post request
-[2025-02-19 22:25:14] INFO: Start Server
-[2025-02-19 22:25:20] INFO: Directive to: ./www/index.html
-[2025-02-19 22:25:20] INFO: 200 OK in get request
-[2025-02-19 22:25:20] INFO: Directive to: ./www/style.css
-[2025-02-19 22:25:20] INFO: 200 OK in get request
-[2025-02-19 22:25:20] INFO: Directive to: ./www/script.js
-[2025-02-19 22:25:20] INFO: 200 OK in get request
-[2025-02-19 22:25:25] ERROR: 404 Bad Request
-
-Failed to read full request body
-[2025-02-19 22:25:25] ERROR: Error detected Request scope
-[2025-02-19 22:25:25] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 22:25:25] ERROR: 400 Bad request in post request
-[2025-02-19 22:29:52] INFO: Start Server
-[2025-02-19 22:29:58] INFO: Directive to: ./www/index.html
-[2025-02-19 22:29:58] INFO: 200 OK in get request
-[2025-02-19 22:29:59] INFO: Directive to: ./www/style.css
-[2025-02-19 22:29:59] INFO: 200 OK in get request
-[2025-02-19 22:29:59] INFO: Directive to: ./www/script.js
-[2025-02-19 22:29:59] INFO: 200 OK in get request
-[2025-02-19 22:30:03] ERROR: 404 Bad Request: Failed to read full request body
-[2025-02-19 22:30:03] ERROR: Error detected Request scope
-[2025-02-19 22:30:03] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 22:30:03] ERROR: 400 Bad request in post request
-[2025-02-19 22:47:03] INFO: Start Server
-[2025-02-19 22:47:08] INFO: Directive to: ./www/index.html
-[2025-02-19 22:47:08] INFO: 200 OK in get request
-[2025-02-19 22:47:08] INFO: Directive to: ./www/style.css
-[2025-02-19 22:47:08] INFO: 200 OK in get request
-[2025-02-19 22:47:08] INFO: Directive to: ./www/script.js
-[2025-02-19 22:47:08] INFO: 200 OK in get request
-[2025-02-19 22:47:14] ERROR: 404 Bad Request: Failed to read full request body
-[2025-02-19 22:47:14] ERROR: Error detected Request scope
-[2025-02-19 22:47:14] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 22:47:14] ERROR: 400 Bad request in post request
-[2025-02-19 23:00:13] INFO: Start Server
-[2025-02-19 23:00:18] ERROR: 400 Bad Request
-
-Unsupported HTTP version
-[2025-02-19 23:00:18] ERROR: Error detected Request scope
-[2025-02-19 23:00:18] WARNING: No matching server_name. Using default server
-[2025-02-19 23:00:18] INFO: Directive to: ./www
-[2025-02-19 23:00:18] ERROR: 405 error in process request
-[2025-02-19 23:00:22] ERROR: 400 Bad Request
-
-Unsupported HTTP version
-[2025-02-19 23:00:22] ERROR: Error detected Request scope
-[2025-02-19 23:00:22] WARNING: No matching server_name. Using default server
-[2025-02-19 23:00:22] INFO: Directive to: ./www
-[2025-02-19 23:00:22] ERROR: 405 error in process request
-[2025-02-19 23:02:24] INFO: Start Server
-[2025-02-19 23:02:29] ERROR: 400 Bad Request
-
-Unsupported HTTP version
-[2025-02-19 23:02:29] ERROR: Error detected Request scope
-[2025-02-19 23:02:29] WARNING: No matching server_name. Using default server
-[2025-02-19 23:02:29] INFO: Directive to: ./www
-[2025-02-19 23:02:29] ERROR: 405 error in process request
-[2025-02-19 23:06:32] INFO: Start Server
-[2025-02-19 23:06:39] ERROR: 400 Bad Request
-
-Unsupported HTTP version
-[2025-02-19 23:06:39] ERROR: Error detected Request scope
-[2025-02-19 23:06:39] WARNING: No matching server_name. Using default server
-[2025-02-19 23:06:39] INFO: Directive to: ./www
-[2025-02-19 23:06:39] ERROR: 405 error in process request
-[2025-02-19 23:06:39] ERROR: 400 Bad Request
-
-Unsupported HTTP version
-[2025-02-19 23:06:39] ERROR: Error detected Request scope
-[2025-02-19 23:06:39] WARNING: No matching server_name. Using default server
-[2025-02-19 23:06:39] INFO: Directive to: ./www
-[2025-02-19 23:06:39] ERROR: 405 error in process request
-[2025-02-19 23:09:51] INFO: Start Server
-[2025-02-19 23:09:56] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:09:56] INFO: Directive to: ./www/index.html
-[2025-02-19 23:09:56] INFO: 200 OK in get request
-[2025-02-19 23:09:56] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:09:56] INFO: Directive to: ./www/script.js
-[2025-02-19 23:09:56] INFO: 200 OK in get request
-[2025-02-19 23:09:56] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:09:56] INFO: Directive to: ./www/style.css
-[2025-02-19 23:09:56] INFO: 200 OK in get request
-[2025-02-19 23:10:09] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:10:09] ERROR: 404 Bad Request: Failed to read full request body
-[2025-02-19 23:10:09] ERROR: Error detected Request scope
-[2025-02-19 23:10:09] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:10:09] ERROR: 400 Bad request in post request
-[2025-02-19 23:24:20] INFO: Start Server
-[2025-02-19 23:24:31] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:24:31] INFO: Directive to: ./www/index.html
-[2025-02-19 23:24:31] INFO: 200 OK in get request
-[2025-02-19 23:24:31] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:24:31] INFO: Directive to: ./www/style.css
-[2025-02-19 23:24:31] INFO: 200 OK in get request
-[2025-02-19 23:24:31] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:24:31] INFO: Directive to: ./www/script.js
-[2025-02-19 23:24:31] INFO: 200 OK in get request
-[2025-02-19 23:24:31] INFO: Parsing Request Line: GET /favicon.ico HTTP/1.1
-[2025-02-19 23:24:31] INFO: Directive to: ./www/favicon.ico
-[2025-02-19 23:24:31] ERROR: 404 File Not Found
-
-Cannot open file
-[2025-02-19 23:24:55] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:24:55] INFO: Directive to: ./www/index.html
-[2025-02-19 23:24:55] INFO: 200 OK in get request
-[2025-02-19 23:24:55] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:24:55] INFO: Directive to: ./www/style.css
-[2025-02-19 23:24:55] INFO: 200 OK in get request
-[2025-02-19 23:24:55] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:24:55] INFO: Directive to: ./www/script.js
-[2025-02-19 23:24:55] INFO: 200 OK in get request
-[2025-02-19 23:24:58] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:24:58] INFO: Directive to: ./www/index.html
-[2025-02-19 23:24:58] INFO: 200 OK in get request
-[2025-02-19 23:24:58] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:24:58] INFO: Directive to: ./www/style.css
-[2025-02-19 23:24:58] INFO: 200 OK in get request
-[2025-02-19 23:24:58] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:24:58] INFO: Directive to: ./www/script.js
-[2025-02-19 23:24:58] INFO: 200 OK in get request
-[2025-02-19 23:25:02] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:25:02] INFO: Directive to: ./www/index.html
-[2025-02-19 23:25:02] INFO: 200 OK in get request
-[2025-02-19 23:25:02] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:25:02] INFO: Directive to: ./www/style.css
-[2025-02-19 23:25:02] INFO: 200 OK in get request
-[2025-02-19 23:25:02] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:25:02] INFO: Directive to: ./www/script.js
-[2025-02-19 23:25:02] INFO: 200 OK in get request
-[2025-02-19 23:25:42] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:25:42] ERROR: 404 Bad Request: Failed to read full request body
-[2025-02-19 23:25:42] ERROR: Error detected Request scope
-[2025-02-19 23:25:42] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:25:42] ERROR: 400 Bad request in post request
-[2025-02-19 23:34:54] INFO: Start Server
-[2025-02-19 23:35:00] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:35:00] INFO: Directive to: ./www/index.html
-[2025-02-19 23:35:00] INFO: 200 OK in get request
-[2025-02-19 23:35:00] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:35:00] INFO: Directive to: ./www/style.css
-[2025-02-19 23:35:00] INFO: 200 OK in get request
-[2025-02-19 23:35:00] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:35:00] INFO: Directive to: ./www/script.js
-[2025-02-19 23:35:00] INFO: 200 OK in get request
-[2025-02-19 23:37:03] INFO: Start Server
-[2025-02-19 23:37:09] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:37:09] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:37:09] ERROR: 400 Bad request in post request
-[2025-02-19 23:37:39] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:37:39] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:37:39] ERROR: 400 Bad request in post request
-[2025-02-19 23:38:36] INFO: Start Server
-[2025-02-19 23:38:38] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:38:38] INFO: Directive to: ./www/index.html
-[2025-02-19 23:38:38] INFO: 200 OK in get request
-[2025-02-19 23:38:38] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:38:38] INFO: Directive to: ./www/style.css
-[2025-02-19 23:38:38] INFO: 200 OK in get request
-[2025-02-19 23:38:38] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:38:38] INFO: Directive to: ./www/script.js
-[2025-02-19 23:38:38] INFO: 200 OK in get request
-[2025-02-19 23:38:46] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:38:46] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:38:46] ERROR: 400 Bad request in post request
-[2025-02-19 23:45:38] INFO: Start Server
-[2025-02-19 23:45:43] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:45:43] INFO: Directive to: ./www/index.html
-[2025-02-19 23:45:43] INFO: 200 OK in get request
-[2025-02-19 23:45:43] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:45:43] INFO: Directive to: ./www/style.css
-[2025-02-19 23:45:43] INFO: 200 OK in get request
-[2025-02-19 23:45:43] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:45:43] INFO: Directive to: ./www/script.js
-[2025-02-19 23:45:43] INFO: 200 OK in get request
-[2025-02-19 23:45:49] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:45:49] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:45:49] ERROR: 400 Bad request in post request
-[2025-02-19 23:53:41] INFO: Start Server
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-19 23:54:14] INFO: Directive to: ./www/index.html
-[2025-02-19 23:54:14] INFO: 200 OK in get request
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-19 23:54:14] INFO: Directive to: ./www/style.css
-[2025-02-19 23:54:14] INFO: 200 OK in get request
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:54:14] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-19 23:54:14] INFO: Directive to: ./www/script.js
-[2025-02-19 23:54:14] INFO: 200 OK in get request
-[2025-02-19 23:54:20] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:54:20] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:54:20] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-19 23:54:20] INFO: Directive to: ./www/upload/test.txt
-[2025-02-19 23:54:20] ERROR: 400 Bad request in post request: Empty body
-[2025-02-20 00:04:36] INFO: Start Server
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-20 00:04:41] INFO: Directive to: ./www/index.html
-[2025-02-20 00:04:41] INFO: 200 OK in get request
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-20 00:04:41] INFO: Directive to: ./www/style.css
-[2025-02-20 00:04:41] INFO: 200 OK in get request
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-20 00:04:41] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-20 00:04:41] INFO: Directive to: ./www/script.js
-[2025-02-20 00:04:41] INFO: 200 OK in get request
-[2025-02-20 00:04:47] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-20 00:04:47] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-20 00:04:47] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-20 00:04:47] INFO: Directive to: ./www/upload/test.txt
-[2025-02-20 00:04:47] ERROR: 400 Bad request in post request: Empty body
-[2025-02-20 00:06:07] INFO: Start Server
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /index.html HTTP/1.1
-[2025-02-20 00:06:15] INFO: Directive to: ./www/index.html
-[2025-02-20 00:06:15] INFO: 200 OK in get request
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /style.css HTTP/1.1
-[2025-02-20 00:06:15] INFO: Directive to: ./www/style.css
-[2025-02-20 00:06:15] INFO: 200 OK in get request
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-20 00:06:15] INFO: Parsing Request Line: GET /script.js HTTP/1.1
-[2025-02-20 00:06:15] INFO: Directive to: ./www/script.js
-[2025-02-20 00:06:15] INFO: 200 OK in get request
-[2025-02-20 00:06:20] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-20 00:06:20] INFO: Successfully received full request body (213 bytes)
-[2025-02-20 00:06:20] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-20 00:06:20] INFO: Successfully received full request body (213 bytes)
-[2025-02-20 00:06:20] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
-[2025-02-20 00:06:20] INFO: Successfully received full request body (213 bytes)
-[2025-02-20 00:06:20] INFO: Directive to: ./www/upload/test.txt
-[2025-02-20 00:06:20] INFO: 201 POST request accepted
+[2025-02-20 03:54:41] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:54:41] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:54:41] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:54:41] INFO: Resolved root: ./www
+[2025-02-20 03:54:41] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:54:41] INFO: Attempting to execute CGI script:
+[2025-02-20 03:54:41] INFO: Interpreter: /bin/bash
+[2025-02-20 03:54:41] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:54:41] INFO: CGI execution successful
+[2025-02-20 03:56:07] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-20 03:56:07] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-20 03:56:07] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-20 03:56:07] INFO: Resolved root: ./www
+[2025-02-20 03:56:07] INFO: Directive to: ./www/style.css
+[2025-02-20 03:56:07] INFO: 200 OK in get request
+[2025-02-20 03:56:29] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:56:29] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:56:29] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:56:29] INFO: Resolved root: ./www
+[2025-02-20 03:56:29] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:56:29] INFO: Attempting to execute CGI script:
+[2025-02-20 03:56:29] INFO: Interpreter: /bin/bash
+[2025-02-20 03:56:29] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:56:29] INFO: CGI execution successful
+[2025-02-20 03:57:22] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:57:22] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:57:22] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:57:22] INFO: Resolved root: ./www
+[2025-02-20 03:57:22] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:57:22] INFO: Attempting to execute CGI script:
+[2025-02-20 03:57:22] INFO: Interpreter: /bin/bash
+[2025-02-20 03:57:22] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:57:22] INFO: CGI execution successful
+[2025-02-20 03:58:32] INFO: Start Server
+[2025-02-20 03:58:34] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:34] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:34] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:34] INFO: Resolved root: ./www
+[2025-02-20 03:58:34] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:34] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:34] INFO: Interpreter: /bin/bash
+[2025-02-20 03:58:34] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:34] INFO: CGI execution successful
+[2025-02-20 03:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:39] INFO: Resolved root: ./www
+[2025-02-20 03:58:39] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 03:58:39] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:39] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 03:58:39] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 03:58:39] INFO: CGI execution successful
+[2025-02-20 03:58:40] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-20 03:58:40] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-20 03:58:40] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-20 03:58:40] INFO: Resolved root: ./www
+[2025-02-20 03:58:40] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-20 03:58:40] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:40] INFO: Interpreter: /usr/bin/python3
+[2025-02-20 03:58:40] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-20 03:58:40] ERROR: Fail to execute CGI script: /usr/bin/python3 ./www/cgi-bin/test.py
+[2025-02-20 03:58:40] ERROR: CGI Execution Failed
+[2025-02-20 03:58:41] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-20 03:58:41] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-20 03:58:41] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-20 03:58:41] INFO: Resolved root: ./www
+[2025-02-20 03:58:41] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-20 03:58:41] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:41] INFO: Interpreter: /usr/bin/python3
+[2025-02-20 03:58:41] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-20 03:58:41] ERROR: Fail to execute CGI script: /usr/bin/python3 ./www/cgi-bin/test.py
+[2025-02-20 03:58:41] ERROR: CGI Execution Failed
+[2025-02-20 03:58:42] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-20 03:58:42] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-20 03:58:42] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-20 03:58:42] INFO: Resolved root: ./www
+[2025-02-20 03:58:42] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-20 03:58:42] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:42] INFO: Interpreter: /usr/bin/php
+[2025-02-20 03:58:42] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-20 03:58:42] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-20 03:58:42] ERROR: CGI Execution Failed
+[2025-02-20 03:58:43] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:43] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:43] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:43] INFO: Resolved root: ./www
+[2025-02-20 03:58:43] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:43] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:43] INFO: Interpreter: /bin/bash
+[2025-02-20 03:58:43] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:43] INFO: CGI execution successful
+[2025-02-20 03:58:43] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:43] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:43] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:43] INFO: Resolved root: ./www
+[2025-02-20 03:58:43] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 03:58:43] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:43] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 03:58:43] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 03:58:43] INFO: CGI execution successful
+[2025-02-20 03:58:45] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:45] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:45] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:45] INFO: Resolved root: ./www
+[2025-02-20 03:58:45] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:45] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:45] INFO: Interpreter: /bin/bash
+[2025-02-20 03:58:45] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:45] INFO: CGI execution successful
+[2025-02-20 03:58:45] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:45] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:45] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:58:45] INFO: Resolved root: ./www
+[2025-02-20 03:58:45] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 03:58:45] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:45] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 03:58:45] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 03:58:45] INFO: CGI execution successful
+[2025-02-20 03:58:47] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:47] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:47] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:58:47] INFO: Resolved root: ./www
+[2025-02-20 03:58:47] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:47] INFO: Attempting to execute CGI script:
+[2025-02-20 03:58:47] INFO: Interpreter: /bin/bash
+[2025-02-20 03:58:47] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:58:47] INFO: CGI execution successful
+[2025-02-20 03:59:12] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:12] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:12] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:12] INFO: Resolved root: ./www
+[2025-02-20 03:59:12] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:12] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:12] INFO: Interpreter: /bin/bash
+[2025-02-20 03:59:12] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:12] INFO: CGI execution successful
+[2025-02-20 03:59:12] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:12] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:12] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:12] INFO: Resolved root: ./www
+[2025-02-20 03:59:12] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 03:59:12] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:12] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 03:59:12] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 03:59:12] INFO: CGI execution successful
+[2025-02-20 03:59:13] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:13] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:13] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:13] INFO: Resolved root: ./www
+[2025-02-20 03:59:13] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:13] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:13] INFO: Interpreter: /bin/bash
+[2025-02-20 03:59:13] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:13] INFO: CGI execution successful
+[2025-02-20 03:59:13] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:13] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:13] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:13] INFO: Resolved root: ./www
+[2025-02-20 03:59:13] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 03:59:13] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:13] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 03:59:13] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 03:59:13] INFO: CGI execution successful
+[2025-02-20 03:59:14] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:14] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:14] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:14] INFO: Resolved root: ./www
+[2025-02-20 03:59:14] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:14] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:14] INFO: Interpreter: /bin/bash
+[2025-02-20 03:59:14] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:14] INFO: CGI execution successful
+[2025-02-20 03:59:14] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:14] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:14] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 03:59:14] INFO: Resolved root: ./www
+[2025-02-20 03:59:14] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 03:59:14] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:14] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 03:59:14] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 03:59:14] INFO: CGI execution successful
+[2025-02-20 03:59:15] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:15] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:15] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 03:59:15] INFO: Resolved root: ./www
+[2025-02-20 03:59:15] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:15] INFO: Attempting to execute CGI script:
+[2025-02-20 03:59:15] INFO: Interpreter: /bin/bash
+[2025-02-20 03:59:15] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 03:59:15] INFO: CGI execution successful
+[2025-02-20 03:59:35] INFO: Parsing Request Line: DELETE /upload/test.txt HTTP/1.1
+[2025-02-20 03:59:35] INFO: Parsing Request Line: DELETE /upload/test.txt HTTP/1.1
+[2025-02-20 03:59:35] INFO: Parsing Request Line: DELETE /upload/test.txt HTTP/1.1
+[2025-02-20 03:59:35] INFO: Resolved root: ./www
+[2025-02-20 03:59:35] INFO: Directive to: ./www/upload/test.txt
+[2025-02-20 03:59:35] INFO: 200 OK in delete request
+[2025-02-20 03:59:40] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-20 03:59:40] ERROR: 400 Bad Request: Incomplete Content-Length
+[2025-02-20 03:59:40] ERROR: Error detected Request scope
+[2025-02-20 03:59:40] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-20 03:59:40] ERROR: 400 Bad Request: Incomplete Content-Length
+[2025-02-20 03:59:40] INFO: Stopping Server
+[2025-02-20 04:02:40] INFO: Start Server
+[2025-02-20 04:02:46] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 04:02:46] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 04:02:46] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-20 04:02:46] INFO: Resolved root: ./www
+[2025-02-20 04:02:46] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-20 04:02:46] INFO: Attempting to execute CGI script:
+[2025-02-20 04:02:46] INFO: Interpreter: /usr/bin/perl
+[2025-02-20 04:02:46] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-20 04:02:46] INFO: CGI execution successful
+[2025-02-20 04:02:47] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 04:02:47] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 04:02:47] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-20 04:02:47] INFO: Resolved root: ./www
+[2025-02-20 04:02:47] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-20 04:02:47] INFO: Attempting to execute CGI script:
+[2025-02-20 04:02:47] INFO: Interpreter: /bin/bash
+[2025-02-20 04:02:47] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-20 04:02:47] INFO: CGI execution successful
+[2025-02-20 04:02:55] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-20 04:02:55] INFO: Successfully received full request body (213 bytes)
+[2025-02-20 04:02:55] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-20 04:02:55] INFO: Successfully received full request body (213 bytes)
+[2025-02-20 04:02:55] INFO: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-20 04:02:55] INFO: Successfully received full request body (213 bytes)
+[2025-02-20 04:02:55] INFO: Resolved root: ./www
+[2025-02-20 04:02:55] INFO: Directive to: ./www/upload/test.txt
+[2025-02-20 04:02:55] INFO: 201 POST request accepted
+[2025-02-20 04:04:15] INFO: Parsing Request Line: GET /upload/test.txt HTTP/1.1
+[2025-02-20 04:04:15] INFO: Parsing Request Line: GET /upload/test.txt HTTP/1.1
+[2025-02-20 04:04:15] INFO: Parsing Request Line: GET /upload/test.txt HTTP/1.1
+[2025-02-20 04:04:15] INFO: Resolved root: ./www
+[2025-02-20 04:04:15] INFO: Directive to: ./www/upload/test.txt
+[2025-02-20 04:04:15] INFO: 200 OK in get request
+[2025-02-20 04:04:20] INFO: Parsing Request Line: DELETE /upload/test.txt HTTP/1.1
+[2025-02-20 04:04:20] INFO: Parsing Request Line: DELETE /upload/test.txt HTTP/1.1
+[2025-02-20 04:04:20] INFO: Parsing Request Line: DELETE /upload/test.txt HTTP/1.1
+[2025-02-20 04:04:20] INFO: Resolved root: ./www
+[2025-02-20 04:04:20] INFO: Directive to: ./www/upload/test.txt
+[2025-02-20 04:04:20] INFO: 200 OK in delete request

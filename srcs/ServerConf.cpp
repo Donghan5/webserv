@@ -38,12 +38,19 @@ void ServerConf::showServerData(void) {
 	}
 }
 
+
 std::string ServerConf::getData(std::string key) const {
-	string_map::const_iterator it = this->_settings.find(key);
-	if (it != _settings.end()) {
-		return it->second;
-	}
-	return "";
+    std::map<std::string, std::string>::const_iterator it = this->_settings.find(key);
+    if (it != _settings.end()) {
+        std::string value = it->second;
+
+        if (!value.empty() && value[value.size() - 1] == ';') {
+            value.erase(value.size() - 1, 1);
+        }
+
+        return value;
+    }
+    return "";
 }
 
 std::string ServerConf::getRootDir(void) const {

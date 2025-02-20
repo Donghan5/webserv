@@ -50,6 +50,16 @@
         <img id="preview-image" style="max-width: 100%; display: none;" />
     </div>
 
+    <!-- ⚡ CGI 테스트 -->
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
     <footer>
         <p>&copy; 2025 WEBSERV PROJECT</p>
     </footer>
@@ -96,23 +106,6 @@
             });
         }
 
-        function getFileList() {
-            fetch("/file-list")
-            .then(response => response.json())
-            .then(data => {
-                const fileList = document.getElementById("file-list");
-                fileList.innerHTML = "";
-                data.forEach(file => {
-                    const li = document.createElement("li");
-                    li.textContent = file;
-                    fileList.appendChild(li);
-                });
-            })
-            .catch(error => {
-                alert("❌ Failed to retrieve file list.");
-            });
-        }
-
         function getFile() {
             const fileName = document.getElementById("getFileName").value;
             if (!fileName) {
@@ -141,6 +134,17 @@
             })
             .catch(error => {
                 document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
             });
         }
     </script>
