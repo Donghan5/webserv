@@ -1,14 +1,24 @@
 #include "../includes/HttpServer.hpp"
 #include "../includes/ParsedRequest.hpp"
+#include "../includes/FileHandler.hpp"
+#include "../includes/Logger.hpp"
 
+#define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
+#define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"
+#define REQUEST403 "HTTP/1.1 403 Forbidden\r\n\r\nForbidden"
+#define REQUEST404 "HTTP/1.1 404 Not Found\r\n\r\nFile not found"
+#define REQUEST405 "HTTP/1.1 405 Method Not Allowed\r\n\r\nMethod Not Allowed"
+#define REQUEST500 "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file"
 
-    // Helper function to make socket non-blocking
+// Helper function to make socket non-blocking
 void HttpServer::make_non_blocking(int fd) {
 	int flags = fcntl(fd, F_GETFL, 0);
 	if (flags == -1) {
+		Logger::log(Logger::ERROR, "Fail socket flags");
 		throw std::runtime_error("Failed to get socket flags");
 	}
 	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
+		Logger::log(Logger::ERROR, "Fail set non-blocking");
 		throw std::runtime_error("Failed to set socket non-blocking");
 	}
 }
@@ -27,32 +37,8 @@ bool HttpServer::ends_with(const std::string& str, const std::string& suffix) {
 	return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
 }
 
-void HttpServer::handlePostRequest(const std::string &fullPath, const std::string &body) {
-	std::ofstream outFile(fullPath.c_str(), std::ios::binary);
-	if (!outFile.is_open()) {
-		throw std::runtime_error("500 Internal Server Error: Cannot open file");
-	}
-	if (body.empty()) {
-		throw std::runtime_error("400 Bad Request: Empty body");
-	}
-	outFile.write(body.c_str(), body.size());
-	outFile.close();
-}
-
-std::string HttpServer::handleDeleteRequest(const std::string &fullPath) {
-	if (!file_exists(fullPath)) {
-		return "HTTP/1.1 404 Not Found\r\n\r\nFile not found";
-	}
-
-	if (remove(fullPath.c_str()) != 0) {
-		return "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file";
-	}
-
-	return "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully";
-}
-
 // Process a complete HTTP request
-std::string HttpServer::process_request(const std::string& request) {
+std::string HttpServer::process_request(const std::string &request) {
 	ParsedRequest parser(request);
 
 	std::string method = parser.getMethod();
@@ -67,55 +53,25 @@ std::string HttpServer::process_request(const std::string& request) {
 	std::string resolved_root = _webconf.resolveRoot(host, path);
 	std::string full_path = resolved_root + path;
 
-	std::cout << "Resolved_root: " << resolved_root << std::endl;
-	std::cout << "full_path: " << full_path << std::endl;
+	Logger::log(Logger::INFO, "Directive to: " + full_path);
 
 	if (method == "GET") {
-		if (file_exists(full_path)) {
-			std::ifstream file(full_path.c_str(), std::ios::binary);
-			if (file) {
-				// Read file content
-				std::stringstream content;
-				content << file.rdbuf();
-				std::string content_str = content.str();
-				// Determine content type
-				std::string content_type = "text/plain";
-				if (ends_with(path, ".html")) content_type = "text/html";
-				else if (ends_with(path, ".css")) content_type = "text/css";
-				else if (ends_with(path, ".js")) content_type = "application/javascript";
-				else if (ends_with(path, ".jpg") || ends_with(path, ".jpeg")) content_type = "image/jpeg";
-				else if (ends_with(path, ".png")) content_type = "image/png";
-
-				std::ostringstream content_length;
-				content_length << content_str.length();
-
-				std::string response = "HTTP/1.1 200 OK\r\n";
-				response += "Content-Type: " + content_type + "\r\n";
-				response += "Content-Length: " + content_length.str() + "\r\n";
-				response += "\r\n";
-				response += content_str;
-				return response;
-			} else {
-				return "HTTP/1.1 403 Forbidden\r\n\r\nForbidden";
-			}
-		} else {
-			return "HTTP/1.1 404 Not Found\r\n\r\nNot Found";
-		}
+		return FileHandler::handleGetRequest(full_path);
 	}
 	else if (method == "POST") {
 		try {
 			std::string body = parser.getBody();
-			handlePostRequest(full_path, body);
-			return "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully";
+			return FileHandler::handlePostRequest(full_path, body);
 		} catch (const std::exception &e) {
-			return "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file" + std::string(e.what());
+			return std::string(e.what()); // request 500
 		}
 	}
 	else if (method == "DELETE") {
-		return handleDeleteRequest(full_path);
+		return FileHandler::handleDeleteRequest(full_path);
 	}
 	else {
-		return "HTTP/1.1 405 Method Not Allowed\r\n\r\nMethod Not Allowed";
+		Logger::log(Logger::ERROR, "405 error in process request");
+		return REQUEST405;
 	}
 }
 
@@ -123,25 +79,32 @@ void HttpServer::handle_client_read(int client_fd) {
 	char buffer[BUFFER_SIZE];
 	ssize_t bytes_read = read(client_fd, buffer, BUFFER_SIZE);
 
-	// if (bytes_read <= 0) {
-	// 	if (bytes_read == 0 || errno != EAGAIN) {
-	// 		close_client(client_fd);
-	// 	}
-	// 	return;
-	// }
-
-	while (bytes_read > 0) {
-		partial_requests[client_fd].append(buffer, bytes_read);
+	if (bytes_read <= 0) {
+		if (bytes_read == 0 || errno != EAGAIN) {
+			close_client(client_fd);
+		}
+		return;
 	}
-	if (bytes_read == 0)
-		close_client(client_fd);
-	else if (bytes_read < 0 && errno != EAGAIN)
-		close_client(client_fd);
+
+	partial_requests[client_fd].append(buffer, bytes_read);
 
 	// Check if we have a complete HTTP request
 	size_t header_end = partial_requests[client_fd].find("\r\n\r\n");
 	if (header_end != std::string::npos) {
+		ParsedRequest parser(partial_requests[client_fd]);
+		parser.parseHttpRequest(partial_requests[client_fd]);
+
+		std::string content_length_str = parser.getData("content-length");
+        if (!content_length_str.empty()) {
+            int content_length = std::atoi(content_length_str.c_str());
+            size_t body_start = header_end + 4;  // 헤더 끝 다음부터 바디 시작
+
+            if (partial_requests[client_fd].size() < body_start + content_length) {
+                return;
+            }
+        }
 		std::string response = process_request(partial_requests[client_fd]);
+		std::cout << "Response: " + response << std::endl;
 		partial_responses[client_fd] = response;
 		partial_requests.erase(client_fd);
 
@@ -193,12 +156,14 @@ HttpServer::HttpServer(int port_num, const WebServConf &webconf)
 	// Create socket
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd < 0) {
+		Logger::log(Logger::ERROR, "Fail to create socket");
 		throw std::runtime_error("Failed to create socket");
 	}
 
 	// Set socket options
 	int opt = 1;
 	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+		Logger::log(Logger::ERROR, "Failed to set socket options");
 		throw std::runtime_error("Failed to set socket options");
 	}
 
@@ -212,6 +177,7 @@ HttpServer::HttpServer(int port_num, const WebServConf &webconf)
 	address.sin_port = htons(port);
 
 	if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
+		Logger::log(Logger::ERROR, "Fail to bind socket");
 		throw std::runtime_error("Failed to bind socket");
 	}
 }
@@ -221,10 +187,12 @@ void HttpServer::start() {
 
 	// Listen for connections
 	if (listen(server_fd, SOMAXCONN) < 0) {
+		Logger::log(Logger::ERROR, "Failed to listen");
 		throw std::runtime_error("Failed to listen");
 	}
 
-	std::cout << "Server started on port " << port << std::endl;
+	Logger::log(Logger::INFO, "Start Server");
+	std::cout << "On port " << port << std::endl;
 
 	// Add server socket to poll set
 	struct pollfd server_pollfd;
@@ -237,6 +205,7 @@ void HttpServer::start() {
 		int ready = poll(&poll_fds[0], poll_fds.size(), -1);
 		if (ready < 0) {
 			if (errno == EINTR) continue;
+			Logger::log(Logger::ERROR, "Poll failed");
 			throw std::runtime_error("Poll failed");
 		}
 
@@ -256,6 +225,7 @@ void HttpServer::start() {
 
 				if (client_fd < 0) {
 					if (errno != EAGAIN && errno != EWOULDBLOCK) {
+						Logger::log(Logger::ERROR, "Fail connection");
 						std::cerr << "Failed to accept connection" << std::endl;
 					}
 					continue;
@@ -303,6 +273,7 @@ void HttpServer::stop() {
 
 HttpServer::~HttpServer() {
 	if (running) {
+		Logger::log(Logger::INFO, "Stopping Server");
 		stop();
 	}
 }

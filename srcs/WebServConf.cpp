@@ -1,4 +1,5 @@
 #include "../includes/WebServConf.hpp"
+#include "../includes/Logger.hpp"
 
 WebServConf::WebServConf() {
 	_hconf = new HttpConf();
@@ -118,14 +119,14 @@ std::string WebServConf::resolveRootFromServer(const ServerConf &serverConf, std
 			i.e.) GET /images/logo.png
 */
 std::string WebServConf::resolveRoot(std::string host, std::string requestPath) const {
-		const std::vector<ServerConf> &servers = _hconf->getServerByName(host);
+	const std::vector<ServerConf> &servers = _hconf->getServerByName(host);
 		// std::cout << _httpblocks[i].getServerByName(host) << std::endl;
-		for (size_t j (0); j < servers.size(); j++) {
-			if (servers[j].getData("server_name") == host) {
-				// std::cout << servers[j].getData("server_name") << std::endl;
-				return resolveRootFromServer(servers[j], requestPath, _hconf->getData("root"));
-			}
+	for (size_t j (0); j < servers.size(); j++) {
+		if (servers[j].getData("server_name") == host) {
+			// std::cout << servers[j].getData("server_name") << std::endl;
+			return resolveRootFromServer(servers[j], requestPath, _hconf->getData("root"));
 		}
-	std::cout << "DEBUG: No matching server_name found. Using default server." << std::endl;
+	}
+	Logger::log(Logger::WARNING, "No matching server_name. Using default server");
 	return "./www";
 }

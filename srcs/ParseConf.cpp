@@ -1,4 +1,5 @@
 #include "../includes/ParseConf.hpp"
+#include "../includes/Logger.hpp"
 
 /*
 	Get type of configuration block
@@ -27,8 +28,6 @@ string_vector ParseConf::confReadToken(std::ifstream &file) {
 	string_vector tokens;
 
 	while (std::getline(file, line)) {
-		std::cout << "DEBUG: Read line: [" << line << "] (size: " << line.size() << ")" << std::endl;
-
 		if (line.empty()) continue;
 
 		std::istringstream ss(line);
@@ -65,8 +64,7 @@ void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfi
 				insideIf = false;
 			}
 			else {
-				std::cout << "Closing brace in location block" << std::endl;
-				break;
+				break; // closing brace
 			}
 		}
 		else if (typeToken == KEY_IF) {
@@ -88,8 +86,6 @@ void ParseConf::handleLocationBlock(std::ifstream &file, ServerConf &serverConfi
 		locationConfig.setData(tokens[0], tokens[1]);
 	}
 	serverConfig.addLocation(locationConfig);
-	std::cout << "==Verify Data (location)==" << std::endl;
-	locationConfig.showLocationData();
 }
 
 /*
@@ -112,13 +108,15 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
 				insideIf = false;
 			}
 			else {
-				std::cout << "Closing brace in server block" << std::endl;
-				break;
+				break; // Closing server block
 			}
 		}
 
 		if (typeToken == KEY_LOCATION) {
-			if (tokens.size() < 2) throw std::logic_error("Invalid location block form");
+			if (tokens.size() < 2) {
+				Logger::log(Logger::ERROR, "Invalid location block form");
+				throw std::logic_error("Invalid location block form");
+			}
 			handleLocationBlock(file, serverConfig);
 		}
 		else if (typeToken == KEY_IF) {
@@ -142,8 +140,6 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
 		}
 	}
 	httpConfig.addServer(serverConfig);
-	std::cout << "==Verify Data (server)==" << std::endl;
-	serverConfig.showServerData();
 }
 
 /*
@@ -158,8 +154,7 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 		e_type_key typeToken = getKeyType(tokens[0]);
 		if (tokens.empty()) continue;
 		if (typeToken == KEY_CLOSING_BRACE) {
-			std::cout << "Closing brace in http block" << std::endl;
-			break;
+			break; // closing brace
 		}
 
 		if (typeToken == KEY_SERVER) {
@@ -173,8 +168,6 @@ void ParseConf::handleHttpBlock(std::ifstream &file) {
 		}
 		_webconf->setHttpBlock(hconf);
 	}
-	std::cout << "==Verify Data (http)==" << std::endl;
-	hconf.showHttpData();
 }
 
 /*
@@ -211,13 +204,12 @@ void	ParseConf::ParsingConfigure(std::string confFileName) {
 	std::ifstream file(confFileName.c_str());
 
 	if (!file.is_open()) {
+		Logger::log(Logger::ERROR, "Fail open file");
 		throw std::runtime_error("Cannot open the file");
 	}
 
 	std::string firstLine;
 	if (std::getline(file, firstLine)) {
-		// if (firstLine.empty()) continue;
-		std::cout << "DEBUG: First line read: [" << firstLine << "]" << std::endl;
 		std::istringstream ss(firstLine);
 		std::string token;
 		string_vector firstTokens;
@@ -229,7 +221,6 @@ void	ParseConf::ParsingConfigure(std::string confFileName) {
 		if (!firstTokens.empty()) {
 			e_type_key typeToken = getKeyType(firstTokens[0]);
 			if (typeToken == KEY_EVENT) {
-				std::cout << "DEBUG: Handling first-line EVENTS block" << std::endl;
 				handleEventBlock(file);
 			}
 		}
@@ -247,6 +238,7 @@ void	ParseConf::ParsingConfigure(std::string confFileName) {
 				handleEventBlock(file);
 				break;
 			default:
+				Logger::log(Logger::ERROR, "Invalid top-level directive");
 				throw std::logic_error("Invalid top-level directvie: " + tokens[0]);
 		}
 	}
@@ -257,6 +249,7 @@ ParseConf::ParseConf(std::string confFileName): _confFileName(confFileName) {
 	try {
 		ParsingConfigure(confFileName);
 	} catch (const std::exception &e) {
+		Logger::log(Logger::ERROR, "Parsing Error");
 		std::cerr << e.what() << std::endl;
 	}
 }
