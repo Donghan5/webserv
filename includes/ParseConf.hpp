@@ -44,7 +44,7 @@ class ParseConf {
 		ParseConf(); // default constructor
 
 	public:
-		ParseConf(std::string confFileName);
+		explicit ParseConf(std::string confFileName);
 		ParseConf(const ParseConf &obj);
 		~ParseConf();
 
