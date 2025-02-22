@@ -103,7 +103,7 @@ void HttpServer::handle_client_read(int client_fd) {
 		std::string content_length_str = parser.getData("content-length");
         if (!content_length_str.empty()) {
             int content_length = std::atoi(content_length_str.c_str());
-            size_t body_start = header_end + 4;  // 헤더 끝 다음부터 바디 시작
+            size_t body_start = header_end + 4;
 
             if (partial_requests[client_fd].size() < body_start + content_length) {
                 return;

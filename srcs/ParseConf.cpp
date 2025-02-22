@@ -29,8 +29,7 @@ string_vector ParseConf::confReadToken(std::ifstream &file) {
 
 	std::cout << line << std::endl;
 	while (std::getline(file, line)) {
-		std::cout << "DEBUG: Read line: [" << line << "] (size: " << line.size() << ")" << std::endl;
-
+		Logger::log(Logger::DEBUG, "Read line: " + line);
 		if (line.empty()) continue;
 
 		std::istringstream ss(line);
@@ -49,6 +48,7 @@ void ParseConf::handleLocationBlock(std::ifstream& file, ServerConf& serverConfi
     string_vector tokens = confReadToken(file);
 
     if (tokens.size() < 2) {
+		Logger::log(Logger::ERROR, "Invalid location block format");
         throw std::runtime_error("Invalid location block format");
     }
 
@@ -190,6 +190,7 @@ void ParseConf::handleEventBlock(std::ifstream &file) {
 void ParseConf::ParsingConfigure(std::string confFileName) {
     std::ifstream file(confFileName.c_str());
     if (!file.is_open()) {
+		Logger::log(Logger::ERROR, "Cannot open conf file");
         throw std::runtime_error("Cannot open the file");
     }
 

@@ -17,14 +17,21 @@ void Logger::init() {
 	Return current time
 */
 std::string Logger::getCurrentTime() {
-	time_t now = time(0);
-	struct tm tstruct;
-	char buf[80];
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
 
-	tstruct = *localtime(&now);
+	time_t now = tv.tv_sec;
+	struct tm tstruct = *localtime(&now);
+
+	char buf[80];
 	strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
 
-	return std::string(buf);
+	int milliseconds = tv.tv_usec / 1000;
+
+	std::ostringstream oss;
+	oss << buf << "." << std::setw(3) << std::setfill('0') << milliseconds;
+
+	return oss.str();
 }
 
 /*
@@ -35,6 +42,7 @@ std::string Logger::logLevelToString(LogLevel level) {
 		case INFO: return "INFO";
 		case WARNING: return "WARNING";
 		case ERROR: return "ERROR";
+		case DEBUG: return "DEBUG";
 		default: return "UNKNOWN";
 	}
 }

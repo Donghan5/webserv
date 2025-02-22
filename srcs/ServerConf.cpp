@@ -1,4 +1,5 @@
 #include "../includes/ServerConf.hpp"
+#include "../includes/Logger.hpp"
 
 ServerConf::ServerConf() {} // constructor
 
@@ -34,7 +35,8 @@ void ServerConf::setData(const std::string &key, const std::string &value) {
 void ServerConf::showServerData(void) {
 	string_map::iterator it = this->_settings.begin();
 	for (; it != this->_settings.end(); ++it) {
-		std::cout << "Key: " << it->first << " Value: " << it->second << std::endl;
+		Logger::log(Logger::DEBUG, "Key: " + it->first);
+		Logger::log(Logger::DEBUG, "Value: " + it->second);
 	}
 }
 

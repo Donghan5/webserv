@@ -240,3 +240,540 @@
 [2025-02-20 04:04:20] INFO: Resolved root: ./www
 [2025-02-20 04:04:20] INFO: Directive to: ./www/upload/test.txt
 [2025-02-20 04:04:20] INFO: 200 OK in delete request
+[2025-02-22 12:55:40] INFO: Start Server
+[2025-02-22 12:55:49] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 12:55:49] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 12:55:49] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 12:55:49] INFO: Resolved root: ./www
+[2025-02-22 12:55:49] INFO: Directive to: ./www/index.html
+[2025-02-22 12:55:49] INFO: 200 OK in get request
+[2025-02-22 12:55:50] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 12:55:50] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 12:55:50] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 12:55:50] INFO: Resolved root: ./www
+[2025-02-22 12:55:50] INFO: Directive to: ./www/style.css
+[2025-02-22 12:55:50] INFO: 200 OK in get request
+[2025-02-22 12:55:50] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 12:55:50] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 12:55:50] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 12:55:50] INFO: Resolved root: ./www
+[2025-02-22 12:55:50] INFO: Directive to: ./www/script.js
+[2025-02-22 12:55:50] INFO: 200 OK in get request
+[2025-02-22 12:58:32] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:32] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:32] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:32] INFO: Resolved root: ./www
+[2025-02-22 12:58:32] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-22 12:58:32] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:32] INFO: Interpreter: /bin/bash
+[2025-02-22 12:58:32] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-22 12:58:32] INFO: CGI execution successful
+[2025-02-22 12:58:33] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 12:58:33] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 12:58:33] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 12:58:33] INFO: Resolved root: ./www
+[2025-02-22 12:58:33] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-22 12:58:33] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:33] INFO: Interpreter: /usr/bin/perl
+[2025-02-22 12:58:33] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-22 12:58:33] INFO: CGI execution successful
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Resolved root: ./www
+[2025-02-22 12:58:37] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:37] INFO: Interpreter: /usr/bin/python3
+[2025-02-22 12:58:37] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: Fail to execute CGI script: /usr/bin/python3 ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: CGI Execution Failed
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Resolved root: ./www
+[2025-02-22 12:58:37] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:37] INFO: Interpreter: /usr/bin/python3
+[2025-02-22 12:58:37] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: Fail to execute CGI script: /usr/bin/python3 ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: CGI Execution Failed
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Resolved root: ./www
+[2025-02-22 12:58:37] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:37] INFO: Interpreter: /usr/bin/python3
+[2025-02-22 12:58:37] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: Fail to execute CGI script: /usr/bin/python3 ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: CGI Execution Failed
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-22 12:58:37] INFO: Resolved root: ./www
+[2025-02-22 12:58:37] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:37] INFO: Interpreter: /usr/bin/python3
+[2025-02-22 12:58:37] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: Fail to execute CGI script: /usr/bin/python3 ./www/cgi-bin/test.py
+[2025-02-22 12:58:37] ERROR: CGI Execution Failed
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Resolved root: ./www
+[2025-02-22 12:58:38] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:38] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:38] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: CGI Execution Failed
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Resolved root: ./www
+[2025-02-22 12:58:38] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:38] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:38] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: CGI Execution Failed
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Resolved root: ./www
+[2025-02-22 12:58:38] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:38] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:38] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: CGI Execution Failed
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:38] INFO: Resolved root: ./www
+[2025-02-22 12:58:38] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:38] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:38] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:38] ERROR: CGI Execution Failed
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Resolved root: ./www
+[2025-02-22 12:58:39] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:39] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:39] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: CGI Execution Failed
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Resolved root: ./www
+[2025-02-22 12:58:39] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:39] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:39] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: CGI Execution Failed
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Resolved root: ./www
+[2025-02-22 12:58:39] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:39] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:39] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: CGI Execution Failed
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-22 12:58:39] INFO: Resolved root: ./www
+[2025-02-22 12:58:39] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:39] INFO: Interpreter: /usr/bin/php
+[2025-02-22 12:58:39] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: Fail to execute CGI script: /usr/bin/php ./www/cgi-bin/test.php
+[2025-02-22 12:58:39] ERROR: CGI Execution Failed
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 12:58:39] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 12:58:39] INFO: Resolved root: ./www
+[2025-02-22 12:58:39] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-22 12:58:39] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:39] INFO: Interpreter: /usr/bin/perl
+[2025-02-22 12:58:39] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-22 12:58:39] INFO: CGI execution successful
+[2025-02-22 12:58:40] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:40] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:40] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:40] INFO: Resolved root: ./www
+[2025-02-22 12:58:40] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-22 12:58:40] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:40] INFO: Interpreter: /bin/bash
+[2025-02-22 12:58:40] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-22 12:58:40] INFO: CGI execution successful
+[2025-02-22 12:58:41] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:41] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:41] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 12:58:41] INFO: Resolved root: ./www
+[2025-02-22 12:58:41] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-22 12:58:41] INFO: Attempting to execute CGI script:
+[2025-02-22 12:58:41] INFO: Interpreter: /bin/bash
+[2025-02-22 12:58:41] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-22 12:58:41] INFO: CGI execution successful
+[2025-02-22 14:23:36.276] INFO: Start Server
+[2025-02-22 14:26:09.529] DEBUG: Read line: events {
+[2025-02-22 14:26:09.530] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 14:26:09.531] DEBUG: Read line:     use poll;
+[2025-02-22 14:26:09.532] DEBUG: Read line: }
+[2025-02-22 14:26:09.532] DEBUG: Read line: 
+[2025-02-22 14:26:09.533] DEBUG: Read line: http {
+[2025-02-22 14:26:09.533] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 14:26:09.534] DEBUG: Read line: 	server {
+[2025-02-22 14:26:09.534] DEBUG: Read line:         listen 8080;
+[2025-02-22 14:26:09.534] DEBUG: Read line:         server_name localhost;
+[2025-02-22 14:26:09.534] DEBUG: Read line: 
+[2025-02-22 14:26:09.535] DEBUG: Read line:         root ./www;
+[2025-02-22 14:26:09.535] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 14:26:09.535] DEBUG: Read line: 
+[2025-02-22 14:26:09.535] DEBUG: Read line:         # 기본 페이지 처리
+[2025-02-22 14:26:09.536] DEBUG: Read line:         location / {
+[2025-02-22 14:26:09.536] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 14:26:09.536] DEBUG: Read line:         }
+[2025-02-22 14:26:09.537] DEBUG: Read line: 
+[2025-02-22 14:26:09.537] DEBUG: Read line:         # Python CGI 처리
+[2025-02-22 14:26:09.537] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 14:26:09.537] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:26:09.538] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:26:09.538] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:26:09.538] DEBUG: Read line:         }
+[2025-02-22 14:26:09.538] DEBUG: Read line: 
+[2025-02-22 14:26:09.539] DEBUG: Read line:         # PHP CGI 처리
+[2025-02-22 14:26:09.539] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 14:26:09.539] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:26:09.539] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:26:09.539] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:26:09.539] DEBUG: Read line:         }
+[2025-02-22 14:26:09.540] DEBUG: Read line: 
+[2025-02-22 14:26:09.540] DEBUG: Read line:         # Perl CGI 처리
+[2025-02-22 14:26:09.540] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 14:26:09.540] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:26:09.541] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:26:09.541] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:26:09.541] DEBUG: Read line:         }
+[2025-02-22 14:26:09.541] DEBUG: Read line: 
+[2025-02-22 14:26:09.542] DEBUG: Read line:         # Bash CGI 처리
+[2025-02-22 14:26:09.542] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 14:26:09.542] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:26:09.543] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:26:09.543] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:26:09.543] DEBUG: Read line:         }
+[2025-02-22 14:26:09.543] DEBUG: Read line: 
+[2025-02-22 14:26:09.544] DEBUG: Read line:         # 정적 파일 서빙 (CSS, JS, 이미지 등)
+[2025-02-22 14:26:09.544] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 14:26:09.544] DEBUG: Read line:             expires 6M;
+[2025-02-22 14:26:09.544] DEBUG: Read line:             access_log off;
+[2025-02-22 14:26:09.545] DEBUG: Read line:         }
+[2025-02-22 14:26:09.545] DEBUG: Read line: }
+[2025-02-22 14:26:09.545] DEBUG: Read line: }
+[2025-02-22 14:26:09.546] INFO: Start Server
+[2025-02-22 14:28:22.787] DEBUG: Read line: events {
+[2025-02-22 14:28:22.787] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 14:28:22.788] DEBUG: Read line:     use poll;
+[2025-02-22 14:28:22.788] DEBUG: Read line: }
+[2025-02-22 14:28:22.788] DEBUG: Read line: 
+[2025-02-22 14:28:22.788] DEBUG: Read line: http {
+[2025-02-22 14:28:22.789] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 14:28:22.789] DEBUG: Read line: 	server {
+[2025-02-22 14:28:22.790] DEBUG: Read line:         listen 8080;
+[2025-02-22 14:28:22.790] DEBUG: Read line:         server_name localhost;
+[2025-02-22 14:28:22.790] DEBUG: Read line: 
+[2025-02-22 14:28:22.791] DEBUG: Read line:         root ./www;
+[2025-02-22 14:28:22.791] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 14:28:22.792] DEBUG: Read line: 
+[2025-02-22 14:28:22.792] DEBUG: Read line:         location / {
+[2025-02-22 14:28:22.792] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 14:28:22.792] DEBUG: Read line:         }
+[2025-02-22 14:28:22.793] DEBUG: Read line: 
+[2025-02-22 14:28:22.793] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 14:28:22.793] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:28:22.793] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:28:22.794] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:28:22.794] DEBUG: Read line:         }
+[2025-02-22 14:28:22.794] DEBUG: fastcgi_param
+[2025-02-22 14:28:22.794] DEBUG: SCRIPT_FILENAME
+[2025-02-22 14:28:22.795] DEBUG: fastcgi_pass
+[2025-02-22 14:28:22.795] DEBUG: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:28:22.795] DEBUG: include
+[2025-02-22 14:28:22.795] DEBUG: fastcgi_params;
+[2025-02-22 14:28:22.796] DEBUG: location
+[2025-02-22 14:28:22.796] DEBUG: ~
+[2025-02-22 14:28:22.796] DEBUG: path
+[2025-02-22 14:28:22.796] DEBUG: $uri
+[2025-02-22 14:28:22.797] DEBUG: Read line: 
+[2025-02-22 14:28:22.797] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 14:28:22.797] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:28:22.797] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:28:22.797] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:28:22.798] DEBUG: Read line:         }
+[2025-02-22 14:28:22.798] DEBUG: fastcgi_param
+[2025-02-22 14:28:22.798] DEBUG: SCRIPT_FILENAME
+[2025-02-22 14:28:22.798] DEBUG: path
+[2025-02-22 14:28:22.798] DEBUG: unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:28:22.799] DEBUG: Read line: 
+[2025-02-22 14:28:22.799] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 14:28:22.799] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:28:22.799] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:28:22.800] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:28:22.800] DEBUG: Read line:         }
+[2025-02-22 14:28:22.800] DEBUG: fastcgi_param
+[2025-02-22 14:28:22.800] DEBUG: SCRIPT_FILENAME
+[2025-02-22 14:28:22.801] DEBUG: path
+[2025-02-22 14:28:22.801] DEBUG: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:28:22.801] DEBUG: Read line: 
+[2025-02-22 14:28:22.801] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 14:28:22.801] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:28:22.802] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:28:22.802] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:28:22.802] DEBUG: Read line:         }
+[2025-02-22 14:28:22.803] DEBUG: fastcgi_param
+[2025-02-22 14:28:22.803] DEBUG: SCRIPT_FILENAME
+[2025-02-22 14:28:22.803] DEBUG: path
+[2025-02-22 14:28:22.803] DEBUG: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:28:22.804] DEBUG: Read line: 
+[2025-02-22 14:28:22.804] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 14:28:22.804] DEBUG: Read line:             expires 6M;
+[2025-02-22 14:28:22.804] DEBUG: Read line:             access_log off;
+[2025-02-22 14:28:22.804] DEBUG: Read line:         }
+[2025-02-22 14:28:22.805] DEBUG: path
+[2025-02-22 14:28:22.805] DEBUG: 6M;
+[2025-02-22 14:28:22.805] DEBUG: Read line: }
+[2025-02-22 14:28:22.805] DEBUG: Read line: }
+[2025-02-22 14:28:22.806] INFO: Start Server
+[2025-02-22 14:30:06.527] DEBUG: Read line: events {
+[2025-02-22 14:30:06.527] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 14:30:06.528] DEBUG: Read line:     use poll;
+[2025-02-22 14:30:06.528] DEBUG: Read line: }
+[2025-02-22 14:30:06.529] DEBUG: Read line: 
+[2025-02-22 14:30:06.529] DEBUG: Read line: http {
+[2025-02-22 14:30:06.529] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 14:30:06.530] DEBUG: Read line: 	server {
+[2025-02-22 14:30:06.530] DEBUG: Read line:         listen 8080;
+[2025-02-22 14:30:06.530] DEBUG: Read line:         server_name localhost;
+[2025-02-22 14:30:06.530] DEBUG: Read line: 
+[2025-02-22 14:30:06.531] DEBUG: Read line:         root ./www;
+[2025-02-22 14:30:06.531] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 14:30:06.531] DEBUG: Read line: 
+[2025-02-22 14:30:06.531] DEBUG: Read line:         location / {
+[2025-02-22 14:30:06.532] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 14:30:06.532] DEBUG: Read line:         }
+[2025-02-22 14:30:06.532] DEBUG: Read line: 
+[2025-02-22 14:30:06.532] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 14:30:06.532] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:30:06.532] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:30:06.533] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:30:06.533] DEBUG: Read line:         }
+[2025-02-22 14:30:06.533] DEBUG: Key: fastcgi_param
+[2025-02-22 14:30:06.534] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:30:06.534] DEBUG: Key: fastcgi_pass
+[2025-02-22 14:30:06.534] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:30:06.534] DEBUG: Key: include
+[2025-02-22 14:30:06.535] DEBUG: Value: fastcgi_params;
+[2025-02-22 14:30:06.535] DEBUG: Key: location
+[2025-02-22 14:30:06.535] DEBUG: Value: ~
+[2025-02-22 14:30:06.535] DEBUG: Key: path
+[2025-02-22 14:30:06.536] DEBUG: Value: $uri
+[2025-02-22 14:30:06.536] DEBUG: Read line: 
+[2025-02-22 14:30:06.536] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 14:30:06.536] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:30:06.537] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:30:06.537] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:30:06.537] DEBUG: Read line:         }
+[2025-02-22 14:30:06.537] DEBUG: Key: fastcgi_param
+[2025-02-22 14:30:06.538] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:30:06.538] DEBUG: Key: path
+[2025-02-22 14:30:06.538] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:30:06.538] DEBUG: Read line: 
+[2025-02-22 14:30:06.539] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 14:30:06.539] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:30:06.539] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:30:06.539] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:30:06.539] DEBUG: Read line:         }
+[2025-02-22 14:30:06.539] DEBUG: Key: fastcgi_param
+[2025-02-22 14:30:06.539] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:30:06.540] DEBUG: Key: path
+[2025-02-22 14:30:06.540] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:30:06.540] DEBUG: Read line: 
+[2025-02-22 14:30:06.540] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 14:30:06.541] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:30:06.541] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:30:06.541] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:30:06.541] DEBUG: Read line:         }
+[2025-02-22 14:30:06.542] DEBUG: Key: fastcgi_param
+[2025-02-22 14:30:06.542] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:30:06.542] DEBUG: Key: path
+[2025-02-22 14:30:06.542] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:30:06.542] DEBUG: Read line: 
+[2025-02-22 14:30:06.542] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 14:30:06.542] DEBUG: Read line:             expires 6M;
+[2025-02-22 14:30:06.543] DEBUG: Read line:             access_log off;
+[2025-02-22 14:30:06.543] DEBUG: Read line:         }
+[2025-02-22 14:30:06.543] DEBUG: Key: path
+[2025-02-22 14:30:06.543] DEBUG: Value: 6M;
+[2025-02-22 14:30:06.544] DEBUG: Read line: }
+[2025-02-22 14:30:06.544] DEBUG: Key: index
+[2025-02-22 14:30:06.544] DEBUG: Value: index.html
+[2025-02-22 14:30:06.544] DEBUG: Key: listen
+[2025-02-22 14:30:06.544] DEBUG: Value: 8080;
+[2025-02-22 14:30:06.544] DEBUG: Key: location
+[2025-02-22 14:30:06.545] DEBUG: Value: /
+[2025-02-22 14:30:06.545] DEBUG: Key: root
+[2025-02-22 14:30:06.545] DEBUG: Value: ./www;
+[2025-02-22 14:30:06.545] DEBUG: Key: server_name
+[2025-02-22 14:30:06.546] DEBUG: Value: localhost;
+[2025-02-22 14:30:06.546] DEBUG: Read line: }
+[2025-02-22 14:30:06.546] DEBUG: Key: include
+[2025-02-22 14:30:06.547] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-22 14:30:06.547] INFO: Start Server
+[2025-02-22 14:30:17.689] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 14:30:17.690] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 14:30:17.690] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 14:30:17.690] INFO: Resolved root: ./www
+[2025-02-22 14:30:17.691] INFO: Directive to: ./www/index.html
+[2025-02-22 14:30:17.693] INFO: 200 OK in get request
+[2025-02-22 14:30:17.702] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 14:30:17.702] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 14:30:17.703] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 14:30:17.703] INFO: Resolved root: ./www
+[2025-02-22 14:30:17.703] INFO: Directive to: ./www/style.css
+[2025-02-22 14:30:17.704] INFO: 200 OK in get request
+[2025-02-22 14:30:17.705] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 14:30:17.706] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 14:30:17.706] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 14:30:17.707] INFO: Resolved root: ./www
+[2025-02-22 14:30:17.707] INFO: Directive to: ./www/script.js
+[2025-02-22 14:30:17.708] INFO: 200 OK in get request
+[2025-02-22 14:30:35.662] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 14:30:35.663] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 14:30:35.663] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 14:30:35.663] INFO: Resolved root: ./www
+[2025-02-22 14:30:35.663] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-22 14:30:35.664] INFO: Attempting to execute CGI script:
+[2025-02-22 14:30:35.665] INFO: Interpreter: /bin/bash
+[2025-02-22 14:30:35.665] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-22 14:30:35.668] INFO: CGI execution successful
+[2025-02-22 14:32:49.115] DEBUG: Read line: events {
+[2025-02-22 14:32:49.116] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 14:32:49.116] DEBUG: Read line:     use poll;
+[2025-02-22 14:32:49.116] DEBUG: Read line: }
+[2025-02-22 14:32:49.117] DEBUG: Read line: 
+[2025-02-22 14:32:49.117] DEBUG: Read line: http {
+[2025-02-22 14:32:49.118] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 14:32:49.118] DEBUG: Read line: 	server {
+[2025-02-22 14:32:49.119] DEBUG: Read line:         listen 8080;
+[2025-02-22 14:32:49.119] DEBUG: Read line:         server_name localhost;
+[2025-02-22 14:32:49.119] DEBUG: Read line: 
+[2025-02-22 14:32:49.120] DEBUG: Read line:         root ./www;
+[2025-02-22 14:32:49.120] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 14:32:49.120] DEBUG: Read line: 
+[2025-02-22 14:32:49.120] DEBUG: Read line:         location / {
+[2025-02-22 14:32:49.120] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 14:32:49.121] DEBUG: Read line:         }
+[2025-02-22 14:32:49.121] DEBUG: Read line: 
+[2025-02-22 14:32:49.121] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 14:32:49.121] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:32:49.121] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:32:49.122] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:32:49.122] DEBUG: Read line:         }
+[2025-02-22 14:32:49.122] DEBUG: Key: fastcgi_param
+[2025-02-22 14:32:49.122] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:32:49.123] DEBUG: Key: fastcgi_pass
+[2025-02-22 14:32:49.123] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:32:49.123] DEBUG: Key: include
+[2025-02-22 14:32:49.123] DEBUG: Value: fastcgi_params;
+[2025-02-22 14:32:49.123] DEBUG: Key: location
+[2025-02-22 14:32:49.124] DEBUG: Value: ~
+[2025-02-22 14:32:49.124] DEBUG: Key: path
+[2025-02-22 14:32:49.124] DEBUG: Value: $uri
+[2025-02-22 14:32:49.124] DEBUG: Read line: 
+[2025-02-22 14:32:49.124] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 14:32:49.124] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:32:49.125] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:32:49.125] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:32:49.125] DEBUG: Read line:         }
+[2025-02-22 14:32:49.125] DEBUG: Key: fastcgi_param
+[2025-02-22 14:32:49.126] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:32:49.126] DEBUG: Key: path
+[2025-02-22 14:32:49.126] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 14:32:49.126] DEBUG: Read line: 
+[2025-02-22 14:32:49.127] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 14:32:49.127] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:32:49.127] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:32:49.128] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:32:49.128] DEBUG: Read line:         }
+[2025-02-22 14:32:49.128] DEBUG: Key: fastcgi_param
+[2025-02-22 14:32:49.128] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:32:49.128] DEBUG: Key: path
+[2025-02-22 14:32:49.128] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:32:49.129] DEBUG: Read line: 
+[2025-02-22 14:32:49.129] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 14:32:49.129] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 14:32:49.129] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 14:32:49.130] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 14:32:49.130] DEBUG: Read line:         }
+[2025-02-22 14:32:49.130] DEBUG: Key: fastcgi_param
+[2025-02-22 14:32:49.130] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 14:32:49.130] DEBUG: Key: path
+[2025-02-22 14:32:49.131] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 14:32:49.131] DEBUG: Read line: 
+[2025-02-22 14:32:49.131] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 14:32:49.131] DEBUG: Read line:             expires 6M;
+[2025-02-22 14:32:49.131] DEBUG: Read line:             access_log off;
+[2025-02-22 14:32:49.132] DEBUG: Read line:         }
+[2025-02-22 14:32:49.132] DEBUG: Key: path
+[2025-02-22 14:32:49.132] DEBUG: Value: 6M;
+[2025-02-22 14:32:49.132] DEBUG: Read line: }
+[2025-02-22 14:32:49.132] DEBUG: Key: index
+[2025-02-22 14:32:49.132] DEBUG: Value: index.html
+[2025-02-22 14:32:49.132] DEBUG: Key: listen
+[2025-02-22 14:32:49.133] DEBUG: Value: 8080;
+[2025-02-22 14:32:49.133] DEBUG: Key: location
+[2025-02-22 14:32:49.133] DEBUG: Value: /
+[2025-02-22 14:32:49.133] DEBUG: Key: root
+[2025-02-22 14:32:49.133] DEBUG: Value: ./www;
+[2025-02-22 14:32:49.134] DEBUG: Key: server_name
+[2025-02-22 14:32:49.134] DEBUG: Value: localhost;
+[2025-02-22 14:32:49.134] DEBUG: Read line: }
+[2025-02-22 14:32:49.134] DEBUG: Key: include
+[2025-02-22 14:32:49.134] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-22 14:32:49.135] INFO: Start Server
+[2025-02-22 14:33:02.909] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 14:33:02.910] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 14:33:02.910] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 14:33:02.910] INFO: Resolved root: ./www
+[2025-02-22 14:33:02.911] INFO: Directive to: ./www/index.html
+[2025-02-22 14:33:02.912] INFO: 200 OK in get request
+[2025-02-22 14:33:02.920] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 14:33:02.920] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 14:33:02.920] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 14:33:02.921] INFO: Resolved root: ./www
+[2025-02-22 14:33:02.921] INFO: Directive to: ./www/style.css
+[2025-02-22 14:33:02.922] INFO: 200 OK in get request
+[2025-02-22 14:33:02.923] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 14:33:02.923] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 14:33:02.923] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 14:33:02.923] INFO: Resolved root: ./www
+[2025-02-22 14:33:02.924] INFO: Directive to: ./www/script.js
+[2025-02-22 14:33:02.925] INFO: 200 OK in get request
+[2025-02-22 14:33:04.351] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 14:33:04.351] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 14:33:04.351] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 14:33:04.352] INFO: Resolved root: ./www
+[2025-02-22 14:33:04.352] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-22 14:33:04.352] INFO: Attempting to execute CGI script:
+[2025-02-22 14:33:04.353] INFO: Interpreter: /bin/bash
+[2025-02-22 14:33:04.353] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-22 14:33:04.355] INFO: CGI execution successful

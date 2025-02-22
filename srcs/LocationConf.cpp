@@ -1,4 +1,5 @@
 #include "../includes/LocationConf.hpp"
+#include "../includes/Logger.hpp"
 
 LocationConf::LocationConf() {} // constructor
 
@@ -35,7 +36,8 @@ const string_map &LocationConf::getSettings(void) const {
 void LocationConf::showLocationData(void) {
 	string_map::iterator it = this->_settings.begin();
 	for (; it != this->_settings.end(); ++it) {
-		std::cout << "Key: " << it->first << " Value: " << it->second << std::endl;
+		Logger::log(Logger::DEBUG, "Key: " + it->first);
+		Logger::log(Logger::DEBUG, "Value: " + it->second);
 	}
 }
 
