@@ -20,6 +20,7 @@ class ParsedRequest {
 		std::string _version;
 		std::string _body;
 		string_map _headers;
+		string_map _cookies;
 
 		ParsedRequest(); // treate default request path(?)
 
@@ -38,6 +39,9 @@ class ParsedRequest {
 		std::string getVersion(void) const;
 		std::string getBody(void) const;
 		string_map getHeaders(void) const;
+
+		// Cookie part
+		void parseCookie(const std::string &cookieHeader);
 
 
 		// setter

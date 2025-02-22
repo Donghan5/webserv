@@ -25,7 +25,6 @@
         <p>THIS WEBSITE SERVED AS WEBSERV</p>
     </section>
 
-    <!-- 📤 POST: 파일 업로드 -->
     <div class="container">
         <h1>📤 Upload File (POST)</h1>
         <input type="file" id="fileInput">
@@ -33,7 +32,6 @@
         <p id="upload-status"></p>
     </div>
 
-    <!-- 🗑️ DELETE: 파일 삭제 -->
     <div class="container">
         <h1>🗑️ Delete File (DELETE)</h1>
         <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
@@ -41,7 +39,6 @@
         <p id="delete-status"></p>
     </div>
 
-    <!-- 🔍 GET: 특정 파일 조회 -->
     <div class="container">
         <h1>📄 View File (GET)</h1>
         <input type="text" id="getFileName" placeholder="Enter filename">
@@ -50,7 +47,6 @@
         <img id="preview-image" style="max-width: 100%; display: none;" />
     </div>
 
-    <!-- ⚡ CGI 테스트 -->
     <div class="container">
         <h1>⚡ CGI Test</h1>
         <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
@@ -59,6 +55,13 @@
         <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
         <p id="cgi-output">📄 CGI output will be displayed here.</p>
     </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
 
     <footer>
         <p>&copy; 2025 WEBSERV PROJECT</p>
@@ -147,6 +150,29 @@
                 document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
             });
         }
+
+		function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		}
+		
     </script>
 
 </body>

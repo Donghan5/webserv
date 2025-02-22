@@ -32,6 +32,33 @@ void ParsedRequest::setHeaders(std::string key, std::string value) {
 }
 
 /*
+	Parse cookie request
+*/
+void ParsedRequest::parseCookie(const std::string &cookieHeader) {
+	std::istringstream ss(cookieHeader);
+	std::string token;
+
+	while (std::getline(ss, token, ';')) {
+		size_t pos = token.find('=');
+		if (pos != std::string::npos) {
+			std::string key = token.substr(0, pos);
+			std::string value = token.substr(pos + 1);
+
+			trimString(key);
+			trimString(value);
+
+			if (!key.empty() && !value.empty())
+				_cookies[key] = value;
+		}
+	}
+
+	Logger::log(Logger::DEBUG, "Parsed cookies: ");
+	for (string_map::iterator it = _cookies.begin(); it != _cookies.end(); ++it) {
+		Logger::log(Logger::DEBUG, " - " + it->first + ": " + it->second);
+	}
+}
+
+/*
 	Get specific data in _headers
 */
 std::string ParsedRequest::getData(std::string key) const {
@@ -71,6 +98,10 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 			}
 
 			setHeaders(key, value);
+
+			if (key == "cookie") {
+				parseCookie(value);
+			}
 		}
 	}
 
@@ -134,6 +165,7 @@ ParsedRequest &ParsedRequest::operator=(const ParsedRequest &obj) {
 		this->_version = obj._version;
 		this->_body = obj._body;
 		this->_headers = obj._headers;
+		this->_cookies = obj._cookies;
 	}
 	return *this;
 }

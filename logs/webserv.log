@@ -777,3 +777,495 @@
 [2025-02-22 14:33:04.353] INFO: Interpreter: /bin/bash
 [2025-02-22 14:33:04.353] INFO: Script Path: ./www/cgi-bin/test.sh
 [2025-02-22 14:33:04.355] INFO: CGI execution successful
+[2025-02-22 15:24:30.971] DEBUG: Read line: events {
+[2025-02-22 15:24:30.972] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 15:24:30.972] DEBUG: Read line:     use poll;
+[2025-02-22 15:24:30.972] DEBUG: Read line: }
+[2025-02-22 15:24:30.973] DEBUG: Read line: 
+[2025-02-22 15:24:30.973] DEBUG: Read line: http {
+[2025-02-22 15:24:30.973] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 15:24:30.974] DEBUG: Read line: 	server {
+[2025-02-22 15:24:30.974] DEBUG: Read line:         listen 8080;
+[2025-02-22 15:24:30.974] DEBUG: Read line:         server_name localhost;
+[2025-02-22 15:24:30.975] DEBUG: Read line: 
+[2025-02-22 15:24:30.975] DEBUG: Read line:         root ./www;
+[2025-02-22 15:24:30.975] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 15:24:30.976] DEBUG: Read line: 
+[2025-02-22 15:24:30.976] DEBUG: Read line:         location / {
+[2025-02-22 15:24:30.976] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 15:24:30.976] DEBUG: Read line:         }
+[2025-02-22 15:24:30.977] DEBUG: Read line: 
+[2025-02-22 15:24:30.977] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 15:24:30.977] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:24:30.977] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:24:30.978] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:24:30.978] DEBUG: Read line:         }
+[2025-02-22 15:24:30.978] DEBUG: Key: fastcgi_param
+[2025-02-22 15:24:30.979] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:24:30.979] DEBUG: Key: fastcgi_pass
+[2025-02-22 15:24:30.979] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:24:30.979] DEBUG: Key: include
+[2025-02-22 15:24:30.980] DEBUG: Value: fastcgi_params;
+[2025-02-22 15:24:30.980] DEBUG: Key: location
+[2025-02-22 15:24:30.980] DEBUG: Value: ~
+[2025-02-22 15:24:30.980] DEBUG: Key: path
+[2025-02-22 15:24:30.981] DEBUG: Value: $uri
+[2025-02-22 15:24:30.981] DEBUG: Read line: 
+[2025-02-22 15:24:30.981] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 15:24:30.982] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 15:24:30.982] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:24:30.982] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:24:30.983] DEBUG: Read line:         }
+[2025-02-22 15:24:30.983] DEBUG: Key: fastcgi_param
+[2025-02-22 15:24:30.983] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:24:30.984] DEBUG: Key: path
+[2025-02-22 15:24:30.984] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 15:24:30.984] DEBUG: Read line: 
+[2025-02-22 15:24:30.984] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 15:24:30.984] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:24:30.985] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:24:30.985] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:24:30.985] DEBUG: Read line:         }
+[2025-02-22 15:24:30.986] DEBUG: Key: fastcgi_param
+[2025-02-22 15:24:30.986] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:24:30.986] DEBUG: Key: path
+[2025-02-22 15:24:30.986] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:24:30.986] DEBUG: Read line: 
+[2025-02-22 15:24:30.986] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 15:24:30.987] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:24:30.987] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:24:30.987] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:24:30.988] DEBUG: Read line:         }
+[2025-02-22 15:24:30.988] DEBUG: Key: fastcgi_param
+[2025-02-22 15:24:30.988] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:24:30.988] DEBUG: Key: path
+[2025-02-22 15:24:30.988] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:24:30.988] DEBUG: Read line: 
+[2025-02-22 15:24:30.989] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 15:24:30.989] DEBUG: Read line:             expires 6M;
+[2025-02-22 15:24:30.989] DEBUG: Read line:             access_log off;
+[2025-02-22 15:24:30.989] DEBUG: Read line:         }
+[2025-02-22 15:24:30.989] DEBUG: Key: path
+[2025-02-22 15:24:30.990] DEBUG: Value: 6M;
+[2025-02-22 15:24:30.990] DEBUG: Read line: 
+[2025-02-22 15:24:30.990] DEBUG: Read line: 		location /set-cookie {
+[2025-02-22 15:24:30.990] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-22 15:24:30.991] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-22 15:24:30.991] DEBUG: Read line: 		}
+[2025-02-22 15:24:30.991] DEBUG: Key: path
+[2025-02-22 15:24:30.991] DEBUG: Value: Set-Cookie
+[2025-02-22 15:24:30.992] DEBUG: Read line: 
+[2025-02-22 15:24:30.992] DEBUG: Read line: }
+[2025-02-22 15:24:30.992] DEBUG: Key: index
+[2025-02-22 15:24:30.992] DEBUG: Value: index.html
+[2025-02-22 15:24:30.992] DEBUG: Key: listen
+[2025-02-22 15:24:30.992] DEBUG: Value: 8080;
+[2025-02-22 15:24:30.993] DEBUG: Key: location
+[2025-02-22 15:24:30.993] DEBUG: Value: /
+[2025-02-22 15:24:30.993] DEBUG: Key: root
+[2025-02-22 15:24:30.993] DEBUG: Value: ./www;
+[2025-02-22 15:24:30.994] DEBUG: Key: server_name
+[2025-02-22 15:24:30.994] DEBUG: Value: localhost;
+[2025-02-22 15:24:30.994] DEBUG: Read line: }
+[2025-02-22 15:24:30.994] DEBUG: Key: include
+[2025-02-22 15:24:30.994] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-22 15:24:30.995] INFO: Start Server
+[2025-02-22 15:24:37.087] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:24:37.088] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.088] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.088] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:24:37.088] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.089] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.089] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:24:37.089] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.090] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.090] INFO: Resolved root: ./www
+[2025-02-22 15:24:37.090] INFO: Directive to: ./www/index.html
+[2025-02-22 15:24:37.095] INFO: 200 OK in get request
+[2025-02-22 15:24:37.104] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:24:37.105] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.105] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.106] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:24:37.106] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.106] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.106] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:24:37.107] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.107] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.107] INFO: Resolved root: ./www
+[2025-02-22 15:24:37.107] INFO: Directive to: ./www/style.css
+[2025-02-22 15:24:37.108] INFO: 200 OK in get request
+[2025-02-22 15:24:37.108] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:24:37.109] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.109] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.110] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:24:37.110] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.110] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.110] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:24:37.110] DEBUG: Parsed cookies: 
+[2025-02-22 15:24:37.111] DEBUG:  - visits: 11
+[2025-02-22 15:24:37.111] INFO: Resolved root: ./www
+[2025-02-22 15:24:37.111] INFO: Directive to: ./www/script.js
+[2025-02-22 15:24:37.112] INFO: 200 OK in get request
+[2025-02-22 15:25:06.850] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:25:06.850] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.850] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.851] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.851] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:25:06.851] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.851] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.851] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.852] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:25:06.852] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.853] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.853] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.854] INFO: Resolved root: ./www
+[2025-02-22 15:25:06.854] INFO: Directive to: ./www/index.html
+[2025-02-22 15:25:06.856] INFO: 200 OK in get request
+[2025-02-22 15:25:06.865] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:25:06.865] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.866] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.866] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.866] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:25:06.866] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.867] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.867] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.867] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:25:06.867] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.867] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.868] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.868] INFO: Resolved root: ./www
+[2025-02-22 15:25:06.868] INFO: Directive to: ./www/style.css
+[2025-02-22 15:25:06.869] INFO: 200 OK in get request
+[2025-02-22 15:25:06.870] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:25:06.871] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.871] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.871] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.872] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:25:06.872] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.872] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.872] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.872] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:25:06.873] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:06.873] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:06.873] DEBUG:  - visits: 12
+[2025-02-22 15:25:06.873] INFO: Resolved root: ./www
+[2025-02-22 15:25:06.873] INFO: Directive to: ./www/script.js
+[2025-02-22 15:25:06.874] INFO: 200 OK in get request
+[2025-02-22 15:25:46.639] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 15:25:46.640] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:46.640] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:46.641] DEBUG:  - visits: 13
+[2025-02-22 15:25:46.641] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 15:25:46.642] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:46.643] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:46.644] DEBUG:  - visits: 13
+[2025-02-22 15:25:46.645] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-22 15:25:46.646] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:46.646] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:46.646] DEBUG:  - visits: 13
+[2025-02-22 15:25:46.646] INFO: Resolved root: ./www
+[2025-02-22 15:25:46.647] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-22 15:25:46.647] INFO: Attempting to execute CGI script:
+[2025-02-22 15:25:46.647] INFO: Interpreter: /bin/bash
+[2025-02-22 15:25:46.647] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-22 15:25:46.649] INFO: CGI execution successful
+[2025-02-22 15:25:47.947] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 15:25:47.947] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:47.948] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:47.948] DEBUG:  - visits: 13
+[2025-02-22 15:25:47.948] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 15:25:47.948] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:47.948] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:47.949] DEBUG:  - visits: 13
+[2025-02-22 15:25:47.949] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-22 15:25:47.949] DEBUG: Parsed cookies: 
+[2025-02-22 15:25:47.949] DEBUG:  - undefined: undefined
+[2025-02-22 15:25:47.950] DEBUG:  - visits: 13
+[2025-02-22 15:25:47.950] INFO: Resolved root: ./www
+[2025-02-22 15:25:47.950] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-22 15:25:47.951] INFO: Attempting to execute CGI script:
+[2025-02-22 15:25:47.951] INFO: Interpreter: /usr/bin/perl
+[2025-02-22 15:25:47.951] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-22 15:25:47.956] INFO: CGI execution successful
+[2025-02-22 15:27:34.635] DEBUG: Read line: events {
+[2025-02-22 15:27:34.636] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 15:27:34.636] DEBUG: Read line:     use poll;
+[2025-02-22 15:27:34.636] DEBUG: Read line: }
+[2025-02-22 15:27:34.636] DEBUG: Read line: 
+[2025-02-22 15:27:34.636] DEBUG: Read line: http {
+[2025-02-22 15:27:34.637] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 15:27:34.637] DEBUG: Read line: 	server {
+[2025-02-22 15:27:34.637] DEBUG: Read line:         listen 8080;
+[2025-02-22 15:27:34.637] DEBUG: Read line:         server_name localhost;
+[2025-02-22 15:27:34.637] DEBUG: Read line: 
+[2025-02-22 15:27:34.638] DEBUG: Read line:         root ./www;
+[2025-02-22 15:27:34.638] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 15:27:34.638] DEBUG: Read line: 
+[2025-02-22 15:27:34.639] DEBUG: Read line:         location / {
+[2025-02-22 15:27:34.639] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 15:27:34.639] DEBUG: Read line:         }
+[2025-02-22 15:27:34.639] DEBUG: Read line: 
+[2025-02-22 15:27:34.640] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 15:27:34.640] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:27:34.640] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:27:34.640] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:27:34.641] DEBUG: Read line:         }
+[2025-02-22 15:27:34.641] DEBUG: Key: fastcgi_param
+[2025-02-22 15:27:34.641] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:27:34.641] DEBUG: Key: fastcgi_pass
+[2025-02-22 15:27:34.642] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:27:34.642] DEBUG: Key: include
+[2025-02-22 15:27:34.642] DEBUG: Value: fastcgi_params;
+[2025-02-22 15:27:34.642] DEBUG: Key: location
+[2025-02-22 15:27:34.643] DEBUG: Value: ~
+[2025-02-22 15:27:34.643] DEBUG: Key: path
+[2025-02-22 15:27:34.643] DEBUG: Value: $uri
+[2025-02-22 15:27:34.643] DEBUG: Read line: 
+[2025-02-22 15:27:34.643] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 15:27:34.644] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 15:27:34.644] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:27:34.645] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:27:34.645] DEBUG: Read line:         }
+[2025-02-22 15:27:34.645] DEBUG: Key: fastcgi_param
+[2025-02-22 15:27:34.645] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:27:34.645] DEBUG: Key: path
+[2025-02-22 15:27:34.646] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 15:27:34.646] DEBUG: Read line: 
+[2025-02-22 15:27:34.646] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 15:27:34.647] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:27:34.647] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:27:34.647] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:27:34.647] DEBUG: Read line:         }
+[2025-02-22 15:27:34.648] DEBUG: Key: fastcgi_param
+[2025-02-22 15:27:34.648] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:27:34.649] DEBUG: Key: path
+[2025-02-22 15:27:34.649] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:27:34.649] DEBUG: Read line: 
+[2025-02-22 15:27:34.649] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 15:27:34.649] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:27:34.650] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:27:34.650] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:27:34.650] DEBUG: Read line:         }
+[2025-02-22 15:27:34.650] DEBUG: Key: fastcgi_param
+[2025-02-22 15:27:34.651] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:27:34.651] DEBUG: Key: path
+[2025-02-22 15:27:34.651] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:27:34.651] DEBUG: Read line: 
+[2025-02-22 15:27:34.651] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 15:27:34.651] DEBUG: Read line:             expires 6M;
+[2025-02-22 15:27:34.651] DEBUG: Read line:             access_log off;
+[2025-02-22 15:27:34.652] DEBUG: Read line:         }
+[2025-02-22 15:27:34.652] DEBUG: Key: path
+[2025-02-22 15:27:34.652] DEBUG: Value: 6M;
+[2025-02-22 15:27:34.652] DEBUG: Read line: 
+[2025-02-22 15:27:34.652] DEBUG: Read line: 		location /set-cookie {
+[2025-02-22 15:27:34.653] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-22 15:27:34.653] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-22 15:27:34.654] DEBUG: Read line: 		}
+[2025-02-22 15:27:34.654] DEBUG: Key: path
+[2025-02-22 15:27:34.654] DEBUG: Value: Set-Cookie
+[2025-02-22 15:27:34.655] DEBUG: Read line: 
+[2025-02-22 15:27:34.655] DEBUG: Read line: }
+[2025-02-22 15:27:34.655] DEBUG: Key: index
+[2025-02-22 15:27:34.655] DEBUG: Value: index.html
+[2025-02-22 15:27:34.655] DEBUG: Key: listen
+[2025-02-22 15:27:34.655] DEBUG: Value: 8080;
+[2025-02-22 15:27:34.655] DEBUG: Key: location
+[2025-02-22 15:27:34.656] DEBUG: Value: /
+[2025-02-22 15:27:34.656] DEBUG: Key: root
+[2025-02-22 15:27:34.656] DEBUG: Value: ./www;
+[2025-02-22 15:27:34.656] DEBUG: Key: server_name
+[2025-02-22 15:27:34.656] DEBUG: Value: localhost;
+[2025-02-22 15:27:34.656] DEBUG: Read line: }
+[2025-02-22 15:27:34.656] DEBUG: Key: include
+[2025-02-22 15:27:34.657] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-22 15:27:34.657] INFO: Start Server
+[2025-02-22 15:27:39.953] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:27:39.954] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.954] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.954] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.955] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:27:39.955] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.956] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.957] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.958] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:27:39.959] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.959] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.960] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.961] INFO: Resolved root: ./www
+[2025-02-22 15:27:39.961] INFO: Directive to: ./www/index.html
+[2025-02-22 15:27:39.963] INFO: 200 OK in get request
+[2025-02-22 15:27:39.969] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:27:39.970] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.970] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.970] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.970] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:27:39.971] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.971] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.971] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.971] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:27:39.971] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.972] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.972] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.972] INFO: Resolved root: ./www
+[2025-02-22 15:27:39.972] INFO: Directive to: ./www/style.css
+[2025-02-22 15:27:39.973] INFO: 200 OK in get request
+[2025-02-22 15:27:39.973] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:27:39.974] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.974] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.975] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.975] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:27:39.975] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.976] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.976] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.976] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:27:39.977] DEBUG: Parsed cookies: 
+[2025-02-22 15:27:39.977] DEBUG:  - undefined: undefined
+[2025-02-22 15:27:39.977] DEBUG:  - visits: 13
+[2025-02-22 15:27:39.977] INFO: Resolved root: ./www
+[2025-02-22 15:27:39.978] INFO: Directive to: ./www/script.js
+[2025-02-22 15:27:39.978] INFO: 200 OK in get request
+[2025-02-22 15:30:29.264] DEBUG: Read line: events {
+[2025-02-22 15:30:29.265] DEBUG: Read line:     worker_connections 1024;
+[2025-02-22 15:30:29.265] DEBUG: Read line:     use poll;
+[2025-02-22 15:30:29.265] DEBUG: Read line: }
+[2025-02-22 15:30:29.266] DEBUG: Read line: 
+[2025-02-22 15:30:29.266] DEBUG: Read line: http {
+[2025-02-22 15:30:29.266] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-22 15:30:29.267] DEBUG: Read line: 	server {
+[2025-02-22 15:30:29.267] DEBUG: Read line:         listen 8080;
+[2025-02-22 15:30:29.267] DEBUG: Read line:         server_name localhost;
+[2025-02-22 15:30:29.267] DEBUG: Read line: 
+[2025-02-22 15:30:29.268] DEBUG: Read line:         root ./www;
+[2025-02-22 15:30:29.268] DEBUG: Read line:         index index.html index.php;
+[2025-02-22 15:30:29.268] DEBUG: Read line: 
+[2025-02-22 15:30:29.268] DEBUG: Read line:         location / {
+[2025-02-22 15:30:29.269] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-22 15:30:29.269] DEBUG: Read line:         }
+[2025-02-22 15:30:29.269] DEBUG: Read line: 
+[2025-02-22 15:30:29.270] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-22 15:30:29.270] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:30:29.270] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:30:29.271] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:30:29.271] DEBUG: Read line:         }
+[2025-02-22 15:30:29.271] DEBUG: Key: fastcgi_param
+[2025-02-22 15:30:29.272] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:30:29.272] DEBUG: Key: fastcgi_pass
+[2025-02-22 15:30:29.272] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:30:29.272] DEBUG: Key: include
+[2025-02-22 15:30:29.273] DEBUG: Value: fastcgi_params;
+[2025-02-22 15:30:29.273] DEBUG: Key: location
+[2025-02-22 15:30:29.273] DEBUG: Value: ~
+[2025-02-22 15:30:29.273] DEBUG: Key: path
+[2025-02-22 15:30:29.274] DEBUG: Value: $uri
+[2025-02-22 15:30:29.274] DEBUG: Read line: 
+[2025-02-22 15:30:29.274] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-22 15:30:29.274] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 15:30:29.275] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:30:29.275] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:30:29.275] DEBUG: Read line:         }
+[2025-02-22 15:30:29.275] DEBUG: Key: fastcgi_param
+[2025-02-22 15:30:29.275] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:30:29.276] DEBUG: Key: path
+[2025-02-22 15:30:29.276] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-22 15:30:29.276] DEBUG: Read line: 
+[2025-02-22 15:30:29.276] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-22 15:30:29.276] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:30:29.277] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:30:29.277] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:30:29.277] DEBUG: Read line:         }
+[2025-02-22 15:30:29.277] DEBUG: Key: fastcgi_param
+[2025-02-22 15:30:29.277] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:30:29.277] DEBUG: Key: path
+[2025-02-22 15:30:29.278] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:30:29.278] DEBUG: Read line: 
+[2025-02-22 15:30:29.278] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-22 15:30:29.278] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-22 15:30:29.278] DEBUG: Read line:             include fastcgi_params;
+[2025-02-22 15:30:29.278] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-22 15:30:29.279] DEBUG: Read line:         }
+[2025-02-22 15:30:29.279] DEBUG: Key: fastcgi_param
+[2025-02-22 15:30:29.279] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-22 15:30:29.279] DEBUG: Key: path
+[2025-02-22 15:30:29.279] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-22 15:30:29.280] DEBUG: Read line: 
+[2025-02-22 15:30:29.280] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-22 15:30:29.280] DEBUG: Read line:             expires 6M;
+[2025-02-22 15:30:29.280] DEBUG: Read line:             access_log off;
+[2025-02-22 15:30:29.281] DEBUG: Read line:         }
+[2025-02-22 15:30:29.281] DEBUG: Key: path
+[2025-02-22 15:30:29.281] DEBUG: Value: 6M;
+[2025-02-22 15:30:29.281] DEBUG: Read line: 
+[2025-02-22 15:30:29.281] DEBUG: Read line: 		location /set-cookie {
+[2025-02-22 15:30:29.282] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-22 15:30:29.282] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-22 15:30:29.282] DEBUG: Read line: 		}
+[2025-02-22 15:30:29.282] DEBUG: Key: path
+[2025-02-22 15:30:29.282] DEBUG: Value: Set-Cookie
+[2025-02-22 15:30:29.282] DEBUG: Read line: 
+[2025-02-22 15:30:29.283] DEBUG: Read line: }
+[2025-02-22 15:30:29.283] DEBUG: Key: index
+[2025-02-22 15:30:29.283] DEBUG: Value: index.html
+[2025-02-22 15:30:29.283] DEBUG: Key: listen
+[2025-02-22 15:30:29.283] DEBUG: Value: 8080;
+[2025-02-22 15:30:29.284] DEBUG: Key: location
+[2025-02-22 15:30:29.284] DEBUG: Value: /
+[2025-02-22 15:30:29.284] DEBUG: Key: root
+[2025-02-22 15:30:29.284] DEBUG: Value: ./www;
+[2025-02-22 15:30:29.284] DEBUG: Key: server_name
+[2025-02-22 15:30:29.284] DEBUG: Value: localhost;
+[2025-02-22 15:30:29.285] DEBUG: Read line: }
+[2025-02-22 15:30:29.285] DEBUG: Key: include
+[2025-02-22 15:30:29.285] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-22 15:30:29.286] INFO: Start Server
+[2025-02-22 15:30:32.962] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:30:32.962] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.963] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.963] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.963] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:30:32.963] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.964] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.964] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.965] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-22 15:30:32.965] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.965] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.966] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.967] INFO: Resolved root: ./www
+[2025-02-22 15:30:32.967] INFO: Directive to: ./www/index.html
+[2025-02-22 15:30:32.970] INFO: 200 OK in get request
+[2025-02-22 15:30:32.977] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:30:32.977] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.978] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.978] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.978] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:30:32.979] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.979] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.979] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.980] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-22 15:30:32.980] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.981] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.981] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.981] INFO: Resolved root: ./www
+[2025-02-22 15:30:32.981] INFO: Directive to: ./www/style.css
+[2025-02-22 15:30:32.982] INFO: 200 OK in get request
+[2025-02-22 15:30:32.983] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:30:32.983] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.983] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.984] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.984] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:30:32.984] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.985] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.985] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.985] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-22 15:30:32.985] DEBUG: Parsed cookies: 
+[2025-02-22 15:30:32.985] DEBUG:  - undefined: undefined
+[2025-02-22 15:30:32.985] DEBUG:  - visits: 14
+[2025-02-22 15:30:32.986] INFO: Resolved root: ./www
+[2025-02-22 15:30:32.986] INFO: Directive to: ./www/script.js
+[2025-02-22 15:30:32.987] INFO: 200 OK in get request
+[2025-02-22 15:33:18.767] INFO: Parsing Request Line: GET /set-cookie HTTP/1.1
+[2025-02-22 15:33:18.767] INFO: Parsing Request Line: GET /set-cookie HTTP/1.1
+[2025-02-22 15:33:18.768] INFO: Parsing Request Line: GET /set-cookie HTTP/1.1
+[2025-02-22 15:33:18.768] INFO: Resolved root: ./www
+[2025-02-22 15:33:18.768] INFO: Directive to: ./www/set-cookie
+[2025-02-22 15:33:18.769] INFO: Stopping Server
