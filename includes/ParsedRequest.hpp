@@ -42,6 +42,7 @@ class ParsedRequest {
 
 		// Cookie part
 		void parseCookie(const std::string &cookieHeader);
+		void setCookie(const std::string &key, const std::string &value, int maxAge);
 
 
 		// setter

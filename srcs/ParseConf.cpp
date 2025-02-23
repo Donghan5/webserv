@@ -92,7 +92,7 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
         if (tokens.size() == 0) continue;
 
         e_type_key typeToken = getKeyType(tokens[0]);
-        if (typeToken == KEY_CLOSING_BRACE) break;  // 서버 블록 종료
+        if (typeToken == KEY_CLOSING_BRACE) break;
 
         if (typeToken == KEY_LOCATION) {
             handleLocationBlock(file, serverConfig);
@@ -150,11 +150,11 @@ void ParseConf::handleEventBlock(std::ifstream &file) {
         if (tokens.size() > 1) {
             std::string value = tokens[1];
             if (value.size() > 0 && value[value.size() - 1] == ';') {
-                value.erase(value.size() - 1, 1);  // `;` 제거
+                value.erase(value.size() - 1, 1);
             }
 
             if (tokens[0] == "worker_connections") {
-                if (isdigit(value[0])) {  // 값이 숫자인지 확인
+                if (isdigit(value[0])) {
                     this->_webconf->getEventConf().setWorkerConnections(std::atoi(value.c_str()));
                 } else {
                     Logger::log(Logger::ERROR, "Invalid argument for worker_connections: " + value);

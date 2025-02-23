@@ -46,6 +46,32 @@ std::string HttpServer::process_request(const std::string &request) {
 	std::string path = parser.getPath();
 	std::string host = parser.getHost();
 
+	// handler set-cookie
+	if (path == "/set-cookie") {
+		std::string cookieHeader = parser.getData("cookie");
+		std::string sessionID;
+
+		if (cookieHeader.empty() || cookieHeader == "undefined") {
+			sessionID = FileHandler::generateSessionID();
+			Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
+			parser.setCookie("session_id", sessionID, 3600);
+		} else {
+			sessionID = cookieHeader;
+			Logger::log(Logger::DEBUG, "Session_id found: " + cookieHeader);
+		}
+
+		std::ostringstream response;
+		response << "HTTP/1.1 200 OK\r\n"
+				 << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n"
+				 << "Content-Type: text/plain\r\n"
+				 << "Content-Length: 20\r\n"
+				 << "\r\n"
+				 << "Cookie has been set!";
+
+		Logger::log(Logger::INFO, "Cookie has been set!");
+		return response.str();
+	}
+
 	// Default to index.html for root path
 	if (path == "/") {
 		path = "/index.html";
@@ -56,11 +82,13 @@ std::string HttpServer::process_request(const std::string &request) {
 
 	Logger::log(Logger::INFO, "Resolved root: " + resolved_root);
 	Logger::log(Logger::INFO, "Directive to: " + full_path);
+
 	std::string extension = path.substr(path.find_last_of("."));
 	if (extension == ".py" || extension == ".php" || extension == ".pl" || extension == ".sh") {
 			CgiHandler cgi(full_path, parser.getHeaders(), parser.getBody());
 			return cgi.executeCgi();
 	}
+
 	if (method == "GET") {
 		return FileHandler::handleGetRequest(full_path);
 	}
@@ -110,7 +138,8 @@ void HttpServer::handle_client_read(int client_fd) {
             }
         }
 		std::string response = process_request(partial_requests[client_fd]);
-		std::cout << "Response: " + response << std::endl;
+		Logger::log(Logger::DEBUG, "Response: " + response);
+		// std::cout << "Response: " + response << std::endl;
 		partial_responses[client_fd] = response;
 		partial_requests.erase(client_fd);
 

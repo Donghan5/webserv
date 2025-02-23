@@ -17,7 +17,6 @@ int main(int argc, char **argv) {
 	ParseConf parser(name);
 	try {
 		std::string portStr = parser.getWebServConf().getFirstListenValue();
-		std::cout << "portStr: " << portStr << std::endl;
 		int port = std::atoi(portStr.c_str());
 		HttpServer server(port, parser.getWebServConf());
 		server.start();

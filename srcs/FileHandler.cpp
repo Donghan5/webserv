@@ -78,6 +78,7 @@ std::string FileHandler::handleGetRequest(const std::string &path) {
 	std::ostringstream content_length;
 	content_length << content_str.length();
 
+
 	std::string response = "HTTP/1.1 200 OK\r\n";
 	response += "Content-Type: " + content_type + "\r\n";
 	response += "Content-Length: " + content_length.str() + "\r\n";
@@ -122,4 +123,14 @@ std::string FileHandler::handleDeleteRequest(const std::string &path) {
 	}
 	Logger::log(Logger::INFO, "200 OK in delete request");
 	return "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully";
+}
+
+std::string FileHandler::generateSessionID() {
+	std::ostringstream oss;
+	srand(time(0));
+	for (size_t i = 0; i < 16; ++i) {
+		char c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"[rand() % 62];
+		oss << c;
+	}
+	return oss.str();
 }

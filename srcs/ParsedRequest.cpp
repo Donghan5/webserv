@@ -59,6 +59,24 @@ void ParsedRequest::parseCookie(const std::string &cookieHeader) {
 }
 
 /*
+	To send information of cookie
+*/
+void ParsedRequest::setCookie(const std::string &key, const std::string &value, int maxAge) {
+	std::ostringstream cookie;
+
+	cookie << key << '=' << value << "; Path=/; HttpOnly";
+	if (maxAge > 0) {
+		cookie << "; Max-Age= " << maxAge;
+	}
+	if (maxAge < 0) {
+		Logger::log(Logger::ERROR, "Max-Age value must be positive number");
+		throw std::logic_error("maxAge value must be positive number");
+	}
+	_cookies[key] = value;
+	_headers["Set-Cookie"] = cookie.str();
+}
+
+/*
 	Get specific data in _headers
 */
 std::string ParsedRequest::getData(std::string key) const {
@@ -74,7 +92,7 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 	std::string line;
 
 	if (std::getline(stream, line)) {
-		Logger::log(Logger::INFO, "Parsing Request Line: " + line);
+		Logger::log(Logger::DEBUG, "Parsing Request Line: " + line);
 		std::istringstream lineStream(line);
 		lineStream >> _method >> _path >> _version;
 	}
@@ -111,7 +129,7 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 		_host = _host.substr(0, colon);
 		_headers["host"] = _host;
 	} else {
-		_host = "default";
+		_host = "localhost";
 	}
 
 	if (_method == "POST") {
@@ -121,7 +139,6 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 		}
 		if (_headers.find("content-length") != _headers.end()) {
 			std::string contentLengthStr = getData("content-length");
-			std::cout << "Content length str: " + contentLengthStr << std::endl;
 			if (!contentLengthStr.empty()) {
 				int contentLength = std::atoi(contentLengthStr.c_str());
 

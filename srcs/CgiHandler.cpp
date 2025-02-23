@@ -77,7 +77,6 @@ std::string CgiHandler::executeCgi() {
 		Logger::log(Logger::ERROR, "Fail to execute CGI script: " + std::string(args[0]) + " " + std::string(args[1]));
 		exit(1);
 	} else {
-		// 부모 프로세스
 		close(pipefd_out[1]);
 		close(pipefd_in[0]);
 

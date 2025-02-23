@@ -1,4 +1,3 @@
-/* 🌑 Dark mode style */
 body {
     font-family: 'Poppins', sans-serif;
     text-align: center;
@@ -8,7 +7,6 @@ body {
     padding: 0;
 }
 
-/* header */
 header {
     background: #2C2C2E;
     color: white;
@@ -66,7 +64,6 @@ nav ul li a:hover {
     color: #CCCCCC;
 }
 
-/* 💾 visit count */
 .container {
     background: #2C2C2E;
     padding: 30px;
@@ -76,7 +73,6 @@ nav ul li a:hover {
     margin: 20px auto;
 }
 
-/* ⚡button */
 .btn-primary {
     background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
     border: none;
@@ -97,7 +93,6 @@ nav ul li a:hover {
     box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* 🕶️ footer */
 footer {
     background: #2C2C2E;
     color: #A0A0A0;

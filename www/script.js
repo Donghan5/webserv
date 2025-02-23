@@ -1,24 +1,31 @@
-// Function to set a cookie
-function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        let date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + value + "; path=/" + expires;
+function setCookie() {
+    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+    });
 }
 
+
+
 // Function to get a cookie
-function getCookie(name) {
-    let nameEQ = name + "=";
-    let ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length);
-    }
-    return null;
+function getCookie() {
+    fetch("/get-cookie", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+    });
 }
+
 
 // Track visit count
 window.onload = function() {

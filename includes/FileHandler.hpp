@@ -7,7 +7,9 @@
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
+#include <cstdlib>
 #include <unistd.h>
+#include <ctime>
 #include <map>
 
 #define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
@@ -27,6 +29,7 @@ class FileHandler {
 		static std::string handleGetRequest(const std::string &path);
 		static std::string handlePostRequest(const std::string &path, const std::string &body);
 		static std::string handleDeleteRequest(const std::string &path);
+		static std::string generateSessionID(void);
 };
 
 #endif
