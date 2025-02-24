@@ -152,7 +152,7 @@
         }
 
 		function setCookie() {
-			fetch("/set-cookie")
+			fetch("/set-cookie", { method: "GET", credentials: "include" })
 			.then(response => response.text())
 			.then(data => {
 				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
@@ -163,7 +163,7 @@
 		}
 
 		function getCookie() {
-			fetch("/get-cookie")
+			fetch("/get-cookie", { method: "GET", credentials: "include"})
 			.then(response => response.text())
 			.then(data => {
 				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
@@ -172,7 +172,7 @@
 				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
 			});
 		}
-		
+
     </script>
 
 </body>

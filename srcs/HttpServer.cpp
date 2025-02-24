@@ -46,31 +46,43 @@ std::string HttpServer::process_request(const std::string &request) {
 	std::string path = parser.getPath();
 	std::string host = parser.getHost();
 
-	// handler set-cookie
-	if (path == "/set-cookie") {
-		std::string cookieHeader = parser.getData("cookie");
-		std::string sessionID;
+	// // handler set-cookie
+	// if (path == "/set-cookie") {
+	// 	std::string cookieHeader = parser.getData("cookie");
+	// 	std::string sessionID;
 
-		if (cookieHeader.empty() || cookieHeader == "undefined") {
-			sessionID = FileHandler::generateSessionID();
-			Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
-			parser.setCookie("session_id", sessionID, 3600);
-		} else {
-			sessionID = cookieHeader;
-			Logger::log(Logger::DEBUG, "Session_id found: " + cookieHeader);
-		}
+	// 	if (cookieHeader.empty() || cookieHeader == "undefined") {
+	// 		sessionID = FileHandler::generateSessionID();
+	// 		Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
+	// 		parser.setCookie("session_id", sessionID, 3600);
+	// 	} else {
+	// 		sessionID = cookieHeader;
+	// 		Logger::log(Logger::DEBUG, "Session_id found: " + cookieHeader);
+	// 	}
 
-		std::ostringstream response;
-		response << "HTTP/1.1 200 OK\r\n"
-				 << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n"
-				 << "Content-Type: text/plain\r\n"
-				 << "Content-Length: 20\r\n"
-				 << "\r\n"
-				 << "Cookie has been set!";
+	// 	std::ostringstream response;
+	// 	response << "HTTP/1.1 200 OK\r\n"
+	// 			 << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n"
+	// 			 << "Content-Type: text/plain\r\n"
+	// 			 << "Content-Length: 20\r\n"
+	// 			 << "\r\n"
+	// 			 << "Cookie has been set!";
 
-		Logger::log(Logger::INFO, "Cookie has been set!");
-		return response.str();
-	}
+	// 	Logger::log(Logger::INFO, "Cookie has been set!");
+	// 	return response.str();
+	// }
+
+	// if (path == "/delete-cookie") {
+	// 	std::ostringstream responseDeleteCookie;
+	// 	responseDeleteCookie << "HTTP/1.1 200 OK\r\n"
+	// 						 << "Set-Cookie: session_id=; Path=/; Max-Age=0; HttpOnly\r\n"
+	// 						 << "Content-Type: text/plain\r\n"
+	// 						 << "Content-Length: 21\r\n"
+	// 						 << "\r\n"
+	// 						 << "Cookie has been deleted!";
+	// 	Logger::log(Logger::INFO, "Cookie has been deleted!");
+	// 	return responseDeleteCookie.str();
+	// }
 
 	// Default to index.html for root path
 	if (path == "/") {

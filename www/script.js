@@ -1,30 +1,30 @@
-function setCookie() {
-    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
-    })
-    .catch(error => {
-        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
-    });
-}
+// function setCookie() {
+//     fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+//     });
+// }
 
 
 
-// Function to get a cookie
-function getCookie() {
-    fetch("/get-cookie", {
-        method: "GET",
-        credentials: "include"
-    })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
-    })
-    .catch(error => {
-        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
-    });
-}
+// // Function to get a cookie
+// function getCookie() {
+//     fetch("/get-cookie", {
+//         method: "GET",
+//         credentials: "include"
+//     })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+//     });
+// }
 
 
 // Track visit count

@@ -59,24 +59,6 @@ void ParsedRequest::parseCookie(const std::string &cookieHeader) {
 }
 
 /*
-	To send information of cookie
-*/
-void ParsedRequest::setCookie(const std::string &key, const std::string &value, int maxAge) {
-	std::ostringstream cookie;
-
-	cookie << key << '=' << value << "; Path=/; HttpOnly";
-	if (maxAge > 0) {
-		cookie << "; Max-Age= " << maxAge;
-	}
-	if (maxAge < 0) {
-		Logger::log(Logger::ERROR, "Max-Age value must be positive number");
-		throw std::logic_error("maxAge value must be positive number");
-	}
-	_cookies[key] = value;
-	_headers["Set-Cookie"] = cookie.str();
-}
-
-/*
 	Get specific data in _headers
 */
 std::string ParsedRequest::getData(std::string key) const {

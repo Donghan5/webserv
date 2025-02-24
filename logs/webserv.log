@@ -5309,3 +5309,4104 @@ Cookie has been set!
 [2025-02-23 02:35:34.535] INFO: Resolved root: ./www
 [2025-02-23 02:35:34.535] INFO: Directive to: ./www/get-cookie
 [2025-02-23 02:35:34.535] INFO: Stopping Server
+[2025-02-23 15:20:22.178] DEBUG: Read line: events {
+[2025-02-23 15:20:22.180] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:20:22.180] DEBUG: Read line:     use poll;
+[2025-02-23 15:20:22.180] DEBUG: Read line: }
+[2025-02-23 15:20:22.180] DEBUG: Read line: 
+[2025-02-23 15:20:22.180] DEBUG: Read line: http {
+[2025-02-23 15:20:22.180] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:20:22.180] DEBUG: Read line: 	server {
+[2025-02-23 15:20:22.181] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:20:22.181] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:20:22.181] DEBUG: Read line: 
+[2025-02-23 15:20:22.182] DEBUG: Read line:         root ./www;
+[2025-02-23 15:20:22.183] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:20:22.183] DEBUG: Read line: 
+[2025-02-23 15:20:22.183] DEBUG: Read line:         location / {
+[2025-02-23 15:20:22.184] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:20:22.184] DEBUG: Read line:         }
+[2025-02-23 15:20:22.184] DEBUG: Read line: 
+[2025-02-23 15:20:22.184] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:20:22.185] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:22.185] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:22.185] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:22.186] DEBUG: Read line:         }
+[2025-02-23 15:20:22.186] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:22.186] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:22.187] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:20:22.187] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:22.187] DEBUG: Key: include
+[2025-02-23 15:20:22.188] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:20:22.188] DEBUG: Key: location
+[2025-02-23 15:20:22.188] DEBUG: Value: ~
+[2025-02-23 15:20:22.188] DEBUG: Key: path
+[2025-02-23 15:20:22.188] DEBUG: Value: $uri
+[2025-02-23 15:20:22.189] DEBUG: Read line: 
+[2025-02-23 15:20:22.189] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:20:22.189] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:20:22.190] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:22.190] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:22.190] DEBUG: Read line:         }
+[2025-02-23 15:20:22.190] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:22.190] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:22.190] DEBUG: Key: path
+[2025-02-23 15:20:22.191] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:20:22.191] DEBUG: Read line: 
+[2025-02-23 15:20:22.191] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:20:22.191] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:22.191] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:22.192] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:22.192] DEBUG: Read line:         }
+[2025-02-23 15:20:22.192] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:22.192] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:22.193] DEBUG: Key: path
+[2025-02-23 15:20:22.193] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:22.193] DEBUG: Read line: 
+[2025-02-23 15:20:22.193] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:20:22.194] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:22.194] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:22.194] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:22.194] DEBUG: Read line:         }
+[2025-02-23 15:20:22.194] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:22.195] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:22.195] DEBUG: Key: path
+[2025-02-23 15:20:22.195] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:22.195] DEBUG: Read line: 
+[2025-02-23 15:20:22.195] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:20:22.196] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:20:22.196] DEBUG: Read line:             access_log off;
+[2025-02-23 15:20:22.196] DEBUG: Read line:         }
+[2025-02-23 15:20:22.197] DEBUG: Key: path
+[2025-02-23 15:20:22.197] DEBUG: Value: 6M;
+[2025-02-23 15:20:22.197] DEBUG: Read line: 
+[2025-02-23 15:20:22.197] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:20:22.198] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:20:22.198] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:20:22.198] DEBUG: Read line: 		}
+[2025-02-23 15:20:22.199] DEBUG: Key: path
+[2025-02-23 15:20:22.199] DEBUG: Value: Set-Cookie
+[2025-02-23 15:20:22.199] DEBUG: Read line: 
+[2025-02-23 15:20:22.199] DEBUG: Read line: }
+[2025-02-23 15:20:22.199] DEBUG: Key: index
+[2025-02-23 15:20:22.200] DEBUG: Value: index.html
+[2025-02-23 15:20:22.200] DEBUG: Key: listen
+[2025-02-23 15:20:22.200] DEBUG: Value: 8080;
+[2025-02-23 15:20:22.200] DEBUG: Key: location
+[2025-02-23 15:20:22.200] DEBUG: Value: /
+[2025-02-23 15:20:22.201] DEBUG: Key: root
+[2025-02-23 15:20:22.201] DEBUG: Value: ./www;
+[2025-02-23 15:20:22.201] DEBUG: Key: server_name
+[2025-02-23 15:20:22.201] DEBUG: Value: localhost;
+[2025-02-23 15:20:22.201] DEBUG: Read line: }
+[2025-02-23 15:20:22.202] DEBUG: Key: include
+[2025-02-23 15:20:22.202] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:20:22.202] INFO: Start Server
+[2025-02-23 15:20:35.053] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:20:35.054] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.054] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.054] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:20:35.054] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.054] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.055] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:20:35.055] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.055] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.056] INFO: Resolved root: ./www
+[2025-02-23 15:20:35.056] INFO: Directive to: ./www/index.html
+[2025-02-23 15:20:35.058] INFO: 200 OK in get request
+[2025-02-23 15:20:35.058] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		}
+		
+    </script>
+
+</body>
+</html>
+
+[2025-02-23 15:20:35.070] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:20:35.070] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.070] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.070] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:20:35.070] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.070] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.070] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:20:35.071] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.071] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.071] INFO: Resolved root: ./www
+[2025-02-23 15:20:35.071] INFO: Directive to: ./www/style.css
+[2025-02-23 15:20:35.071] INFO: 200 OK in get request
+[2025-02-23 15:20:35.072] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:20:35.072] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:20:35.072] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.072] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.072] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:20:35.073] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.073] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.073] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:20:35.073] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.073] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.073] INFO: Resolved root: ./www
+[2025-02-23 15:20:35.073] INFO: Directive to: ./www/script.js
+[2025-02-23 15:20:35.074] INFO: 200 OK in get request
+[2025-02-23 15:20:35.074] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+function setCookie() {
+    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+    });
+}
+
+
+
+// Function to get a cookie
+function getCookie() {
+    fetch("/get-cookie", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+    });
+}
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.color = "black";
+    }, 2000);
+
+    alert("Hello! Welcome to webserv!!");
+}
+
+[2025-02-23 15:20:35.308] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:20:35.308] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.308] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.309] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:20:35.309] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.309] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.310] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:20:35.310] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:35.310] DEBUG:  - visits: 20
+[2025-02-23 15:20:35.310] INFO: Resolved root: ./www
+[2025-02-23 15:20:35.311] INFO: Directive to: ./www/get-cookie
+[2025-02-23 15:20:35.311] INFO: Stopping Server
+[2025-02-23 15:20:51.161] DEBUG: Read line: events {
+[2025-02-23 15:20:51.161] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:20:51.162] DEBUG: Read line:     use poll;
+[2025-02-23 15:20:51.163] DEBUG: Read line: }
+[2025-02-23 15:20:51.163] DEBUG: Read line: 
+[2025-02-23 15:20:51.163] DEBUG: Read line: http {
+[2025-02-23 15:20:51.164] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:20:51.164] DEBUG: Read line: 	server {
+[2025-02-23 15:20:51.165] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:20:51.165] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:20:51.165] DEBUG: Read line: 
+[2025-02-23 15:20:51.166] DEBUG: Read line:         root ./www;
+[2025-02-23 15:20:51.166] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:20:51.166] DEBUG: Read line: 
+[2025-02-23 15:20:51.166] DEBUG: Read line:         location / {
+[2025-02-23 15:20:51.166] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:20:51.167] DEBUG: Read line:         }
+[2025-02-23 15:20:51.167] DEBUG: Read line: 
+[2025-02-23 15:20:51.167] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:20:51.167] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:51.168] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:51.168] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:51.169] DEBUG: Read line:         }
+[2025-02-23 15:20:51.169] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:51.169] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:51.169] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:20:51.170] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:51.170] DEBUG: Key: include
+[2025-02-23 15:20:51.170] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:20:51.170] DEBUG: Key: location
+[2025-02-23 15:20:51.170] DEBUG: Value: ~
+[2025-02-23 15:20:51.170] DEBUG: Key: path
+[2025-02-23 15:20:51.171] DEBUG: Value: $uri
+[2025-02-23 15:20:51.171] DEBUG: Read line: 
+[2025-02-23 15:20:51.171] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:20:51.171] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:20:51.171] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:51.171] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:51.172] DEBUG: Read line:         }
+[2025-02-23 15:20:51.172] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:51.172] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:51.172] DEBUG: Key: path
+[2025-02-23 15:20:51.173] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:20:51.173] DEBUG: Read line: 
+[2025-02-23 15:20:51.173] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:20:51.174] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:51.174] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:51.174] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:51.174] DEBUG: Read line:         }
+[2025-02-23 15:20:51.174] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:51.175] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:51.175] DEBUG: Key: path
+[2025-02-23 15:20:51.175] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:51.175] DEBUG: Read line: 
+[2025-02-23 15:20:51.175] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:20:51.175] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:51.175] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:20:51.176] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:20:51.176] DEBUG: Read line:         }
+[2025-02-23 15:20:51.176] DEBUG: Key: fastcgi_param
+[2025-02-23 15:20:51.176] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:20:51.176] DEBUG: Key: path
+[2025-02-23 15:20:51.176] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:20:51.176] DEBUG: Read line: 
+[2025-02-23 15:20:51.177] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:20:51.177] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:20:51.177] DEBUG: Read line:             access_log off;
+[2025-02-23 15:20:51.177] DEBUG: Read line:         }
+[2025-02-23 15:20:51.178] DEBUG: Key: path
+[2025-02-23 15:20:51.178] DEBUG: Value: 6M;
+[2025-02-23 15:20:51.178] DEBUG: Read line: 
+[2025-02-23 15:20:51.178] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:20:51.178] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:20:51.178] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:20:51.178] DEBUG: Read line: 		}
+[2025-02-23 15:20:51.179] DEBUG: Key: path
+[2025-02-23 15:20:51.179] DEBUG: Value: Set-Cookie
+[2025-02-23 15:20:51.179] DEBUG: Read line: 
+[2025-02-23 15:20:51.179] DEBUG: Read line: }
+[2025-02-23 15:20:51.179] DEBUG: Key: index
+[2025-02-23 15:20:51.179] DEBUG: Value: index.html
+[2025-02-23 15:20:51.180] DEBUG: Key: listen
+[2025-02-23 15:20:51.180] DEBUG: Value: 8080;
+[2025-02-23 15:20:51.180] DEBUG: Key: location
+[2025-02-23 15:20:51.180] DEBUG: Value: /
+[2025-02-23 15:20:51.180] DEBUG: Key: root
+[2025-02-23 15:20:51.181] DEBUG: Value: ./www;
+[2025-02-23 15:20:51.181] DEBUG: Key: server_name
+[2025-02-23 15:20:51.181] DEBUG: Value: localhost;
+[2025-02-23 15:20:51.181] DEBUG: Read line: }
+[2025-02-23 15:20:51.182] DEBUG: Key: include
+[2025-02-23 15:20:51.182] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:20:51.182] INFO: Start Server
+[2025-02-23 15:20:53.237] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:20:53.237] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.238] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.238] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:20:53.238] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.238] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.238] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:20:53.238] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.239] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.239] INFO: Resolved root: ./www
+[2025-02-23 15:20:53.239] INFO: Directive to: ./www/index.html
+[2025-02-23 15:20:53.240] INFO: 200 OK in get request
+[2025-02-23 15:20:53.241] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		}
+		
+    </script>
+
+</body>
+</html>
+
+[2025-02-23 15:20:53.249] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:20:53.250] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.250] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.250] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:20:53.250] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.251] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.251] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:20:53.251] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.252] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.252] INFO: Resolved root: ./www
+[2025-02-23 15:20:53.252] INFO: Directive to: ./www/style.css
+[2025-02-23 15:20:53.252] INFO: 200 OK in get request
+[2025-02-23 15:20:53.253] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:20:53.253] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:20:53.253] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.253] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.253] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:20:53.254] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.254] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.254] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:20:53.254] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.254] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.254] INFO: Resolved root: ./www
+[2025-02-23 15:20:53.255] INFO: Directive to: ./www/script.js
+[2025-02-23 15:20:53.255] INFO: 200 OK in get request
+[2025-02-23 15:20:53.255] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+function setCookie() {
+    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+    });
+}
+
+
+
+// Function to get a cookie
+function getCookie() {
+    fetch("/get-cookie", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+    });
+}
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.color = "black";
+    }, 2000);
+
+    alert("Hello! Welcome to webserv!!");
+}
+
+[2025-02-23 15:20:53.261] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:20:53.261] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.261] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.262] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:20:53.262] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.262] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.262] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:20:53.263] DEBUG: Parsed cookies: 
+[2025-02-23 15:20:53.263] DEBUG:  - visits: 20
+[2025-02-23 15:20:53.263] INFO: Resolved root: ./www
+[2025-02-23 15:20:53.263] INFO: Directive to: ./www/get-cookie
+[2025-02-23 15:20:53.263] INFO: Stopping Server
+[2025-02-23 15:21:04.764] DEBUG: Read line: events {
+[2025-02-23 15:21:04.765] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:21:04.765] DEBUG: Read line:     use poll;
+[2025-02-23 15:21:04.765] DEBUG: Read line: }
+[2025-02-23 15:21:04.766] DEBUG: Read line: 
+[2025-02-23 15:21:04.766] DEBUG: Read line: http {
+[2025-02-23 15:21:04.767] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:21:04.767] DEBUG: Read line: 	server {
+[2025-02-23 15:21:04.768] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:21:04.768] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:21:04.768] DEBUG: Read line: 
+[2025-02-23 15:21:04.769] DEBUG: Read line:         root ./www;
+[2025-02-23 15:21:04.769] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:21:04.770] DEBUG: Read line: 
+[2025-02-23 15:21:04.770] DEBUG: Read line:         location / {
+[2025-02-23 15:21:04.770] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:21:04.770] DEBUG: Read line:         }
+[2025-02-23 15:21:04.771] DEBUG: Read line: 
+[2025-02-23 15:21:04.771] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:21:04.771] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:04.772] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:04.772] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:04.772] DEBUG: Read line:         }
+[2025-02-23 15:21:04.772] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:04.772] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:04.773] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:21:04.773] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:04.773] DEBUG: Key: include
+[2025-02-23 15:21:04.773] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:21:04.774] DEBUG: Key: location
+[2025-02-23 15:21:04.774] DEBUG: Value: ~
+[2025-02-23 15:21:04.774] DEBUG: Key: path
+[2025-02-23 15:21:04.774] DEBUG: Value: $uri
+[2025-02-23 15:21:04.775] DEBUG: Read line: 
+[2025-02-23 15:21:04.775] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:21:04.775] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:21:04.775] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:04.776] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:04.776] DEBUG: Read line:         }
+[2025-02-23 15:21:04.777] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:04.777] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:04.777] DEBUG: Key: path
+[2025-02-23 15:21:04.777] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:21:04.777] DEBUG: Read line: 
+[2025-02-23 15:21:04.778] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:21:04.778] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:04.778] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:04.778] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:04.779] DEBUG: Read line:         }
+[2025-02-23 15:21:04.779] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:04.779] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:04.780] DEBUG: Key: path
+[2025-02-23 15:21:04.780] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:04.780] DEBUG: Read line: 
+[2025-02-23 15:21:04.780] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:21:04.781] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:04.781] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:04.781] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:04.781] DEBUG: Read line:         }
+[2025-02-23 15:21:04.781] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:04.781] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:04.782] DEBUG: Key: path
+[2025-02-23 15:21:04.782] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:04.782] DEBUG: Read line: 
+[2025-02-23 15:21:04.782] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:21:04.783] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:21:04.783] DEBUG: Read line:             access_log off;
+[2025-02-23 15:21:04.783] DEBUG: Read line:         }
+[2025-02-23 15:21:04.783] DEBUG: Key: path
+[2025-02-23 15:21:04.783] DEBUG: Value: 6M;
+[2025-02-23 15:21:04.784] DEBUG: Read line: 
+[2025-02-23 15:21:04.784] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:21:04.784] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:21:04.784] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:21:04.784] DEBUG: Read line: 		}
+[2025-02-23 15:21:04.784] DEBUG: Key: path
+[2025-02-23 15:21:04.785] DEBUG: Value: Set-Cookie
+[2025-02-23 15:21:04.785] DEBUG: Read line: 
+[2025-02-23 15:21:04.785] DEBUG: Read line: }
+[2025-02-23 15:21:04.785] DEBUG: Key: index
+[2025-02-23 15:21:04.785] DEBUG: Value: index.html
+[2025-02-23 15:21:04.786] DEBUG: Key: listen
+[2025-02-23 15:21:04.786] DEBUG: Value: 8080;
+[2025-02-23 15:21:04.786] DEBUG: Key: location
+[2025-02-23 15:21:04.786] DEBUG: Value: /
+[2025-02-23 15:21:04.787] DEBUG: Key: root
+[2025-02-23 15:21:04.787] DEBUG: Value: ./www;
+[2025-02-23 15:21:04.787] DEBUG: Key: server_name
+[2025-02-23 15:21:04.787] DEBUG: Value: localhost;
+[2025-02-23 15:21:04.787] DEBUG: Read line: }
+[2025-02-23 15:21:04.788] DEBUG: Key: include
+[2025-02-23 15:21:04.788] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:21:04.788] INFO: Start Server
+[2025-02-23 15:21:06.490] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:21:06.490] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.490] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.490] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:21:06.491] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.491] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.491] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:21:06.491] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.492] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.492] INFO: Resolved root: ./www
+[2025-02-23 15:21:06.493] INFO: Directive to: ./www/index.html
+[2025-02-23 15:21:06.494] INFO: 200 OK in get request
+[2025-02-23 15:21:06.494] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		}
+		
+    </script>
+
+</body>
+</html>
+
+[2025-02-23 15:21:06.496] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:21:06.496] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.497] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.497] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:21:06.497] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.498] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.499] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:21:06.500] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.500] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.500] INFO: Resolved root: ./www
+[2025-02-23 15:21:06.500] INFO: Directive to: ./www/style.css
+[2025-02-23 15:21:06.501] INFO: 200 OK in get request
+[2025-02-23 15:21:06.502] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:21:06.502] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:21:06.502] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.502] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.502] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:21:06.502] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.502] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.503] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:21:06.503] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.503] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.503] INFO: Resolved root: ./www
+[2025-02-23 15:21:06.503] INFO: Directive to: ./www/script.js
+[2025-02-23 15:21:06.504] INFO: 200 OK in get request
+[2025-02-23 15:21:06.504] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+function setCookie() {
+    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+    });
+}
+
+
+
+// Function to get a cookie
+function getCookie() {
+    fetch("/get-cookie", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+    });
+}
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.color = "black";
+    }, 2000);
+
+    alert("Hello! Welcome to webserv!!");
+}
+
+[2025-02-23 15:21:06.533] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:21:06.533] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.533] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.533] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:21:06.534] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.534] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.534] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:21:06.534] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:06.535] DEBUG:  - visits: 20
+[2025-02-23 15:21:06.535] INFO: Resolved root: ./www
+[2025-02-23 15:21:06.535] INFO: Directive to: ./www/get-cookie
+[2025-02-23 15:21:06.535] INFO: Stopping Server
+[2025-02-23 15:21:25.225] DEBUG: Read line: events {
+[2025-02-23 15:21:25.225] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:21:25.226] DEBUG: Read line:     use poll;
+[2025-02-23 15:21:25.226] DEBUG: Read line: }
+[2025-02-23 15:21:25.226] DEBUG: Read line: 
+[2025-02-23 15:21:25.226] DEBUG: Read line: http {
+[2025-02-23 15:21:25.226] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:21:25.227] DEBUG: Read line: 	server {
+[2025-02-23 15:21:25.227] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:21:25.227] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:21:25.227] DEBUG: Read line: 
+[2025-02-23 15:21:25.227] DEBUG: Read line:         root ./www;
+[2025-02-23 15:21:25.227] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:21:25.227] DEBUG: Read line: 
+[2025-02-23 15:21:25.228] DEBUG: Read line:         location / {
+[2025-02-23 15:21:25.228] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:21:25.228] DEBUG: Read line:         }
+[2025-02-23 15:21:25.228] DEBUG: Read line: 
+[2025-02-23 15:21:25.228] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:21:25.229] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:25.229] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:25.230] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:25.230] DEBUG: Read line:         }
+[2025-02-23 15:21:25.230] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:25.230] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:25.231] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:21:25.231] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:25.231] DEBUG: Key: include
+[2025-02-23 15:21:25.231] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:21:25.232] DEBUG: Key: location
+[2025-02-23 15:21:25.232] DEBUG: Value: ~
+[2025-02-23 15:21:25.232] DEBUG: Key: path
+[2025-02-23 15:21:25.233] DEBUG: Value: $uri
+[2025-02-23 15:21:25.233] DEBUG: Read line: 
+[2025-02-23 15:21:25.233] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:21:25.233] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:21:25.234] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:25.234] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:25.234] DEBUG: Read line:         }
+[2025-02-23 15:21:25.234] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:25.235] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:25.235] DEBUG: Key: path
+[2025-02-23 15:21:25.235] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:21:25.236] DEBUG: Read line: 
+[2025-02-23 15:21:25.236] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:21:25.236] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:25.237] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:25.237] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:25.237] DEBUG: Read line:         }
+[2025-02-23 15:21:25.237] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:25.237] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:25.238] DEBUG: Key: path
+[2025-02-23 15:21:25.238] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:25.238] DEBUG: Read line: 
+[2025-02-23 15:21:25.238] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:21:25.239] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:25.239] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:21:25.239] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:21:25.239] DEBUG: Read line:         }
+[2025-02-23 15:21:25.239] DEBUG: Key: fastcgi_param
+[2025-02-23 15:21:25.240] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:21:25.240] DEBUG: Key: path
+[2025-02-23 15:21:25.240] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:21:25.240] DEBUG: Read line: 
+[2025-02-23 15:21:25.241] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:21:25.241] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:21:25.241] DEBUG: Read line:             access_log off;
+[2025-02-23 15:21:25.241] DEBUG: Read line:         }
+[2025-02-23 15:21:25.241] DEBUG: Key: path
+[2025-02-23 15:21:25.241] DEBUG: Value: 6M;
+[2025-02-23 15:21:25.242] DEBUG: Read line: 
+[2025-02-23 15:21:25.242] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:21:25.242] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:21:25.242] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:21:25.242] DEBUG: Read line: 		}
+[2025-02-23 15:21:25.242] DEBUG: Key: path
+[2025-02-23 15:21:25.242] DEBUG: Value: Set-Cookie
+[2025-02-23 15:21:25.243] DEBUG: Read line: 
+[2025-02-23 15:21:25.243] DEBUG: Read line: }
+[2025-02-23 15:21:25.243] DEBUG: Key: index
+[2025-02-23 15:21:25.243] DEBUG: Value: index.html
+[2025-02-23 15:21:25.243] DEBUG: Key: listen
+[2025-02-23 15:21:25.244] DEBUG: Value: 8080;
+[2025-02-23 15:21:25.244] DEBUG: Key: location
+[2025-02-23 15:21:25.244] DEBUG: Value: /
+[2025-02-23 15:21:25.244] DEBUG: Key: root
+[2025-02-23 15:21:25.244] DEBUG: Value: ./www;
+[2025-02-23 15:21:25.244] DEBUG: Key: server_name
+[2025-02-23 15:21:25.244] DEBUG: Value: localhost;
+[2025-02-23 15:21:25.245] DEBUG: Read line: }
+[2025-02-23 15:21:25.245] DEBUG: Key: include
+[2025-02-23 15:21:25.245] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:21:25.246] INFO: Start Server
+[2025-02-23 15:21:32.668] DEBUG: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-23 15:21:32.669] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:32.669] DEBUG:  - visits: 20
+[2025-02-23 15:21:32.669] INFO: Successfully received full request body (213 bytes)
+[2025-02-23 15:21:32.669] DEBUG: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-23 15:21:32.669] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:32.670] DEBUG:  - visits: 20
+[2025-02-23 15:21:32.670] INFO: Successfully received full request body (213 bytes)
+[2025-02-23 15:21:32.670] DEBUG: Parsing Request Line: POST /upload/test.txt HTTP/1.1
+[2025-02-23 15:21:32.671] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:32.671] DEBUG:  - visits: 20
+[2025-02-23 15:21:32.671] INFO: Successfully received full request body (213 bytes)
+[2025-02-23 15:21:32.671] INFO: Resolved root: ./www
+[2025-02-23 15:21:32.671] INFO: Directive to: ./www/upload/test.txt
+[2025-02-23 15:21:32.673] INFO: 201 POST request accepted
+[2025-02-23 15:21:32.673] DEBUG: Response: HTTP/1.1 201 Created
+
+File uploaded successfully
+[2025-02-23 15:21:52.700] DEBUG: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-23 15:21:52.700] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:52.700] DEBUG:  - visits: 20
+[2025-02-23 15:21:52.700] DEBUG: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-23 15:21:52.701] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:52.701] DEBUG:  - visits: 20
+[2025-02-23 15:21:52.701] DEBUG: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-23 15:21:52.701] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:52.702] DEBUG:  - visits: 20
+[2025-02-23 15:21:52.702] INFO: Resolved root: ./www
+[2025-02-23 15:21:52.702] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-23 15:21:52.703] INFO: Attempting to execute CGI script:
+[2025-02-23 15:21:52.704] INFO: Interpreter: /bin/bash
+[2025-02-23 15:21:52.704] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-23 15:21:52.707] INFO: CGI execution successful
+[2025-02-23 15:21:52.707] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+
+[2025-02-23 15:21:52.703] INFO: Attempting to execute CGI script:
+[2025-02-23 15:21:52.704] INFO: Interpreter: /bin/bash
+[2025-02-23 15:21:52.704] INFO: Script Path: ./www/cgi-bin/test.sh
+Content-Type: text/html
+
+<html><body>
+<h1>Bash CGI Test</h1>
+<p>Hello from Bash CGI!</p>
+</body></html>
+
+[2025-02-23 15:21:53.758] DEBUG: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-23 15:21:53.759] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:53.759] DEBUG:  - visits: 20
+[2025-02-23 15:21:53.759] DEBUG: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-23 15:21:53.759] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:53.760] DEBUG:  - visits: 20
+[2025-02-23 15:21:53.760] DEBUG: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-23 15:21:53.760] DEBUG: Parsed cookies: 
+[2025-02-23 15:21:53.761] DEBUG:  - visits: 20
+[2025-02-23 15:21:53.761] INFO: Resolved root: ./www
+[2025-02-23 15:21:53.761] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-23 15:21:53.762] INFO: Attempting to execute CGI script:
+[2025-02-23 15:21:53.762] INFO: Interpreter: /usr/bin/perl
+[2025-02-23 15:21:53.763] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-23 15:21:53.768] INFO: CGI execution successful
+[2025-02-23 15:21:53.769] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+
+[2025-02-23 15:21:53.762] INFO: Attempting to execute CGI script:
+[2025-02-23 15:21:53.762] INFO: Interpreter: /usr/bin/perl
+[2025-02-23 15:21:53.763] INFO: Script Path: ./www/cgi-bin/test.pl
+Content-Type: text/html
+
+<html><body><h1>Perl CGI Test</h1><p>Hello from Perl CGI!</p></body></html>
+[2025-02-23 15:30:04.757] DEBUG: Read line: events {
+[2025-02-23 15:30:04.758] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:30:04.758] DEBUG: Read line:     use poll;
+[2025-02-23 15:30:04.758] DEBUG: Read line: }
+[2025-02-23 15:30:04.759] DEBUG: Read line: 
+[2025-02-23 15:30:04.759] DEBUG: Read line: http {
+[2025-02-23 15:30:04.759] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:30:04.759] DEBUG: Read line: 	server {
+[2025-02-23 15:30:04.759] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:30:04.760] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:30:04.760] DEBUG: Read line: 
+[2025-02-23 15:30:04.760] DEBUG: Read line:         root ./www;
+[2025-02-23 15:30:04.760] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:30:04.761] DEBUG: Read line: 
+[2025-02-23 15:30:04.761] DEBUG: Read line:         location / {
+[2025-02-23 15:30:04.761] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:30:04.761] DEBUG: Read line:         }
+[2025-02-23 15:30:04.762] DEBUG: Read line: 
+[2025-02-23 15:30:04.762] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:30:04.762] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:30:04.762] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:30:04.762] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:30:04.762] DEBUG: Read line:         }
+[2025-02-23 15:30:04.762] DEBUG: Key: fastcgi_param
+[2025-02-23 15:30:04.763] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:30:04.763] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:30:04.764] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:30:04.764] DEBUG: Key: include
+[2025-02-23 15:30:04.764] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:30:04.765] DEBUG: Key: location
+[2025-02-23 15:30:04.765] DEBUG: Value: ~
+[2025-02-23 15:30:04.765] DEBUG: Key: path
+[2025-02-23 15:30:04.766] DEBUG: Value: $uri
+[2025-02-23 15:30:04.766] DEBUG: Read line: 
+[2025-02-23 15:30:04.766] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:30:04.766] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:30:04.767] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:30:04.767] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:30:04.767] DEBUG: Read line:         }
+[2025-02-23 15:30:04.768] DEBUG: Key: fastcgi_param
+[2025-02-23 15:30:04.768] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:30:04.768] DEBUG: Key: path
+[2025-02-23 15:30:04.768] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:30:04.768] DEBUG: Read line: 
+[2025-02-23 15:30:04.769] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:30:04.769] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:30:04.769] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:30:04.769] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:30:04.770] DEBUG: Read line:         }
+[2025-02-23 15:30:04.770] DEBUG: Key: fastcgi_param
+[2025-02-23 15:30:04.770] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:30:04.770] DEBUG: Key: path
+[2025-02-23 15:30:04.770] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:30:04.771] DEBUG: Read line: 
+[2025-02-23 15:30:04.771] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:30:04.771] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:30:04.771] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:30:04.771] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:30:04.772] DEBUG: Read line:         }
+[2025-02-23 15:30:04.772] DEBUG: Key: fastcgi_param
+[2025-02-23 15:30:04.772] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:30:04.773] DEBUG: Key: path
+[2025-02-23 15:30:04.773] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:30:04.773] DEBUG: Read line: 
+[2025-02-23 15:30:04.773] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:30:04.774] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:30:04.774] DEBUG: Read line:             access_log off;
+[2025-02-23 15:30:04.774] DEBUG: Read line:         }
+[2025-02-23 15:30:04.774] DEBUG: Key: path
+[2025-02-23 15:30:04.775] DEBUG: Value: 6M;
+[2025-02-23 15:30:04.775] DEBUG: Read line: 
+[2025-02-23 15:30:04.775] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:30:04.775] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:30:04.775] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:30:04.776] DEBUG: Read line: 		}
+[2025-02-23 15:30:04.776] DEBUG: Key: path
+[2025-02-23 15:30:04.776] DEBUG: Value: Set-Cookie
+[2025-02-23 15:30:04.776] DEBUG: Read line: 
+[2025-02-23 15:30:04.776] DEBUG: Read line: }
+[2025-02-23 15:30:04.776] DEBUG: Key: index
+[2025-02-23 15:30:04.777] DEBUG: Value: index.html
+[2025-02-23 15:30:04.777] DEBUG: Key: listen
+[2025-02-23 15:30:04.777] DEBUG: Value: 8080;
+[2025-02-23 15:30:04.777] DEBUG: Key: location
+[2025-02-23 15:30:04.777] DEBUG: Value: /
+[2025-02-23 15:30:04.777] DEBUG: Key: root
+[2025-02-23 15:30:04.777] DEBUG: Value: ./www;
+[2025-02-23 15:30:04.777] DEBUG: Key: server_name
+[2025-02-23 15:30:04.778] DEBUG: Value: localhost;
+[2025-02-23 15:30:04.778] DEBUG: Read line: }
+[2025-02-23 15:30:04.778] DEBUG: Key: include
+[2025-02-23 15:30:04.778] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:30:04.778] INFO: Start Server
+[2025-02-23 15:30:39.739] DEBUG: Parsing Request Line: GET /delete-cookie HTTP/1.1
+[2025-02-23 15:30:39.740] DEBUG: Parsing Request Line: GET /delete-cookie HTTP/1.1
+[2025-02-23 15:30:39.740] DEBUG: Parsing Request Line: GET /delete-cookie HTTP/1.1
+[2025-02-23 15:30:39.740] INFO: Cookie has been deleted!
+[2025-02-23 15:30:39.741] DEBUG: Response: HTTP/1.1 200 OK
+Set-Cookie: session_id=; Path=/; Max-Age=0; HttpOnly
+Content-Type: text/plain
+Content-Length: 21
+
+Cookie has been deleted!
+[2025-02-23 15:31:01.255] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:31:01.255] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.255] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.255] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:31:01.256] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.256] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.256] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:31:01.256] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.257] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.257] INFO: Resolved root: ./www
+[2025-02-23 15:31:01.257] INFO: Directive to: ./www/index.html
+[2025-02-23 15:31:01.259] INFO: 200 OK in get request
+[2025-02-23 15:31:01.259] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		}
+		
+    </script>
+
+</body>
+</html>
+
+[2025-02-23 15:31:01.268] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:31:01.268] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.269] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.269] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:31:01.269] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.270] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.270] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:31:01.270] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.270] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.270] INFO: Resolved root: ./www
+[2025-02-23 15:31:01.270] INFO: Directive to: ./www/style.css
+[2025-02-23 15:31:01.271] INFO: 200 OK in get request
+[2025-02-23 15:31:01.271] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:31:01.272] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:31:01.272] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.273] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.273] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:31:01.273] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.274] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.274] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:31:01.275] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.275] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.275] INFO: Resolved root: ./www
+[2025-02-23 15:31:01.275] INFO: Directive to: ./www/script.js
+[2025-02-23 15:31:01.276] INFO: 200 OK in get request
+[2025-02-23 15:31:01.276] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+function setCookie() {
+    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+    });
+}
+
+
+
+// Function to get a cookie
+function getCookie() {
+    fetch("/get-cookie", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+    });
+}
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.color = "black";
+    }, 2000);
+
+    alert("Hello! Welcome to webserv!!");
+}
+
+[2025-02-23 15:31:01.286] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:31:01.286] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.286] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.287] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:31:01.287] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.287] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.287] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:31:01.288] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:01.288] DEBUG:  - visits: 20
+[2025-02-23 15:31:01.288] INFO: Resolved root: ./www
+[2025-02-23 15:31:01.288] INFO: Directive to: ./www/get-cookie
+[2025-02-23 15:31:01.288] INFO: Stopping Server
+[2025-02-23 15:31:10.736] DEBUG: Read line: events {
+[2025-02-23 15:31:10.736] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:31:10.736] DEBUG: Read line:     use poll;
+[2025-02-23 15:31:10.736] DEBUG: Read line: }
+[2025-02-23 15:31:10.737] DEBUG: Read line: 
+[2025-02-23 15:31:10.737] DEBUG: Read line: http {
+[2025-02-23 15:31:10.737] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:31:10.738] DEBUG: Read line: 	server {
+[2025-02-23 15:31:10.738] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:31:10.739] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:31:10.739] DEBUG: Read line: 
+[2025-02-23 15:31:10.739] DEBUG: Read line:         root ./www;
+[2025-02-23 15:31:10.739] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:31:10.740] DEBUG: Read line: 
+[2025-02-23 15:31:10.740] DEBUG: Read line:         location / {
+[2025-02-23 15:31:10.740] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:31:10.740] DEBUG: Read line:         }
+[2025-02-23 15:31:10.740] DEBUG: Read line: 
+[2025-02-23 15:31:10.741] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:31:10.741] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:31:10.741] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:31:10.741] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:31:10.741] DEBUG: Read line:         }
+[2025-02-23 15:31:10.742] DEBUG: Key: fastcgi_param
+[2025-02-23 15:31:10.742] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:31:10.742] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:31:10.742] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:31:10.743] DEBUG: Key: include
+[2025-02-23 15:31:10.743] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:31:10.743] DEBUG: Key: location
+[2025-02-23 15:31:10.743] DEBUG: Value: ~
+[2025-02-23 15:31:10.744] DEBUG: Key: path
+[2025-02-23 15:31:10.744] DEBUG: Value: $uri
+[2025-02-23 15:31:10.744] DEBUG: Read line: 
+[2025-02-23 15:31:10.744] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:31:10.745] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:31:10.745] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:31:10.745] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:31:10.745] DEBUG: Read line:         }
+[2025-02-23 15:31:10.746] DEBUG: Key: fastcgi_param
+[2025-02-23 15:31:10.746] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:31:10.746] DEBUG: Key: path
+[2025-02-23 15:31:10.746] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:31:10.746] DEBUG: Read line: 
+[2025-02-23 15:31:10.746] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:31:10.746] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:31:10.747] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:31:10.747] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:31:10.747] DEBUG: Read line:         }
+[2025-02-23 15:31:10.748] DEBUG: Key: fastcgi_param
+[2025-02-23 15:31:10.748] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:31:10.748] DEBUG: Key: path
+[2025-02-23 15:31:10.748] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:31:10.749] DEBUG: Read line: 
+[2025-02-23 15:31:10.749] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:31:10.749] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:31:10.749] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:31:10.749] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:31:10.750] DEBUG: Read line:         }
+[2025-02-23 15:31:10.750] DEBUG: Key: fastcgi_param
+[2025-02-23 15:31:10.750] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:31:10.751] DEBUG: Key: path
+[2025-02-23 15:31:10.751] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:31:10.751] DEBUG: Read line: 
+[2025-02-23 15:31:10.751] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:31:10.752] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:31:10.752] DEBUG: Read line:             access_log off;
+[2025-02-23 15:31:10.752] DEBUG: Read line:         }
+[2025-02-23 15:31:10.753] DEBUG: Key: path
+[2025-02-23 15:31:10.753] DEBUG: Value: 6M;
+[2025-02-23 15:31:10.753] DEBUG: Read line: 
+[2025-02-23 15:31:10.753] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:31:10.753] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:31:10.754] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:31:10.754] DEBUG: Read line: 		}
+[2025-02-23 15:31:10.754] DEBUG: Key: path
+[2025-02-23 15:31:10.754] DEBUG: Value: Set-Cookie
+[2025-02-23 15:31:10.754] DEBUG: Read line: 
+[2025-02-23 15:31:10.755] DEBUG: Read line: }
+[2025-02-23 15:31:10.755] DEBUG: Key: index
+[2025-02-23 15:31:10.755] DEBUG: Value: index.html
+[2025-02-23 15:31:10.755] DEBUG: Key: listen
+[2025-02-23 15:31:10.756] DEBUG: Value: 8080;
+[2025-02-23 15:31:10.756] DEBUG: Key: location
+[2025-02-23 15:31:10.756] DEBUG: Value: /
+[2025-02-23 15:31:10.756] DEBUG: Key: root
+[2025-02-23 15:31:10.757] DEBUG: Value: ./www;
+[2025-02-23 15:31:10.757] DEBUG: Key: server_name
+[2025-02-23 15:31:10.757] DEBUG: Value: localhost;
+[2025-02-23 15:31:10.757] DEBUG: Read line: }
+[2025-02-23 15:31:10.757] DEBUG: Key: include
+[2025-02-23 15:31:10.757] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:31:10.758] INFO: Start Server
+[2025-02-23 15:31:15.653] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:31:15.653] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.653] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.653] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:31:15.654] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.654] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.655] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:31:15.656] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.656] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.656] INFO: Resolved root: ./www
+[2025-02-23 15:31:15.656] INFO: Directive to: ./www/index.html
+[2025-02-23 15:31:15.657] INFO: 200 OK in get request
+[2025-02-23 15:31:15.657] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		}
+		
+    </script>
+
+</body>
+</html>
+
+[2025-02-23 15:31:15.665] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:31:15.665] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.665] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.666] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:31:15.666] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.667] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.667] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:31:15.667] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.667] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.667] INFO: Resolved root: ./www
+[2025-02-23 15:31:15.667] INFO: Directive to: ./www/style.css
+[2025-02-23 15:31:15.668] INFO: 200 OK in get request
+[2025-02-23 15:31:15.668] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:31:15.669] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:31:15.669] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.669] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.669] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:31:15.670] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.670] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.670] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:31:15.670] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.671] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.671] INFO: Resolved root: ./www
+[2025-02-23 15:31:15.671] INFO: Directive to: ./www/script.js
+[2025-02-23 15:31:15.672] INFO: 200 OK in get request
+[2025-02-23 15:31:15.672] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+function setCookie() {
+    fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+    });
+}
+
+
+
+// Function to get a cookie
+function getCookie() {
+    fetch("/get-cookie", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+    })
+    .catch(error => {
+        document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+    });
+}
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.color = "black";
+    }, 2000);
+
+    alert("Hello! Welcome to webserv!!");
+}
+
+[2025-02-23 15:31:15.682] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:31:15.682] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.682] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.683] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:31:15.683] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.683] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.683] DEBUG: Parsing Request Line: GET /get-cookie HTTP/1.1
+[2025-02-23 15:31:15.684] DEBUG: Parsed cookies: 
+[2025-02-23 15:31:15.684] DEBUG:  - visits: 20
+[2025-02-23 15:31:15.684] INFO: Resolved root: ./www
+[2025-02-23 15:31:15.684] INFO: Directive to: ./www/get-cookie
+[2025-02-23 15:31:15.684] INFO: Stopping Server
+[2025-02-23 15:32:19.256] DEBUG: Read line: events {
+[2025-02-23 15:32:19.258] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:32:19.258] DEBUG: Read line:     use poll;
+[2025-02-23 15:32:19.258] DEBUG: Read line: }
+[2025-02-23 15:32:19.258] DEBUG: Read line: 
+[2025-02-23 15:32:19.259] DEBUG: Read line: http {
+[2025-02-23 15:32:19.260] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:32:19.260] DEBUG: Read line: 	server {
+[2025-02-23 15:32:19.261] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:32:19.261] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:32:19.262] DEBUG: Read line: 
+[2025-02-23 15:32:19.262] DEBUG: Read line:         root ./www;
+[2025-02-23 15:32:19.262] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:32:19.262] DEBUG: Read line: 
+[2025-02-23 15:32:19.263] DEBUG: Read line:         location / {
+[2025-02-23 15:32:19.263] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:32:19.263] DEBUG: Read line:         }
+[2025-02-23 15:32:19.264] DEBUG: Read line: 
+[2025-02-23 15:32:19.264] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:32:19.264] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:32:19.265] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:32:19.265] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:32:19.265] DEBUG: Read line:         }
+[2025-02-23 15:32:19.265] DEBUG: Key: fastcgi_param
+[2025-02-23 15:32:19.266] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:32:19.266] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:32:19.266] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:32:19.267] DEBUG: Key: include
+[2025-02-23 15:32:19.267] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:32:19.267] DEBUG: Key: location
+[2025-02-23 15:32:19.267] DEBUG: Value: ~
+[2025-02-23 15:32:19.267] DEBUG: Key: path
+[2025-02-23 15:32:19.268] DEBUG: Value: $uri
+[2025-02-23 15:32:19.268] DEBUG: Read line: 
+[2025-02-23 15:32:19.268] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:32:19.269] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:32:19.269] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:32:19.269] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:32:19.269] DEBUG: Read line:         }
+[2025-02-23 15:32:19.269] DEBUG: Key: fastcgi_param
+[2025-02-23 15:32:19.270] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:32:19.270] DEBUG: Key: path
+[2025-02-23 15:32:19.270] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:32:19.270] DEBUG: Read line: 
+[2025-02-23 15:32:19.271] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:32:19.271] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:32:19.271] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:32:19.271] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:32:19.271] DEBUG: Read line:         }
+[2025-02-23 15:32:19.272] DEBUG: Key: fastcgi_param
+[2025-02-23 15:32:19.272] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:32:19.272] DEBUG: Key: path
+[2025-02-23 15:32:19.272] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:32:19.272] DEBUG: Read line: 
+[2025-02-23 15:32:19.272] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:32:19.273] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:32:19.273] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:32:19.273] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:32:19.273] DEBUG: Read line:         }
+[2025-02-23 15:32:19.273] DEBUG: Key: fastcgi_param
+[2025-02-23 15:32:19.273] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:32:19.274] DEBUG: Key: path
+[2025-02-23 15:32:19.274] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:32:19.274] DEBUG: Read line: 
+[2025-02-23 15:32:19.274] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:32:19.275] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:32:19.275] DEBUG: Read line:             access_log off;
+[2025-02-23 15:32:19.275] DEBUG: Read line:         }
+[2025-02-23 15:32:19.275] DEBUG: Key: path
+[2025-02-23 15:32:19.275] DEBUG: Value: 6M;
+[2025-02-23 15:32:19.275] DEBUG: Read line: 
+[2025-02-23 15:32:19.276] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:32:19.276] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:32:19.276] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:32:19.277] DEBUG: Read line: 		}
+[2025-02-23 15:32:19.277] DEBUG: Key: path
+[2025-02-23 15:32:19.277] DEBUG: Value: Set-Cookie
+[2025-02-23 15:32:19.277] DEBUG: Read line: 
+[2025-02-23 15:32:19.277] DEBUG: Read line: }
+[2025-02-23 15:32:19.278] DEBUG: Key: index
+[2025-02-23 15:32:19.278] DEBUG: Value: index.html
+[2025-02-23 15:32:19.278] DEBUG: Key: listen
+[2025-02-23 15:32:19.278] DEBUG: Value: 8080;
+[2025-02-23 15:32:19.278] DEBUG: Key: location
+[2025-02-23 15:32:19.279] DEBUG: Value: /
+[2025-02-23 15:32:19.279] DEBUG: Key: root
+[2025-02-23 15:32:19.279] DEBUG: Value: ./www;
+[2025-02-23 15:32:19.279] DEBUG: Key: server_name
+[2025-02-23 15:32:19.280] DEBUG: Value: localhost;
+[2025-02-23 15:32:19.280] DEBUG: Read line: }
+[2025-02-23 15:32:19.280] DEBUG: Key: include
+[2025-02-23 15:32:19.280] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:32:19.280] INFO: Start Server
+[2025-02-23 15:32:24.158] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:32:24.159] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.159] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.159] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:32:24.159] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.160] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.160] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:32:24.161] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.162] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.162] INFO: Resolved root: ./www
+[2025-02-23 15:32:24.163] INFO: Directive to: ./www/index.html
+[2025-02-23 15:32:24.165] INFO: 200 OK in get request
+[2025-02-23 15:32:24.166] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<!-- <div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div> -->
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		<!-- function setCookie() {
+			fetch("/set-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+			});
+		} -->
+
+    </script>
+
+
+[2025-02-23 15:32:24.176] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:32:24.177] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.177] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.177] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:32:24.178] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.178] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.178] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:32:24.179] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.179] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.179] INFO: Resolved root: ./www
+[2025-02-23 15:32:24.179] INFO: Directive to: ./www/style.css
+[2025-02-23 15:32:24.180] INFO: 200 OK in get request
+[2025-02-23 15:32:24.180] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:32:24.181] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:32:24.181] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.181] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.182] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:32:24.182] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.183] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.183] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:32:24.183] DEBUG: Parsed cookies: 
+[2025-02-23 15:32:24.183] DEBUG:  - visits: 20
+[2025-02-23 15:32:24.183] INFO: Resolved root: ./www
+[2025-02-23 15:32:24.183] INFO: Directive to: ./www/script.js
+[2025-02-23 15:32:24.184] INFO: 200 OK in get request
+[2025-02-23 15:32:24.184] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+// function setCookie() {
+//     fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+//     });
+// }
+
+
+
+// // Function to get a cookie
+// function getCookie() {
+//     fetch("/get-cookie", {
+//         method: "GET",
+//         credentials: "include"
+//     })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+//     });
+// }
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.colo
+[2025-02-23 15:35:36.314] DEBUG: Read line: events {
+[2025-02-23 15:35:36.314] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:35:36.314] DEBUG: Read line:     use poll;
+[2025-02-23 15:35:36.315] DEBUG: Read line: }
+[2025-02-23 15:35:36.315] DEBUG: Read line: 
+[2025-02-23 15:35:36.316] DEBUG: Read line: http {
+[2025-02-23 15:35:36.316] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:35:36.316] DEBUG: Read line: 	server {
+[2025-02-23 15:35:36.316] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:35:36.316] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:35:36.317] DEBUG: Read line: 
+[2025-02-23 15:35:36.317] DEBUG: Read line:         root ./www;
+[2025-02-23 15:35:36.317] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:35:36.317] DEBUG: Read line: 
+[2025-02-23 15:35:36.317] DEBUG: Read line:         location / {
+[2025-02-23 15:35:36.317] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:35:36.317] DEBUG: Read line:         }
+[2025-02-23 15:35:36.317] DEBUG: Read line: 
+[2025-02-23 15:35:36.318] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:35:36.318] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:36.318] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:36.318] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:36.318] DEBUG: Read line:         }
+[2025-02-23 15:35:36.318] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:36.318] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:36.318] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:35:36.318] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:36.318] DEBUG: Key: include
+[2025-02-23 15:35:36.318] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:35:36.318] DEBUG: Key: location
+[2025-02-23 15:35:36.318] DEBUG: Value: ~
+[2025-02-23 15:35:36.319] DEBUG: Key: path
+[2025-02-23 15:35:36.319] DEBUG: Value: $uri
+[2025-02-23 15:35:36.319] DEBUG: Read line: 
+[2025-02-23 15:35:36.319] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:35:36.319] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:35:36.319] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:36.319] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:36.319] DEBUG: Read line:         }
+[2025-02-23 15:35:36.319] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:36.319] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:36.320] DEBUG: Key: path
+[2025-02-23 15:35:36.320] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:35:36.320] DEBUG: Read line: 
+[2025-02-23 15:35:36.320] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:35:36.320] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:36.320] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:36.320] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:36.320] DEBUG: Read line:         }
+[2025-02-23 15:35:36.320] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:36.320] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:36.320] DEBUG: Key: path
+[2025-02-23 15:35:36.320] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:36.321] DEBUG: Read line: 
+[2025-02-23 15:35:36.321] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:35:36.321] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:36.321] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:36.321] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:36.321] DEBUG: Read line:         }
+[2025-02-23 15:35:36.321] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:36.321] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:36.321] DEBUG: Key: path
+[2025-02-23 15:35:36.321] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:36.321] DEBUG: Read line: 
+[2025-02-23 15:35:36.321] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:35:36.321] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:35:36.322] DEBUG: Read line:             access_log off;
+[2025-02-23 15:35:36.322] DEBUG: Read line:         }
+[2025-02-23 15:35:36.322] DEBUG: Key: path
+[2025-02-23 15:35:36.322] DEBUG: Value: 6M;
+[2025-02-23 15:35:36.322] DEBUG: Read line: 
+[2025-02-23 15:35:36.322] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:35:36.322] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:35:36.322] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:35:36.322] DEBUG: Read line: 		}
+[2025-02-23 15:35:36.322] DEBUG: Key: path
+[2025-02-23 15:35:36.322] DEBUG: Value: Set-Cookie
+[2025-02-23 15:35:36.323] DEBUG: Read line: 
+[2025-02-23 15:35:36.323] DEBUG: Read line: }
+[2025-02-23 15:35:36.323] DEBUG: Key: index
+[2025-02-23 15:35:36.323] DEBUG: Value: index.html
+[2025-02-23 15:35:36.323] DEBUG: Key: listen
+[2025-02-23 15:35:36.323] DEBUG: Value: 8080;
+[2025-02-23 15:35:36.323] DEBUG: Key: location
+[2025-02-23 15:35:36.323] DEBUG: Value: /
+[2025-02-23 15:35:36.323] DEBUG: Key: root
+[2025-02-23 15:35:36.323] DEBUG: Value: ./www;
+[2025-02-23 15:35:36.323] DEBUG: Key: server_name
+[2025-02-23 15:35:36.323] DEBUG: Value: localhost;
+[2025-02-23 15:35:36.323] DEBUG: Read line: }
+[2025-02-23 15:35:36.324] DEBUG: Key: include
+[2025-02-23 15:35:36.324] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:35:36.324] INFO: Start Server
+[2025-02-23 15:35:40.400] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:35:40.401] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.401] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.401] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:35:40.401] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.402] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.402] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:35:40.402] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.403] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.403] INFO: Resolved root: ./www
+[2025-02-23 15:35:40.403] INFO: Directive to: ./www/index.html
+[2025-02-23 15:35:40.405] INFO: 200 OK in get request
+[2025-02-23 15:35:40.405] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<!-- <div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div> -->
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie", { method: "GET", credentials: "include"})
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById(
+[2025-02-23 15:35:40.414] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:35:40.414] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.414] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.415] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:35:40.415] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.415] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.416] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:35:40.416] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.416] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.417] INFO: Resolved root: ./www
+[2025-02-23 15:35:40.417] INFO: Directive to: ./www/style.css
+[2025-02-23 15:35:40.418] INFO: 200 OK in get request
+[2025-02-23 15:35:40.418] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:35:40.418] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:35:40.419] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.419] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.419] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:35:40.420] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.420] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.421] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:35:40.421] DEBUG: Parsed cookies: 
+[2025-02-23 15:35:40.421] DEBUG:  - visits: 20
+[2025-02-23 15:35:40.421] INFO: Resolved root: ./www
+[2025-02-23 15:35:40.422] INFO: Directive to: ./www/script.js
+[2025-02-23 15:35:40.423] INFO: 200 OK in get request
+[2025-02-23 15:35:40.423] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+// function setCookie() {
+//     fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+//     });
+// }
+
+
+
+// // Function to get a cookie
+// function getCookie() {
+//     fetch("/get-cookie", {
+//         method: "GET",
+//         credentials: "include"
+//     })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+//     });
+// }
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.colo
+[2025-02-23 15:35:59.070] DEBUG: Read line: events {
+[2025-02-23 15:35:59.071] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:35:59.072] DEBUG: Read line:     use poll;
+[2025-02-23 15:35:59.072] DEBUG: Read line: }
+[2025-02-23 15:35:59.072] DEBUG: Read line: 
+[2025-02-23 15:35:59.073] DEBUG: Read line: http {
+[2025-02-23 15:35:59.073] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:35:59.074] DEBUG: Read line: 	server {
+[2025-02-23 15:35:59.075] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:35:59.075] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:35:59.075] DEBUG: Read line: 
+[2025-02-23 15:35:59.076] DEBUG: Read line:         root ./www;
+[2025-02-23 15:35:59.076] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:35:59.076] DEBUG: Read line: 
+[2025-02-23 15:35:59.077] DEBUG: Read line:         location / {
+[2025-02-23 15:35:59.077] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:35:59.077] DEBUG: Read line:         }
+[2025-02-23 15:35:59.078] DEBUG: Read line: 
+[2025-02-23 15:35:59.078] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:35:59.078] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:59.078] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:59.079] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:59.080] DEBUG: Read line:         }
+[2025-02-23 15:35:59.080] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:59.080] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:59.080] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:35:59.081] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:59.081] DEBUG: Key: include
+[2025-02-23 15:35:59.082] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:35:59.082] DEBUG: Key: location
+[2025-02-23 15:35:59.082] DEBUG: Value: ~
+[2025-02-23 15:35:59.082] DEBUG: Key: path
+[2025-02-23 15:35:59.083] DEBUG: Value: $uri
+[2025-02-23 15:35:59.083] DEBUG: Read line: 
+[2025-02-23 15:35:59.084] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:35:59.084] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:35:59.084] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:59.084] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:59.085] DEBUG: Read line:         }
+[2025-02-23 15:35:59.085] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:59.085] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:59.085] DEBUG: Key: path
+[2025-02-23 15:35:59.085] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:35:59.086] DEBUG: Read line: 
+[2025-02-23 15:35:59.086] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:35:59.086] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:59.086] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:59.086] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:59.087] DEBUG: Read line:         }
+[2025-02-23 15:35:59.087] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:59.087] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:59.087] DEBUG: Key: path
+[2025-02-23 15:35:59.087] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:59.088] DEBUG: Read line: 
+[2025-02-23 15:35:59.088] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:35:59.088] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:59.088] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:35:59.088] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:35:59.088] DEBUG: Read line:         }
+[2025-02-23 15:35:59.089] DEBUG: Key: fastcgi_param
+[2025-02-23 15:35:59.089] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:35:59.089] DEBUG: Key: path
+[2025-02-23 15:35:59.089] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:35:59.089] DEBUG: Read line: 
+[2025-02-23 15:35:59.090] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:35:59.090] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:35:59.090] DEBUG: Read line:             access_log off;
+[2025-02-23 15:35:59.090] DEBUG: Read line:         }
+[2025-02-23 15:35:59.090] DEBUG: Key: path
+[2025-02-23 15:35:59.090] DEBUG: Value: 6M;
+[2025-02-23 15:35:59.091] DEBUG: Read line: 
+[2025-02-23 15:35:59.091] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:35:59.091] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:35:59.091] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:35:59.091] DEBUG: Read line: 		}
+[2025-02-23 15:35:59.092] DEBUG: Key: path
+[2025-02-23 15:35:59.092] DEBUG: Value: Set-Cookie
+[2025-02-23 15:35:59.092] DEBUG: Read line: 
+[2025-02-23 15:35:59.092] DEBUG: Read line: }
+[2025-02-23 15:35:59.093] DEBUG: Key: index
+[2025-02-23 15:35:59.093] DEBUG: Value: index.html
+[2025-02-23 15:35:59.093] DEBUG: Key: listen
+[2025-02-23 15:35:59.093] DEBUG: Value: 8080;
+[2025-02-23 15:35:59.094] DEBUG: Key: location
+[2025-02-23 15:35:59.094] DEBUG: Value: /
+[2025-02-23 15:35:59.094] DEBUG: Key: root
+[2025-02-23 15:35:59.094] DEBUG: Value: ./www;
+[2025-02-23 15:35:59.094] DEBUG: Key: server_name
+[2025-02-23 15:35:59.094] DEBUG: Value: localhost;
+[2025-02-23 15:35:59.095] DEBUG: Read line: }
+[2025-02-23 15:35:59.095] DEBUG: Key: include
+[2025-02-23 15:35:59.095] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:35:59.096] INFO: Start Server
+[2025-02-23 15:36:02.387] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:36:02.387] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.388] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.388] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:36:02.388] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.388] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.389] DEBUG: Parsing Request Line: GET / HTTP/1.1
+[2025-02-23 15:36:02.389] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.389] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.390] INFO: Resolved root: ./www
+[2025-02-23 15:36:02.390] INFO: Directive to: ./www/index.html
+[2025-02-23 15:36:02.394] INFO: 200 OK in get request
+[2025-02-23 15:36:02.395] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 6231
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv Modern Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🚀 Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 HOME</a></li>
+                <li><a href="about.html">ℹ️ ABOUT</a></li>
+                <li><a href="contact.html">📞 CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>WELCOME TO WEBSERV ✨</h2>
+        <p>THIS WEBSITE SERVED AS WEBSERV</p>
+    </section>
+
+    <div class="container">
+        <h1>📤 Upload File (POST)</h1>
+        <input type="file" id="fileInput">
+        <button class="btn-primary" onclick="uploadFile()">Upload</button>
+        <p id="upload-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>🗑️ Delete File (DELETE)</h1>
+        <input type="text" id="deleteFileName" placeholder="Enter filename to delete">
+        <button class="btn-danger" onclick="deleteFile()">Delete</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <div class="container">
+        <h1>📄 View File (GET)</h1>
+        <input type="text" id="getFileName" placeholder="Enter filename">
+        <button class="btn-secondary" onclick="getFile()">View</button>
+        <p id="get-status"></p>
+        <img id="preview-image" style="max-width: 100%; display: none;" />
+    </div>
+
+    <div class="container">
+        <h1>⚡ CGI Test</h1>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.py')">Run Python CGI 🐍</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.php')">Run PHP CGI 🐘</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.pl')">Run Perl CGI 🐪</button>
+        <button class="btn-secondary" onclick="runCGI('/cgi-bin/test.sh')">Run Bash CGI 🖥️</button>
+        <p id="cgi-output">📄 CGI output will be displayed here.</p>
+    </div>
+
+	<div class="container">
+		<h1>🍪 Cookie Test</h1>
+		<button class="btn-primary" onclick="setCookie()">Set Cookie</button>
+		<button class="btn-secondary" onclick="getCookie()">Get Cookie</button>
+		<p id="cookie-status">📄 Cookie value will be displayed here.</p>
+	</div>
+
+    <footer>
+        <p>&copy; 2025 WEBSERV PROJECT</p>
+    </footer>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload/" + file.name, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("upload-status").innerText = "✅ Upload Successful!";
+            })
+            .catch(error => {
+                document.getElementById("upload-status").innerText = "❌ Upload Failed!";
+            });
+        }
+
+        function deleteFile() {
+            const fileName = document.getElementById("deleteFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename to delete.");
+                return;
+            }
+
+            fetch("/upload/" + fileName, { method: "DELETE" })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("delete-status").innerText = "✅ File Deleted!";
+            })
+            .catch(error => {
+                document.getElementById("delete-status").innerText = "❌ Delete Failed!";
+            });
+        }
+
+        function getFile() {
+            const fileName = document.getElementById("getFileName").value;
+            if (!fileName) {
+                alert("Please enter a filename.");
+                return;
+            }
+
+            fetch("/upload/" + fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("File not found!");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileType = blob.type;
+                const url = URL.createObjectURL(blob);
+
+                if (fileType.startsWith("image/")) {
+                    document.getElementById("preview-image").src = url;
+                    document.getElementById("preview-image").style.display = "block";
+                } else {
+                    window.open(url, "_blank");
+                }
+                document.getElementById("get-status").innerText = "✅ File retrieved!";
+            })
+            .catch(error => {
+                document.getElementById("get-status").innerText = "❌ File not found!";
+            });
+        }
+
+        function runCGI(cgiPath) {
+            fetch(cgiPath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output").innerText = "✅ CGI Output:\n" + data;
+            })
+            .catch(error => {
+                document.getElementById("cgi-output").innerText = "❌ CGI Execution Failed!";
+            });
+        }
+
+		function setCookie() {
+			fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+			})
+			.catch(error => {
+				document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+			});
+		}
+
+		function getCookie() {
+			fetch("/get-cookie", { method: "GET", credentials: "include"})
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+			})
+			.catch(error => {
+				document.getElementById("cookie-s
+[2025-02-23 15:36:02.403] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:36:02.404] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.404] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.404] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:36:02.404] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.405] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.405] DEBUG: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-23 15:36:02.405] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.406] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.406] INFO: Resolved root: ./www
+[2025-02-23 15:36:02.406] INFO: Directive to: ./www/style.css
+[2025-02-23 15:36:02.407] INFO: 200 OK in get request
+[2025-02-23 15:36:02.407] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: text/css
+Content-Length: 1844
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1C1C1E;
+    color: #E5E5E7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2C2E;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #E5E5E7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #A0A0A0;
+}
+
+/* 🎭 Hero section (Main) */
+.hero {
+    background: linear-gradient(135deg, #333, #111);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #CCCCCC;
+}
+
+.container {
+    background: #2C2C2E;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3A3A3C, #1C1C1E);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: #E5E5E7;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #505050, #303030);
+    transform: scale(1.05);
+    box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    background: #2C2C2E;
+    color: #A0A0A0;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+[2025-02-23 15:36:02.408] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:36:02.408] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.408] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.409] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:36:02.409] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.410] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.410] DEBUG: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-23 15:36:02.410] DEBUG: Parsed cookies: 
+[2025-02-23 15:36:02.410] DEBUG:  - visits: 20
+[2025-02-23 15:36:02.411] INFO: Resolved root: ./www
+[2025-02-23 15:36:02.411] INFO: Directive to: ./www/script.js
+[2025-02-23 15:36:02.412] INFO: 200 OK in get request
+[2025-02-23 15:36:02.412] DEBUG: Response: HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 1419
+
+// function setCookie() {
+//     fetch("/set-cookie", { method: "GET", credentials: "same-origin" })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "✅ Cookie Set!";
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ Failed to set cookie!";
+//     });
+// }
+
+
+
+// // Function to get a cookie
+// function getCookie() {
+//     fetch("/get-cookie", {
+//         method: "GET",
+//         credentials: "include"
+//     })
+//     .then(response => response.text())
+//     .then(data => {
+//         document.getElementById("cookie-status").innerText = "🍪 Cookie: " + data;
+//     })
+//     .catch(error => {
+//         document.getElementById("cookie-status").innerText = "❌ No cookie found!";
+//     });
+// }
+
+
+// Track visit count
+window.onload = function() {
+    let visits = getCookie("visits") || 0;
+    visits++;
+    setCookie("visits", visits, 7);
+    document.getElementById("visit-count").innerText = `Visit count: ${visits}`;
+};
+
+function sayHello() {
+    const button = document.querySelector(".btn-primary");
+    button.innerText = "✅ 클릭 완료!";
+    button.style.background = "#4CAF50";
+    button.style.color = "white";
+
+    setTimeout(() => {
+        button.innerText = "클릭해보세요";
+        button.style.background = "#ffcc00";
+        button.style.colo
+[2025-02-23 15:46:36.854] DEBUG: Read line: events {
+[2025-02-23 15:46:36.854] DEBUG: Read line:     worker_connections 1024;
+[2025-02-23 15:46:36.855] DEBUG: Read line:     use poll;
+[2025-02-23 15:46:36.855] DEBUG: Read line: }
+[2025-02-23 15:46:36.855] DEBUG: Read line: 
+[2025-02-23 15:46:36.856] DEBUG: Read line: http {
+[2025-02-23 15:46:36.856] DEBUG: Read line: 	include /etc/nginx/mime.types;
+[2025-02-23 15:46:36.856] DEBUG: Read line: 	server {
+[2025-02-23 15:46:36.857] DEBUG: Read line:         listen 8080;
+[2025-02-23 15:46:36.858] DEBUG: Read line:         server_name localhost;
+[2025-02-23 15:46:36.858] DEBUG: Read line: 
+[2025-02-23 15:46:36.858] DEBUG: Read line:         root ./www;
+[2025-02-23 15:46:36.859] DEBUG: Read line:         index index.html index.php;
+[2025-02-23 15:46:36.859] DEBUG: Read line: 
+[2025-02-23 15:46:36.859] DEBUG: Read line:         location / {
+[2025-02-23 15:46:36.859] DEBUG: Read line:             try_files $uri $uri/ =404;
+[2025-02-23 15:46:36.859] DEBUG: Read line:         }
+[2025-02-23 15:46:36.860] DEBUG: Read line: 
+[2025-02-23 15:46:36.860] DEBUG: Read line:         location ~ \.py$ {
+[2025-02-23 15:46:36.860] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:46:36.861] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:46:36.861] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:46:36.861] DEBUG: Read line:         }
+[2025-02-23 15:46:36.861] DEBUG: Key: fastcgi_param
+[2025-02-23 15:46:36.861] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:46:36.862] DEBUG: Key: fastcgi_pass
+[2025-02-23 15:46:36.862] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:46:36.862] DEBUG: Key: include
+[2025-02-23 15:46:36.862] DEBUG: Value: fastcgi_params;
+[2025-02-23 15:46:36.862] DEBUG: Key: location
+[2025-02-23 15:46:36.862] DEBUG: Value: ~
+[2025-02-23 15:46:36.863] DEBUG: Key: path
+[2025-02-23 15:46:36.863] DEBUG: Value: $uri
+[2025-02-23 15:46:36.863] DEBUG: Read line: 
+[2025-02-23 15:46:36.863] DEBUG: Read line:         location ~ \.php$ {
+[2025-02-23 15:46:36.863] DEBUG: Read line:             fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:46:36.864] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:46:36.864] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:46:36.864] DEBUG: Read line:         }
+[2025-02-23 15:46:36.865] DEBUG: Key: fastcgi_param
+[2025-02-23 15:46:36.865] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:46:36.865] DEBUG: Key: path
+[2025-02-23 15:46:36.866] DEBUG: Value: unix:/run/php/php7.4-fpm.sock;
+[2025-02-23 15:46:36.866] DEBUG: Read line: 
+[2025-02-23 15:46:36.866] DEBUG: Read line:         location ~ \.pl$ {
+[2025-02-23 15:46:36.866] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:46:36.867] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:46:36.867] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:46:36.867] DEBUG: Read line:         }
+[2025-02-23 15:46:36.867] DEBUG: Key: fastcgi_param
+[2025-02-23 15:46:36.868] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:46:36.868] DEBUG: Key: path
+[2025-02-23 15:46:36.868] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:46:36.869] DEBUG: Read line: 
+[2025-02-23 15:46:36.869] DEBUG: Read line:         location ~ \.sh$ {
+[2025-02-23 15:46:36.869] DEBUG: Read line:             fastcgi_pass unix:/run/fcgiwrap.socket;
+[2025-02-23 15:46:36.869] DEBUG: Read line:             include fastcgi_params;
+[2025-02-23 15:46:36.869] DEBUG: Read line:             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+[2025-02-23 15:46:36.870] DEBUG: Read line:         }
+[2025-02-23 15:46:36.870] DEBUG: Key: fastcgi_param
+[2025-02-23 15:46:36.870] DEBUG: Value: SCRIPT_FILENAME
+[2025-02-23 15:46:36.870] DEBUG: Key: path
+[2025-02-23 15:46:36.870] DEBUG: Value: unix:/run/fcgiwrap.socket;
+[2025-02-23 15:46:36.870] DEBUG: Read line: 
+[2025-02-23 15:46:36.871] DEBUG: Read line:         location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+[2025-02-23 15:46:36.871] DEBUG: Read line:             expires 6M;
+[2025-02-23 15:46:36.871] DEBUG: Read line:             access_log off;
+[2025-02-23 15:46:36.871] DEBUG: Read line:         }
+[2025-02-23 15:46:36.871] DEBUG: Key: path
+[2025-02-23 15:46:36.871] DEBUG: Value: 6M;
+[2025-02-23 15:46:36.872] DEBUG: Read line: 
+[2025-02-23 15:46:36.872] DEBUG: Read line: 		location /set-cookie {
+[2025-02-23 15:46:36.872] DEBUG: Read line:     		add_header Set-Cookie "user=42webserv; Path=/; HttpOnly";
+[2025-02-23 15:46:36.872] DEBUG: Read line:     		return 200 "Cookie has been set!";
+[2025-02-23 15:46:36.872] DEBUG: Read line: 		}
+[2025-02-23 15:46:36.873] DEBUG: Key: path
+[2025-02-23 15:46:36.873] DEBUG: Value: Set-Cookie
+[2025-02-23 15:46:36.873] DEBUG: Read line: 
+[2025-02-23 15:46:36.873] DEBUG: Read line: }
+[2025-02-23 15:46:36.874] DEBUG: Key: index
+[2025-02-23 15:46:36.874] DEBUG: Value: index.html
+[2025-02-23 15:46:36.874] DEBUG: Key: listen
+[2025-02-23 15:46:36.874] DEBUG: Value: 8080;
+[2025-02-23 15:46:36.874] DEBUG: Key: location
+[2025-02-23 15:46:36.875] DEBUG: Value: /
+[2025-02-23 15:46:36.875] DEBUG: Key: root
+[2025-02-23 15:46:36.875] DEBUG: Value: ./www;
+[2025-02-23 15:46:36.875] DEBUG: Key: server_name
+[2025-02-23 15:46:36.876] DEBUG: Value: localhost;
+[2025-02-23 15:46:36.876] DEBUG: Read line: }
+[2025-02-23 15:46:36.876] DEBUG: Key: include
+[2025-02-23 15:46:36.877] DEBUG: Value: /etc/nginx/mime.types
+[2025-02-23 15:46:36.877] INFO: Start Server
