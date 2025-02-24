@@ -8,16 +8,18 @@
 #include <sstream>
 #include <ctime>
 #include <iomanip>
+#include "Logger.hpp"
 
 class CookieManager {
-	private: std::map<std::string, std::string> _cookies;
+	private:
+		static std::map<std::string, std::string> _cookies;
 
 	public:
-		static void setCookie(const std::string &key, const std::string &value, int maxAge);
-		static void getCookie(const std::string &key);
+		static std::string setCookie(const std::string &key, const std::string &value, int maxAge);
+		static std::string getCookie(const std::string &key);
 		static void deleteCookie(const std::string &key);
 		static std::string getAllCookies(void);
+		static void parseCookie(const std::string &cookieHeader);
 };
-
 
 #endif

@@ -1,5 +1,6 @@
 #include "../includes/FileHandler.hpp"
 #include "../includes/Logger.hpp"
+#include "../includes/ParsedRequest.hpp"
 
 /*
 	Initialize mime_types
@@ -56,7 +57,23 @@ bool FileHandler::exists(const std::string &path) {
 /*
 	Handling GET request
 */
-std::string FileHandler::handleGetRequest(const std::string &path) {
+std::string FileHandler::handleGetRequest(const std::string &path, const std::string &request) {
+	ParsedRequest parser(request);
+	std::string sessionID;
+	std::string cookieHeader = parser.getData("cookie");
+
+	if (cookieHeader.empty() || cookieHeader == "undefined") {
+		sessionID = SessionManager::createSession();
+		Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
+		CookieManager::setCookie("session_id", sessionID, 3600);
+	} else {
+		sessionID = cookieHeader;
+		Logger::log(Logger::DEBUG, "Session_id found: " + cookieHeader);
+	}
+
+	std::ostringstream responseHeaders;
+	responseHeaders << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n";
+
 	if (!FileHandler::exists(path)) {
 		Logger::log(Logger::ERROR, "404 File Not Found\r\n\r\nCannot open file");
 		return REQUEST404;
@@ -79,13 +96,16 @@ std::string FileHandler::handleGetRequest(const std::string &path) {
 	content_length << content_str.length();
 
 
-	std::string response = "HTTP/1.1 200 OK\r\n";
-	response += "Content-Type: " + content_type + "\r\n";
-	response += "Content-Length: " + content_length.str() + "\r\n";
-	response += "\r\n";
-	response += content_str;
+	std::ostringstream response;
+	response << "HTTP/1.1 200 OK\r\n";
+	response << responseHeaders.str();  // Set-Cookie
+	response << "Content-Type: " << content_type << "\r\n";
+	response << "Content-Length: " << content_length.str() << "\r\n";
+	response << "\r\n";
+	response << content_str;
+
 	Logger::log(Logger::INFO, "200 OK in get request");
-	return response;
+	return response.str();
 }
 
 /*
@@ -121,16 +141,7 @@ std::string FileHandler::handleDeleteRequest(const std::string &path) {
 		Logger::log(Logger::ERROR, "500 Error in delete handle");
 		return REQUEST500;
 	}
+
 	Logger::log(Logger::INFO, "200 OK in delete request");
 	return "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully";
-}
-
-std::string FileHandler::generateSessionID() {
-	std::ostringstream oss;
-	srand(time(0));
-	for (size_t i = 0; i < 16; ++i) {
-		char c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"[rand() % 62];
-		oss << c;
-	}
-	return oss.str();
 }

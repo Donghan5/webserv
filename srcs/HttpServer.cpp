@@ -4,13 +4,6 @@
 #include "../includes/Logger.hpp"
 #include "../includes/CgiHandler.hpp"
 
-#define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
-#define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"
-#define REQUEST403 "HTTP/1.1 403 Forbidden\r\n\r\nForbidden"
-#define REQUEST404 "HTTP/1.1 404 Not Found\r\n\r\nFile not found"
-#define REQUEST405 "HTTP/1.1 405 Method Not Allowed\r\n\r\nMethod Not Allowed"
-#define REQUEST500 "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file"
-
 // Helper function to make socket non-blocking
 void HttpServer::make_non_blocking(int fd) {
 	int flags = fcntl(fd, F_GETFL, 0);
@@ -46,44 +39,6 @@ std::string HttpServer::process_request(const std::string &request) {
 	std::string path = parser.getPath();
 	std::string host = parser.getHost();
 
-	// // handler set-cookie
-	// if (path == "/set-cookie") {
-	// 	std::string cookieHeader = parser.getData("cookie");
-	// 	std::string sessionID;
-
-	// 	if (cookieHeader.empty() || cookieHeader == "undefined") {
-	// 		sessionID = FileHandler::generateSessionID();
-	// 		Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
-	// 		parser.setCookie("session_id", sessionID, 3600);
-	// 	} else {
-	// 		sessionID = cookieHeader;
-	// 		Logger::log(Logger::DEBUG, "Session_id found: " + cookieHeader);
-	// 	}
-
-	// 	std::ostringstream response;
-	// 	response << "HTTP/1.1 200 OK\r\n"
-	// 			 << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n"
-	// 			 << "Content-Type: text/plain\r\n"
-	// 			 << "Content-Length: 20\r\n"
-	// 			 << "\r\n"
-	// 			 << "Cookie has been set!";
-
-	// 	Logger::log(Logger::INFO, "Cookie has been set!");
-	// 	return response.str();
-	// }
-
-	// if (path == "/delete-cookie") {
-	// 	std::ostringstream responseDeleteCookie;
-	// 	responseDeleteCookie << "HTTP/1.1 200 OK\r\n"
-	// 						 << "Set-Cookie: session_id=; Path=/; Max-Age=0; HttpOnly\r\n"
-	// 						 << "Content-Type: text/plain\r\n"
-	// 						 << "Content-Length: 21\r\n"
-	// 						 << "\r\n"
-	// 						 << "Cookie has been deleted!";
-	// 	Logger::log(Logger::INFO, "Cookie has been deleted!");
-	// 	return responseDeleteCookie.str();
-	// }
-
 	// Default to index.html for root path
 	if (path == "/") {
 		path = "/index.html";
@@ -101,8 +56,21 @@ std::string HttpServer::process_request(const std::string &request) {
 			return cgi.executeCgi();
 	}
 
+	// delete Cookie
+	if (path == "/delete-cookie") {
+		std::ostringstream responseDeleteCookie;
+		responseDeleteCookie << "HTTP/1.1 200 OK\r\n"
+							 << "Set-Cookie: session_id=; Path=/; Max-Age=0; HttpOnly\r\n"
+							 << "Content-Type: text/plain\r\n"
+							 << "Content-Length: 21\r\n"
+							 << "\r\n"
+							 << "Cookie has been deleted!";
+		Logger::log(Logger::INFO, "Cookie has been deleted!");
+		return responseDeleteCookie.str();
+	}
+
 	if (method == "GET") {
-		return FileHandler::handleGetRequest(full_path);
+		return FileHandler::handleGetRequest(full_path, request);
 	}
 	else if (method == "POST") {
 		try {

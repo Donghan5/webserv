@@ -11,6 +11,8 @@
 #include <unistd.h>
 #include <ctime>
 #include <map>
+#include "SessionManager.hpp"
+#include "CookieManager.hpp"
 
 #define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
 #define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"
@@ -26,10 +28,9 @@ class FileHandler {
 	public:
 		static std::string getContentType(const std::string &path);
 		static bool exists(const std::string &path);
-		static std::string handleGetRequest(const std::string &path);
+		static std::string handleGetRequest(const std::string &path, const std::string &request);
 		static std::string handlePostRequest(const std::string &path, const std::string &body);
 		static std::string handleDeleteRequest(const std::string &path);
-		static std::string generateSessionID(void);
 };
 
 #endif

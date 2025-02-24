@@ -3,9 +3,29 @@
 std::map<std::string, std::string> CookieManager::_cookies;
 
 /*
+	trim all the spaces
+*/
+static std::string &trimString(std::string &str) {
+	const std::string whitespace = " \t\r\n";
+	size_t start = str.find_first_not_of(whitespace);
+	size_t end = str.find_last_not_of(whitespace);
+
+	if (start == std::string::npos) { // string is empty
+		str.clear();
+	} else {
+		str = str.substr(start, end - start + 1);
+	}
+
+	if (!str.empty() && str[str.size() - 1] == '\r') {
+		str.erase(str.size() - 1);
+	}
+	return str;
+}
+
+/*
 	Parse cookie request
 */
-void CookieMa::parseCookie(const std::string &cookieHeader) {
+void CookieManager::parseCookie(const std::string &cookieHeader) {
 	std::istringstream ss(cookieHeader);
 	std::string token;
 
@@ -19,12 +39,13 @@ void CookieMa::parseCookie(const std::string &cookieHeader) {
 			trimString(value);
 
 			if (!key.empty() && !value.empty())
-				_cookies[key] = value;
+			CookieManager::_cookies[key] = value;
 		}
 	}
 
 	Logger::log(Logger::DEBUG, "Parsed cookies: ");
-	for (string_map::iterator it = _cookies.begin(); it != _cookies.end(); ++it) {
+	std::map<std::string, std::string>::iterator it = CookieManager::_cookies.begin();
+	for (; it != CookieManager::_cookies.end(); ++it) {
 		Logger::log(Logger::DEBUG, " - " + it->first + ": " + it->second);
 	}
 }
@@ -32,7 +53,7 @@ void CookieMa::parseCookie(const std::string &cookieHeader) {
 /*
 	To send information of cookie
 */
-void CookieManager::setCookie(const std::string &key, const std::string &value, int maxAge) {
+std::string CookieManager::setCookie(const std::string &key, const std::string &value, int maxAge) {
 	std::ostringstream cookie;
 
 	cookie << key << '=' << value << "; Path=/; HttpOnly";
@@ -43,29 +64,29 @@ void CookieManager::setCookie(const std::string &key, const std::string &value, 
 		Logger::log(Logger::ERROR, "Max-Age value must be positive number");
 		throw std::logic_error("maxAge value must be positive number");
 	}
-	_cookies[key] = value;
-	_headers["Set-Cookie"] = cookie.str();
+	CookieManager::_cookies[key] = value;
+	return "Set-Cookie: " + cookie.str() + "\r\n";
 }
 
 /*
 	Getting sepecific cookie
 	if cannot find, return empty string
 */
-void CookieManager::getCookie(const std::string &key) {
-	if (_cookies.find(key) != _cookies.end()) {
-		return _cookies[key];
+std::string CookieManager::getCookie(const std::string &key) {
+	if (CookieManager::_cookies.find(key) != CookieManager::_cookies.end()) {
+		return CookieManager::_cookies[key];
 	}
 	return "";
 }
 
 void CookieManager::deleteCookie(const std::string &key) {
-	_cookies.erase(key);
+	CookieManager::_cookies.erase(key);
 }
 
 std::string CookieManager::getAllCookies(void) {
 	std::ostringstream cookieHeader;
-	std::map<std::string, std::string>::const_iterator it = _cookie.begin();
-	for (; it != _cookie.end(); ++it) {
+	std::map<std::string, std::string>::const_iterator it = CookieManager::_cookies.begin();
+	for (; it != CookieManager::_cookies.end(); ++it) {
 		cookieHeader << "Set-Cookie: " << it->second << "\r\n";
 	}
 	return cookieHeader.str();

@@ -9,6 +9,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <sys/socket.h>
+#include "CookieManager.hpp"
 
 typedef std::map<std::string, std::string> string_map;
 
@@ -20,7 +21,6 @@ class ParsedRequest {
 		std::string _version;
 		std::string _body;
 		string_map _headers;
-		string_map _cookies;
 
 		ParsedRequest(); // treate default request path(?)
 
