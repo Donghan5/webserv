@@ -13,7 +13,8 @@ OBJ_DIR = objs
 SRCS = $(SRC_DIR)/test.cpp $(SRC_DIR)/EventConf.cpp $(SRC_DIR)/HttpConf.cpp \
        $(SRC_DIR)/LocationConf.cpp $(SRC_DIR)/ParseConf.cpp $(SRC_DIR)/ServerConf.cpp \
 	   $(SRC_DIR)/HttpServer.cpp $(SRC_DIR)/WebServConf.cpp $(SRC_DIR)/ParsedRequest.cpp \
-	   $(SRC_DIR)/FileHandler.cpp $(SRC_DIR)/Logger.cpp $(SRC_DIR)/CgiHandler.cpp
+	   $(SRC_DIR)/FileHandler.cpp $(SRC_DIR)/Logger.cpp $(SRC_DIR)/CgiHandler.cpp \
+	   $(SRC_DIR)/ConfigAccess.cpp $(SRC_DIR)/ConfigParser.cpp
 
 # Object files (convert .cpp to .o)
 OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
