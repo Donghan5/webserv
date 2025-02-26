@@ -40,7 +40,6 @@ void ServerConf::showServerData(void) {
 	}
 }
 
-
 std::string ServerConf::getData(std::string key) const {
     std::map<std::string, std::string>::const_iterator it = this->_settings.find(key);
     if (it != _settings.end()) {

@@ -103,7 +103,6 @@ void ParseConf::handleServerBlock(std::ifstream &file, HttpConf &httpConfig) {
 	serverConfig.showServerData();
 }
 
-
 /*
 	Handle multiple http block
 */

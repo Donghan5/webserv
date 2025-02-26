@@ -20,6 +20,7 @@ std::map<std::string, std::string> FileHandler::initMimeTypes() {
 	return mimeTypes;
 }
 
+// init the private members
 std::map<std::string, std::string> FileHandler::_mimeTypes = FileHandler::initMimeTypes();
 
 /*
@@ -59,20 +60,6 @@ bool FileHandler::exists(const std::string &path) {
 */
 std::string FileHandler::handleGetRequest(const std::string &path, const std::string &request) {
 	ParsedRequest parser(request);
-	std::string sessionID;
-	std::string cookieHeader = parser.getData("cookie");
-
-	if (cookieHeader.empty() || cookieHeader == "undefined") {
-		sessionID = SessionManager::createSession();
-		Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
-		CookieManager::setCookie("session_id", sessionID, 3600);
-	} else {
-		sessionID = cookieHeader;
-		Logger::log(Logger::DEBUG, "Session_id found: " + cookieHeader);
-	}
-
-	std::ostringstream responseHeaders;
-	responseHeaders << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n";
 
 	if (!FileHandler::exists(path)) {
 		Logger::log(Logger::ERROR, "404 File Not Found\r\n\r\nCannot open file");
@@ -89,16 +76,12 @@ std::string FileHandler::handleGetRequest(const std::string &path, const std::st
 	content << file.rdbuf();
 	std::string content_str = content.str();
 
-	// Determine content type
 	std::string content_type = FileHandler::getContentType(path);
-
 	std::ostringstream content_length;
 	content_length << content_str.length();
 
-
 	std::ostringstream response;
 	response << "HTTP/1.1 200 OK\r\n";
-	response << responseHeaders.str();  // Set-Cookie
 	response << "Content-Type: " << content_type << "\r\n";
 	response << "Content-Length: " << content_length.str() << "\r\n";
 	response << "\r\n";

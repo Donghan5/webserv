@@ -120,10 +120,8 @@ std::string WebServConf::resolveRootFromServer(const ServerConf &serverConf, std
 */
 std::string WebServConf::resolveRoot(std::string host, std::string requestPath) const {
 	const std::vector<ServerConf> &servers = _hconf->getServerByName(host);
-		// std::cout << _httpblocks[i].getServerByName(host) << std::endl;
 	for (size_t j (0); j < servers.size(); j++) {
 		if (servers[j].getData("server_name") == host) {
-			// std::cout << servers[j].getData("server_name") << std::endl;
 			return resolveRootFromServer(servers[j], requestPath, _hconf->getData("root"));
 		}
 	}

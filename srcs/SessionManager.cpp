@@ -1,4 +1,5 @@
 #include "../includes/SessionManager.hpp"
+#include "../includes/Logger.hpp"
 
 std::map< std::string, std::map<std::string, std::string> > SessionManager::_session;
 
@@ -24,6 +25,7 @@ std::string SessionManager::createSession(void) {
 	setting session values
 */
 void SessionManager::setSessionValue(const std::string &sessionID, const std::string &key, const std::string &value) {
+	// Logger::log(Logger::DEBUG, "Setting session: " + sessionID + " key: " + key + " value: " + value);
 	SessionManager::_session[sessionID][key] = value;
 }
 

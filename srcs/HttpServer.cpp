@@ -4,6 +4,13 @@
 #include "../includes/Logger.hpp"
 #include "../includes/CgiHandler.hpp"
 
+static std::string intToString(int num) {
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
+
+
 // Helper function to make socket non-blocking
 void HttpServer::make_non_blocking(int fd) {
 	int flags = fcntl(fd, F_GETFL, 0);
@@ -56,8 +63,46 @@ std::string HttpServer::process_request(const std::string &request) {
 			return cgi.executeCgi();
 	}
 
+	if (path == "/set-cookie") {
+		std::string cookieHeader = parser.getData("cookie");
+		if (!cookieHeader.empty()) {
+			CookieManager::parseCookie(cookieHeader);
+		}
+
+		std::string sessionID = CookieManager::getCookie("session_id");
+
+		if (sessionID.empty()) {
+			sessionID = SessionManager::createSession();
+			Logger::log(Logger::DEBUG, "New session key created: " + sessionID);
+		} else {
+			Logger::log(Logger::DEBUG, "Session_id found: " + sessionID);
+		}
+
+		std::string visitStr = SessionManager::getSessionValue(sessionID, "visits");
+		int visits = 0;
+		if (!visitStr.empty()) {
+			visits = std::atoi(visitStr.c_str());
+		}
+		visits++;
+		SessionManager::setSessionValue(sessionID, "visits", intToString(visits));
+		Logger::log(Logger::DEBUG, "Session: " + sessionID + intToString(visits));
+		std::ostringstream responseSetCookie;
+		responseSetCookie << "HTTP/1.1 200 OK\r\n"
+						  << "Set-Cookie: session_id: " << sessionID << "; Path=/; HttpOnly\r\n"
+						  << "Content-Type: text/plain\r\n"
+						  << "Content-Length: 20\r\n"
+						  << "\r\n";
+		Logger::log(Logger::INFO, "Cookie has been set!");
+	}
+
 	// delete Cookie
 	if (path == "/delete-cookie") {
+		std::string sessionID = CookieManager::getCookie("session_id");
+		if (!sessionID.empty()) {
+			SessionManager::deleteSessionValue(sessionID);
+			CookieManager::deleteCookie("session_id");
+		}
+
 		std::ostringstream responseDeleteCookie;
 		responseDeleteCookie << "HTTP/1.1 200 OK\r\n"
 							 << "Set-Cookie: session_id=; Path=/; Max-Age=0; HttpOnly\r\n"
@@ -118,8 +163,7 @@ void HttpServer::handle_client_read(int client_fd) {
             }
         }
 		std::string response = process_request(partial_requests[client_fd]);
-		Logger::log(Logger::DEBUG, "Response: " + response);
-		// std::cout << "Response: " + response << std::endl;
+		// Logger::log(Logger::DEBUG, "Response: " + response);
 		partial_responses[client_fd] = response;
 		partial_requests.erase(client_fd);
 

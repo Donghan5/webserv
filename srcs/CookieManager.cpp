@@ -31,19 +31,18 @@ void CookieManager::parseCookie(const std::string &cookieHeader) {
 
 	while (std::getline(ss, token, ';')) {
 		size_t pos = token.find('=');
-		if (pos != std::string::npos) {
+		if (pos != std::string::npos && pos + 1 < token.size()) {
 			std::string key = token.substr(0, pos);
 			std::string value = token.substr(pos + 1);
 
 			trimString(key);
 			trimString(value);
 
-			if (!key.empty() && !value.empty())
-			CookieManager::_cookies[key] = value;
+			if (!key.empty() && !value.empty() && CookieManager::_cookies.find(key) == CookieManager::_cookies.end())
+				CookieManager::_cookies[key] = value;
 		}
 	}
 
-	Logger::log(Logger::DEBUG, "Parsed cookies: ");
 	std::map<std::string, std::string>::iterator it = CookieManager::_cookies.begin();
 	for (; it != CookieManager::_cookies.end(); ++it) {
 		Logger::log(Logger::DEBUG, " - " + it->first + ": " + it->second);
@@ -65,6 +64,7 @@ std::string CookieManager::setCookie(const std::string &key, const std::string &
 		throw std::logic_error("maxAge value must be positive number");
 	}
 	CookieManager::_cookies[key] = value;
+	// return cookie.str();
 	return "Set-Cookie: " + cookie.str() + "\r\n";
 }
 
