@@ -128,3 +128,23 @@ std::string FileHandler::handleDeleteRequest(const std::string &path) {
 	Logger::log(Logger::INFO, "200 OK in delete request");
 	return "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully";
 }
+
+
+std::string FileHandler::handleGetCookie(const std::string &request) {
+	ParsedRequest parser(request);
+	std::string sessionID = CookieManager::getCookie("session_id");
+
+	if (sessionID.empty()) {
+		sessionID = SessionManager::createSession();
+		Logger::log(Logger::INFO, "New session_id created in handleGetCookie function");
+	}
+
+	std::ostringstream response;
+	response << "HTTP/1.1 200 OK\r\n"
+			 << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n"
+			 << "Content-Type: text/plain\r\n"
+			 << "Content-length: 16\r\n"
+			 << "\r\n"
+			 << sessionID;
+	return response.str();
+}

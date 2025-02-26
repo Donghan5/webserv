@@ -49,7 +49,10 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 	if (std::getline(stream, line)) {
 		Logger::log(Logger::DEBUG, "Parsing Request Line: " + line);
 		std::istringstream lineStream(line);
-		lineStream >> _method >> _path >> _version;
+		if (!(lineStream >> _method >> _path >> _version)) {
+			Logger::log(Logger::ERROR, "400 Bad Request: Malformed header");
+			throw std::runtime_error("400 Bad Request\r\n\r\nMalformed header");
+		}
 	}
 
 	if (_version != "HTTP/1.1") {
@@ -60,6 +63,7 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 	while (std::getline(stream, line) && !line.empty()) {
 		size_t pos = line.find(':');
 		if (pos != std::string::npos) {
+			Logger::log(Logger::DEBUG, "Parsing request line: " + line);
 			std::string key = line.substr(0, pos);
 			std::string value = line.substr(pos + 1);
 
@@ -70,10 +74,26 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 				key[i] = std::tolower(key[i]);
 			}
 
+			std::cout << "======= Key (parseHttpRequest) =======" << std::endl;
+			for (size_t i = 0; i < key.size(); i++) {
+				std::cout << key[i];
+			}
+			std::cout << std::endl;
+
+			std::cout << "======= Value (parseHttpRequest) =======" << std::endl;
+			for (size_t i = 0; i < value.size(); i++) {
+				std::cout << value[i];
+			}
+			std::cout << std::endl;
+
 			setHeaders(key, value);
 
 			if (key == "cookie") {
-				CookieManager::parseCookie(value);
+				trimString(value);
+				if (!value.empty())
+					CookieManager::parseCookie(value);
+				else
+					Logger::log(Logger::ERROR, "Invalid cookie format: Empty value");
 			}
 		}
 	}

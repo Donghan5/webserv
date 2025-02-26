@@ -31,16 +31,26 @@ void CookieManager::parseCookie(const std::string &cookieHeader) {
 
 	while (std::getline(ss, token, ';')) {
 		size_t pos = token.find('=');
-		if (pos != std::string::npos && pos + 1 < token.size()) {
-			std::string key = token.substr(0, pos);
-			std::string value = token.substr(pos + 1);
 
-			trimString(key);
-			trimString(value);
-
-			if (!key.empty() && !value.empty() && CookieManager::_cookies.find(key) == CookieManager::_cookies.end())
-				CookieManager::_cookies[key] = value;
+		if (pos == std::string::npos) {
+			Logger::log(Logger::ERROR, "Cannot find '=' in this scope");
+			continue;
 		}
+		std::string key = token.substr(0, pos);
+		std::string value = token.substr(pos + 1);
+
+		trimString(key);
+		trimString(value);
+
+		if (key == "session_id") {
+			size_t sessionPos = value.find("session_id=");
+			if (sessionPos != std::string::npos) {
+				value = value.substr(sessionPos + 11);
+			}
+		}
+
+		if (!key.empty() && !value.empty() && CookieManager::_cookies.find(key) == CookieManager::_cookies.end())
+			CookieManager::_cookies[key] = value;
 	}
 
 	std::map<std::string, std::string>::iterator it = CookieManager::_cookies.begin();
@@ -74,7 +84,14 @@ std::string CookieManager::setCookie(const std::string &key, const std::string &
 */
 std::string CookieManager::getCookie(const std::string &key) {
 	if (CookieManager::_cookies.find(key) != CookieManager::_cookies.end()) {
-		return CookieManager::_cookies[key];
+		std::string value = CookieManager::_cookies[key];
+		if (key == "session_id") {
+			size_t sessionPos = value.find("session_id=");
+			if (sessionPos != std::string::npos) {
+				value = value.substr(sessionPos + 11);
+			}
+		}
+		return value;
 	}
 	return "";
 }

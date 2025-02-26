@@ -31,6 +31,7 @@ class FileHandler {
 		static std::string handleGetRequest(const std::string &path, const std::string &request);
 		static std::string handlePostRequest(const std::string &path, const std::string &body);
 		static std::string handleDeleteRequest(const std::string &path);
+		static std::string handleGetCookie(const std::string &request);
 };
 
 #endif

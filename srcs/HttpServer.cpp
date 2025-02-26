@@ -51,17 +51,7 @@ std::string HttpServer::process_request(const std::string &request) {
 		path = "/index.html";
 	}
 
-	std::string resolved_root = _webconf.resolveRoot(host, path);
-	std::string full_path = resolved_root + path;
-
-	Logger::log(Logger::INFO, "Resolved root: " + resolved_root);
-	Logger::log(Logger::INFO, "Directive to: " + full_path);
-
-	std::string extension = path.substr(path.find_last_of("."));
-	if (extension == ".py" || extension == ".php" || extension == ".pl" || extension == ".sh") {
-			CgiHandler cgi(full_path, parser.getHeaders(), parser.getBody());
-			return cgi.executeCgi();
-	}
+	std::cout << "Verify Path: " << path << std::endl;
 
 	if (path == "/set-cookie") {
 		std::string cookieHeader = parser.getData("cookie");
@@ -88,11 +78,15 @@ std::string HttpServer::process_request(const std::string &request) {
 		Logger::log(Logger::DEBUG, "Session: " + sessionID + intToString(visits));
 		std::ostringstream responseSetCookie;
 		responseSetCookie << "HTTP/1.1 200 OK\r\n"
-						  << "Set-Cookie: session_id: " << sessionID << "; Path=/; HttpOnly\r\n"
+						  << "Set-Cookie: session_id=" << sessionID << "; Path=/; HttpOnly\r\n"
 						  << "Content-Type: text/plain\r\n"
 						  << "Content-Length: 20\r\n"
 						  << "\r\n";
 		Logger::log(Logger::INFO, "Cookie has been set!");
+	}
+
+	if (path == "/get-cookie") {
+		return FileHandler::handleGetCookie(request);
 	}
 
 	// delete Cookie
@@ -113,6 +107,19 @@ std::string HttpServer::process_request(const std::string &request) {
 		Logger::log(Logger::INFO, "Cookie has been deleted!");
 		return responseDeleteCookie.str();
 	}
+
+	std::string resolved_root = _webconf.resolveRoot(host, path);
+	std::string full_path = resolved_root + path;
+
+	Logger::log(Logger::INFO, "Resolved root: " + resolved_root);
+	Logger::log(Logger::INFO, "Directive to: " + full_path);
+
+	std::string extension = path.substr(path.find_last_of("."));
+	if (extension == ".py" || extension == ".php" || extension == ".pl" || extension == ".sh") {
+			CgiHandler cgi(full_path, parser.getHeaders(), parser.getBody());
+			return cgi.executeCgi();
+	}
+
 
 	if (method == "GET") {
 		return FileHandler::handleGetRequest(full_path, request);
