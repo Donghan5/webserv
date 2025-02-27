@@ -13,6 +13,7 @@ class ConfigAccess {
 		static ConfigBlock* findFirstServerBlock(const ConfigBlock* rootBlock);
 		static ConfigBlock* findLocationBlock(const ConfigBlock* serverBlock, const std::string& path);
 		static std::vector<ConfigBlock*> getAllServerBlocks(const ConfigBlock* rootBlock);
+		static ConfigBlock *findEventBlock(ConfigBlock* rootBlock);
 };
 
 #endif // CONFIGACCESS_HPP

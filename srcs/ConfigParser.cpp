@@ -72,85 +72,6 @@ ConfigBlock* ConfigParser::parseBlock(void) {
 
 	if (pos < input.length() && input[pos] == '{') {
 		pos++;
-
-		// create server block
-		if (name == "server") {
-			ServerConf* serverConf = new ServerConf();
-
-			while (pos < input.length() && input[pos] != '}') {
-				ConfigElement* element = parseElement();
-				if (element) {
-					ConfigDirective* directive = dynamic_cast<ConfigDirective*>(element);
-					ConfigBlock* subBlock = dynamic_cast<ConfigBlock*>(element);
-
-					if (directive) {
-						std::string directiveName = directive->getName();
-						std::vector<std::string> params = directive->getParameters();
-
-						if (!params.empty()) {
-							serverConf->setData(directiveName, params[0]);
-						}
-					}
-					else if (subBlock && subBlock->getName() == "location") {
-						LocationConf locationConf;
-
-						std::vector<std::string> params = subBlock->getParameters();
-						if (!params.empty()) {
-							locationConf.setPath(params[0]);
-						}
-
-						// `location` 내부 설정 추가
-						const std::vector<ConfigElement*>& children = subBlock->getChildren();
-						for (size_t i = 0; i < children.size(); ++i) {
-							ConfigDirective* subDirective = dynamic_cast<ConfigDirective*>(children[i]);
-							if (subDirective) {
-								std::vector<std::string> subParams = subDirective->getParameters();
-								if (!subParams.empty()) {
-									locationConf.setData(subDirective->getName(), subParams[0]);
-								}
-							}
-						}
-
-						serverConf->addLocation(locationConf);
-					}
-				}
-				skipWhitespace();
-			}
-
-			if (pos < input.length() && input[pos] == '}') {
-				pos++;
-				return serverConf;  // return ServerConf
-			}
-		}
-
-		// generate LocationConf
-		else if (name == "location") {
-			LocationConf* locationConf = new LocationConf();
-
-			if (!parameters.empty()) {
-				locationConf->setPath(parameters[0]);
-			}
-
-			while (pos < input.length() && input[pos] != '}') {
-				ConfigElement* element = parseElement();
-				if (element) {
-					ConfigDirective* directive = dynamic_cast<ConfigDirective*>(element);
-					if (directive) {
-						std::vector<std::string> params = directive->getParameters();
-						if (!params.empty()) {
-							locationConf->setData(directive->getName(), params[0]);
-						}
-					}
-				}
-				skipWhitespace();
-			}
-
-			if (pos < input.length() && input[pos] == '}') {
-				pos++;
-				return locationConf;  // return locationConf
-			}
-		}
-
 		// basic config
 		ConfigBlock* block = new ConfigBlock(name, parameters);
 		while (pos < input.length() && input[pos] != '}') {
@@ -158,7 +79,7 @@ ConfigBlock* ConfigParser::parseBlock(void) {
 			if (element) {
 				block->addElement(element);
 			}
-			skipWhitespace();
+			this->skipWhitespace();
 		}
 
 		if (pos < input.length() && input[pos] == '}') {
@@ -170,8 +91,8 @@ ConfigBlock* ConfigParser::parseBlock(void) {
 	throw std::runtime_error("Expected block structure");
 }
 
-ConfigElement *parseElement(void) {
-	skipWhitespace();
+ConfigElement *ConfigParser::parseElement(void) {
+	this->skipWhitespace();
 	if (pos >= input.length()) return NULL;
 
 	size_t savedPos = pos;
@@ -182,7 +103,7 @@ ConfigElement *parseElement(void) {
 	return parseBlock();
 }
 
-ConfigBlock *ConfigParser::parseString(cosnt std;:string &configString) {
+ConfigBlock *ConfigParser::parseString(const std::string &configString) {
 	input = configString;
 	pos = 0;
 
@@ -194,7 +115,7 @@ ConfigBlock *ConfigParser::parseString(cosnt std;:string &configString) {
 			if (element) {
 				rootBlock->addElement(element);
 			}
-			skipWhitespace();
+			this->skipWhitespace();
 		}
 	} catch (const std::exception& e) {
 		delete rootBlock;

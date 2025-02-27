@@ -1,7 +1,6 @@
 #include "../includes/ConfigBlock.hpp"
 
-ConfigBlock::ConfigBlock(const std::string& name, const std::vector<std::string>& params = std::vector<std::string>())
-			: name(name), parameters(params) {}
+ConfigBlock::ConfigBlock(const std::string& name, const std::vector<std::string>& params): name(name), parameters(params) {}
 
 ConfigBlock::~ConfigBlock() {
 	for (size_t i = 0; i < children.size(); ++i) {
@@ -26,9 +25,10 @@ const std::vector<ConfigElement*>& ConfigBlock::getChildren() const {
 }
 
 const std::string& ConfigBlock::getName() const { return name; }
-const std::vector<std::string>& getParameters() const { return parameters; }
 
-std::string ConfigBlock::toString(int indent = 0) const {
+const std::vector<std::string>& ConfigBlock::getParameters() const { return parameters; }
+
+std::string ConfigBlock::toString(int indent) const {
 	std::string result(indent, ' ');
 	result += name;
 	for (size_t i = 0; i < parameters.size(); ++i) {

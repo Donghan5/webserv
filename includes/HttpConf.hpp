@@ -24,7 +24,7 @@ class HttpConf {
 		~HttpConf();
 
 		HttpConf &operator=(const HttpConf &obj);
-		void addServer(const ServerConf &server);;
+		void addServer(const ServerConf &server);
 		void setData(const std::string &key, const std::string &value);
 		const server_vector &getServerConfig(void) const;
 
