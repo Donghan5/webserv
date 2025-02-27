@@ -413,3 +413,40 @@ Cannot open file
 [2025-02-27 13:40:02] INFO: Interpreter: /bin/bash
 [2025-02-27 13:40:02] INFO: Script Path: ./www/cgi-bin/test.sh
 [2025-02-27 13:40:02] INFO: CGI execution successful
+[2025-02-27 13:51:59] INFO: Start Server
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:52:04] INFO: Resolved root: ./www
+[2025-02-27 13:52:04] INFO: Directive to: ./www/index.html
+[2025-02-27 13:52:04] INFO: 200 OK in get request
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:52:04] INFO: Resolved root: ./www
+[2025-02-27 13:52:04] INFO: Directive to: ./www/style.css
+[2025-02-27 13:52:04] INFO: 200 OK in get request
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:52:04] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:52:04] INFO: Resolved root: ./www
+[2025-02-27 13:52:04] INFO: Directive to: ./www/script.js
+[2025-02-27 13:52:04] INFO: 200 OK in get request
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:52:06] INFO: Resolved root: ./www
+[2025-02-27 13:52:06] INFO: Directive to: ./www/index.html
+[2025-02-27 13:52:06] INFO: 200 OK in get request
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:52:06] INFO: Resolved root: ./www
+[2025-02-27 13:52:06] INFO: Directive to: ./www/style.css
+[2025-02-27 13:52:06] INFO: 200 OK in get request
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:52:06] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:52:06] INFO: Resolved root: ./www
+[2025-02-27 13:52:06] INFO: Directive to: ./www/script.js
+[2025-02-27 13:52:06] INFO: 200 OK in get request
