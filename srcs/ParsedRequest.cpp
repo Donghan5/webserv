@@ -1,28 +1,6 @@
 #include "../includes/ParsedRequest.hpp"
 #include "../includes/Logger.hpp"
-
-static std::string intToString(int num) {
-	std::ostringstream oss;
-	oss << num;
-	return oss.str();
-}
-
-static std::string &trimString(std::string &str) {
-	const std::string whitespace = " \t\r\n";
-	size_t start = str.find_first_not_of(whitespace);
-	size_t end = str.find_last_not_of(whitespace);
-
-	if (start == std::string::npos) { // string is empty
-		str.clear();
-	} else {
-		str = str.substr(start, end - start + 1);
-	}
-
-	if (!str.empty() && str[str.size() - 1] == '\r') {
-		str.erase(str.size() - 1);
-	}
-	return str;
-}
+#include "../includes/Utils.hpp"
 
 /*
 	Setting headers data
@@ -63,8 +41,8 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 			std::string key = line.substr(0, pos);
 			std::string value = line.substr(pos + 1);
 
-			key = trimString(key);
-			value = trimString(value);
+			key = Utils::trimString(key);
+			value = Utils::trimString(value);
 
 			for (size_t i (0); i < key.size(); i++) {
 				key[i] = std::tolower(key[i]);
@@ -107,7 +85,7 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 					Logger::log(Logger::ERROR, "400 Bad Request: Incomplete Content-Length");
 					throw std::logic_error("400 Bad Request: Incomplete Content-Length");
 				}
-				Logger::log(Logger::INFO, "Successfully received full request body (" + intToString(contentLength) + " bytes)");
+				Logger::log(Logger::INFO, "Successfully received full request body (" + Utils::intToString(contentLength) + " bytes)");
 			}
 		}
 	}

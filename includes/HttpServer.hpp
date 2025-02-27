@@ -17,7 +17,15 @@
 #include <fcntl.h>
 #include <map>
 #include <errno.h>
+#include <algorithm>
 #include "WebServConf.hpp"
+
+#define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
+#define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"
+#define REQUEST403 "HTTP/1.1 403 Forbidden\r\n\r\nForbidden"
+#define REQUEST404 "HTTP/1.1 404 Not Found\r\n\r\nFile not found"
+#define REQUEST405 "HTTP/1.1 405 Method Not Allowed\r\n\r\nMethod Not Allowed"
+#define REQUEST500 "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file"
 
 class HttpServer {
 protected:
@@ -28,6 +36,7 @@ protected:
     static const int BUFFER_SIZE = 4096;
     static const int MAX_EVENTS = 100;
 
+	std::map<int, int> server_fds;
     std::vector<struct pollfd> poll_fds;
     std::map<int, std::string> partial_requests;
     std::map<int, std::string> partial_responses;
@@ -47,7 +56,7 @@ protected:
     void close_client(int client_fd);
 
 public:
-    HttpServer(int port_num, const WebServConf &webconf);
+    HttpServer(const WebServConf &webconf);
     void start();
     void stop();
     ~HttpServer();

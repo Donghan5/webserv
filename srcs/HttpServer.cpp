@@ -3,13 +3,8 @@
 #include "../includes/FileHandler.hpp"
 #include "../includes/Logger.hpp"
 #include "../includes/CgiHandler.hpp"
+#include "../includes/Utils.hpp"
 
-#define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
-#define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"
-#define REQUEST403 "HTTP/1.1 403 Forbidden\r\n\r\nForbidden"
-#define REQUEST404 "HTTP/1.1 404 Not Found\r\n\r\nFile not found"
-#define REQUEST405 "HTTP/1.1 405 Method Not Allowed\r\n\r\nMethod Not Allowed"
-#define REQUEST500 "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to delete file"
 
 // Helper function to make socket non-blocking
 void HttpServer::make_non_blocking(int fd) {
@@ -110,7 +105,6 @@ void HttpServer::handle_client_read(int client_fd) {
             }
         }
 		std::string response = process_request(partial_requests[client_fd]);
-		// std::cout << "Response: " + response << std::endl;
 		partial_responses[client_fd] = response;
 		partial_requests.erase(client_fd);
 
@@ -156,35 +150,54 @@ void HttpServer::close_client(int client_fd) {
 	}
 }
 
-HttpServer::HttpServer(int port_num, const WebServConf &webconf)
-	: port(port_num), _webconf(webconf), running(false) {
+HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(false) {
+	const std::vector<ServerConf>& serverConfigs = _webconf.getHttpBlock().getServerConfig();
 
-	// Create socket
-	server_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (server_fd < 0) {
-		Logger::log(Logger::ERROR, "Fail to create socket");
-		throw std::runtime_error("Failed to create socket");
+	if (serverConfigs.empty()) {
+		throw std::runtime_error("No server configurations found in WebServConf");
 	}
 
-	// Set socket options
-	int opt = 1;
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-		Logger::log(Logger::ERROR, "Failed to set socket options");
-		throw std::runtime_error("Failed to set socket options");
+	std::vector<int> unique_ports;
+	for (size_t i = 0; i < serverConfigs.size(); ++i) {
+		int port = std::atoi(serverConfigs[i].getData("listen").c_str());
+		std::vector<int>::iterator it = std::find(unique_ports.begin(), unique_ports.end(), port);
+		if (port > 0 && it == unique_ports.end()) {
+			unique_ports.push_back(port);
+		}
 	}
 
-	// Make server socket non-blocking
-	make_non_blocking(server_fd);
+	for (size_t i = 0; i < unique_ports.size(); ++i) {
+		int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+		if (server_fd < 0) {
+			throw std::runtime_error("Failed to create socket for port " + Utils::intToString(unique_ports[i]));
+		}
 
-	// Bind socket
-	struct sockaddr_in address;
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(port);
+		int opt = 1;
+		if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+			close(server_fd);
+			throw std::runtime_error("Failed to set socket options");
+		}
 
-	if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
-		Logger::log(Logger::ERROR, "Fail to bind socket");
-		throw std::runtime_error("Failed to bind socket");
+		make_non_blocking(server_fd);
+
+		struct sockaddr_in address;
+		memset(&address, 0, sizeof(address));
+		address.sin_family = AF_INET;
+		address.sin_addr.s_addr = INADDR_ANY;
+		address.sin_port = htons(unique_ports[i]);
+
+		if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
+			close(server_fd);
+			throw std::runtime_error("Failed to bind to port " + Utils::intToString(unique_ports[i]));
+		}
+
+		if (listen(server_fd, SOMAXCONN) < 0) {
+			close(server_fd);
+			throw std::runtime_error("Failed to listen on port " + Utils::intToString(unique_ports[i]));
+		}
+
+		server_fds[unique_ports[i]] = server_fd;
+		std::cout << "Server bound and listening on port " << unique_ports[i] << std::endl;
 	}
 }
 
@@ -198,7 +211,6 @@ void HttpServer::start() {
 	}
 
 	Logger::log(Logger::INFO, "Start Server");
-	std::cout << "On port " << port << std::endl;
 
 	// Add server socket to poll set
 	struct pollfd server_pollfd;
@@ -272,6 +284,10 @@ void HttpServer::stop() {
 			close(poll_fds[i].fd);
 		}
 	}
+	for (std::map<int, int>::iterator it = server_fds.begin(); it != server_fds.end(); ++it) {
+		close(it->second);  // close socket
+	}
+	server_fds.clear();
 	poll_fds.clear();
 	partial_requests.clear();
 	partial_responses.clear();

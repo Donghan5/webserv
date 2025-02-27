@@ -14,12 +14,11 @@ int main(int argc, char **argv) {
 	}
 	Logger::init();
 	std::string name = argv[1];
-	ParseConf parser(name);
 	try {
-		std::string portStr = parser.getWebServConf().getFirstListenValue();
-		std::cout << "portStr: " << portStr << std::endl;
-		int port = std::atoi(portStr.c_str());
-		HttpServer server(port, parser.getWebServConf());
+		ParseConf parser(name);
+		const WebServConf &webconf = parser.getWebServConf();
+
+		HttpServer server(webconf);
 		server.start();
 	} catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
