@@ -24,7 +24,7 @@ WebServConf::~WebServConf() {
 }
 
 
-const HttpConf &WebServConf::getHttpBlock(void) const {
+HttpConf &WebServConf::getHttpBlock(void) {
 	return *_hconf;
 }
 

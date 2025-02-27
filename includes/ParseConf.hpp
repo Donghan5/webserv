@@ -1,10 +1,13 @@
 #ifndef PARSECONF_HPP
 #define PARSECONF_HPP
 
+#include <cstdlib>
 #include <string>
 #include "ConfigParser.hpp"
 #include "ConfigAccess.hpp"
 #include "WebServConf.hpp"
+
+class WebServConf;
 
 class ParseConf {
 	private:

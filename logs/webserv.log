@@ -240,3 +240,176 @@
 [2025-02-20 04:04:20] INFO: Resolved root: ./www
 [2025-02-20 04:04:20] INFO: Directive to: ./www/upload/test.txt
 [2025-02-20 04:04:20] INFO: 200 OK in delete request
+[2025-02-27 13:29:49] INFO: Start Server
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:29:54] INFO: Resolved root: ./www
+[2025-02-27 13:29:54] INFO: Directive to: ./www/index.html
+[2025-02-27 13:29:54] INFO: 200 OK in get request
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:29:54] INFO: Resolved root: ./www
+[2025-02-27 13:29:54] INFO: Directive to: ./www/style.css
+[2025-02-27 13:29:54] INFO: 200 OK in get request
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:29:54] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:29:54] INFO: Resolved root: ./www
+[2025-02-27 13:29:54] INFO: Directive to: ./www/script.js
+[2025-02-27 13:29:54] INFO: 200 OK in get request
+[2025-02-27 13:29:55] INFO: Parsing Request Line: GET /favicon.ico HTTP/1.1
+[2025-02-27 13:29:55] INFO: Parsing Request Line: GET /favicon.ico HTTP/1.1
+[2025-02-27 13:29:55] INFO: Parsing Request Line: GET /favicon.ico HTTP/1.1
+[2025-02-27 13:29:55] INFO: Resolved root: ./www
+[2025-02-27 13:29:55] INFO: Directive to: ./www/favicon.ico
+[2025-02-27 13:29:55] ERROR: 404 File Not Found
+
+Cannot open file
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:29:57] INFO: Resolved root: ./www
+[2025-02-27 13:29:57] INFO: Directive to: ./www/index.html
+[2025-02-27 13:29:57] INFO: 200 OK in get request
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:29:57] INFO: Resolved root: ./www
+[2025-02-27 13:29:57] INFO: Directive to: ./www/style.css
+[2025-02-27 13:29:57] INFO: 200 OK in get request
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:29:57] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:29:57] INFO: Resolved root: ./www
+[2025-02-27 13:29:57] INFO: Directive to: ./www/script.js
+[2025-02-27 13:29:57] INFO: 200 OK in get request
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:34:30] INFO: Resolved root: ./www
+[2025-02-27 13:34:30] INFO: Directive to: ./www/index.html
+[2025-02-27 13:34:30] INFO: 200 OK in get request
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:34:30] INFO: Resolved root: ./www
+[2025-02-27 13:34:30] INFO: Directive to: ./www/style.css
+[2025-02-27 13:34:30] INFO: 200 OK in get request
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:34:30] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:34:30] INFO: Resolved root: ./www
+[2025-02-27 13:34:30] INFO: Directive to: ./www/script.js
+[2025-02-27 13:34:30] INFO: 200 OK in get request
+[2025-02-27 13:35:50] INFO: Start Server
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:35:52] INFO: Resolved root: ./www
+[2025-02-27 13:35:52] INFO: Directive to: ./www/index.html
+[2025-02-27 13:35:52] INFO: 200 OK in get request
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:35:52] INFO: Resolved root: ./www
+[2025-02-27 13:35:52] INFO: Directive to: ./www/style.css
+[2025-02-27 13:35:52] INFO: 200 OK in get request
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:35:52] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:35:52] INFO: Resolved root: ./www
+[2025-02-27 13:35:52] INFO: Directive to: ./www/script.js
+[2025-02-27 13:35:52] INFO: 200 OK in get request
+[2025-02-27 13:36:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-27 13:36:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-27 13:36:38] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-27 13:36:38] INFO: Resolved root: ./www
+[2025-02-27 13:36:38] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-27 13:36:38] INFO: Attempting to execute CGI script:
+[2025-02-27 13:36:38] INFO: Interpreter: /usr/bin/php
+[2025-02-27 13:36:38] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-27 13:36:38] INFO: CGI execution successful
+[2025-02-27 13:36:39] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-27 13:36:39] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-27 13:36:39] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-27 13:36:39] INFO: Resolved root: ./www
+[2025-02-27 13:36:39] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-27 13:36:39] INFO: Attempting to execute CGI script:
+[2025-02-27 13:36:39] INFO: Interpreter: /usr/bin/python3
+[2025-02-27 13:36:39] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-27 13:36:40] INFO: CGI execution successful
+[2025-02-27 13:36:40] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-27 13:36:40] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-27 13:36:40] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-27 13:36:40] INFO: Resolved root: ./www
+[2025-02-27 13:36:40] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-27 13:36:40] INFO: Attempting to execute CGI script:
+[2025-02-27 13:36:40] INFO: Interpreter: /bin/bash
+[2025-02-27 13:36:40] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-27 13:36:40] INFO: CGI execution successful
+[2025-02-27 13:36:42] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-27 13:36:42] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-27 13:36:42] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-27 13:36:42] INFO: Resolved root: ./www
+[2025-02-27 13:36:42] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-27 13:36:42] INFO: Attempting to execute CGI script:
+[2025-02-27 13:36:42] INFO: Interpreter: /usr/bin/perl
+[2025-02-27 13:36:42] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-27 13:36:42] INFO: CGI execution successful
+[2025-02-27 13:39:36] INFO: Start Server
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET / HTTP/1.1
+[2025-02-27 13:39:48] INFO: Resolved root: ./www
+[2025-02-27 13:39:48] INFO: Directive to: ./www/index.html
+[2025-02-27 13:39:48] INFO: 200 OK in get request
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET /style.css HTTP/1.1
+[2025-02-27 13:39:48] INFO: Resolved root: ./www
+[2025-02-27 13:39:48] INFO: Directive to: ./www/style.css
+[2025-02-27 13:39:48] INFO: 200 OK in get request
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:39:48] INFO: Parsing Request Line: GET /script.js HTTP/1.1
+[2025-02-27 13:39:48] INFO: Resolved root: ./www
+[2025-02-27 13:39:48] INFO: Directive to: ./www/script.js
+[2025-02-27 13:39:48] INFO: 200 OK in get request
+[2025-02-27 13:39:57] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-27 13:39:57] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-27 13:39:57] INFO: Parsing Request Line: GET /cgi-bin/test.py HTTP/1.1
+[2025-02-27 13:39:57] INFO: Resolved root: ./www
+[2025-02-27 13:39:57] INFO: Directive to: ./www/cgi-bin/test.py
+[2025-02-27 13:39:57] INFO: Attempting to execute CGI script:
+[2025-02-27 13:39:57] INFO: Interpreter: /usr/bin/python3
+[2025-02-27 13:39:57] INFO: Script Path: ./www/cgi-bin/test.py
+[2025-02-27 13:39:57] INFO: CGI execution successful
+[2025-02-27 13:39:59] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-27 13:39:59] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-27 13:39:59] INFO: Parsing Request Line: GET /cgi-bin/test.php HTTP/1.1
+[2025-02-27 13:39:59] INFO: Resolved root: ./www
+[2025-02-27 13:39:59] INFO: Directive to: ./www/cgi-bin/test.php
+[2025-02-27 13:39:59] INFO: Attempting to execute CGI script:
+[2025-02-27 13:39:59] INFO: Interpreter: /usr/bin/php
+[2025-02-27 13:39:59] INFO: Script Path: ./www/cgi-bin/test.php
+[2025-02-27 13:39:59] INFO: CGI execution successful
+[2025-02-27 13:40:01] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-27 13:40:01] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-27 13:40:01] INFO: Parsing Request Line: GET /cgi-bin/test.pl HTTP/1.1
+[2025-02-27 13:40:01] INFO: Resolved root: ./www
+[2025-02-27 13:40:01] INFO: Directive to: ./www/cgi-bin/test.pl
+[2025-02-27 13:40:01] INFO: Attempting to execute CGI script:
+[2025-02-27 13:40:01] INFO: Interpreter: /usr/bin/perl
+[2025-02-27 13:40:01] INFO: Script Path: ./www/cgi-bin/test.pl
+[2025-02-27 13:40:01] INFO: CGI execution successful
+[2025-02-27 13:40:02] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-27 13:40:02] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-27 13:40:02] INFO: Parsing Request Line: GET /cgi-bin/test.sh HTTP/1.1
+[2025-02-27 13:40:02] INFO: Resolved root: ./www
+[2025-02-27 13:40:02] INFO: Directive to: ./www/cgi-bin/test.sh
+[2025-02-27 13:40:02] INFO: Attempting to execute CGI script:
+[2025-02-27 13:40:02] INFO: Interpreter: /bin/bash
+[2025-02-27 13:40:02] INFO: Script Path: ./www/cgi-bin/test.sh
+[2025-02-27 13:40:02] INFO: CGI execution successful

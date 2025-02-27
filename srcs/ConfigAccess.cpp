@@ -1,6 +1,6 @@
 #include "../includes/ConfigAccess.hpp"
 
-bool ConfigAccess::getDirectiveValue(const ConfigBlock *block, const std::string &directiveName, size_t paramIndex = 0) {
+bool ConfigAccess::getDirectiveValue(const ConfigBlock *block, const std::string &directiveName, std::string &outValue, size_t paramIndex) {
 	const std::vector<ConfigElement*>& children = block->getChildren();
 	for (size_t i = 0; i < children.size(); ++i) {
 		const ConfigDirective* directive = dynamic_cast<const ConfigDirective*>(children[i]);
@@ -19,7 +19,7 @@ ConfigBlock *ConfigAccess::findFirstServerBlock(const ConfigBlock *rootBlock) {
 	if (!rootBlock) {
 		return NULL;
 	}
-	const std::vector<ConfigElement*>& elements = config->getElements();
+	const std::vector<ConfigElement*>& elements = rootBlock->getChildren();
 	for (size_t i = 0; i < elements.size(); ++i) {
 		ConfigBlock* httpBlock = dynamic_cast<ConfigBlock*>(elements[i]);
 		if (httpBlock && httpBlock->getName() == "http") {
@@ -35,6 +35,9 @@ ConfigBlock *ConfigAccess::findFirstServerBlock(const ConfigBlock *rootBlock) {
 	return NULL;
 }
 
+/*
+	To get location block
+*/
 ConfigBlock *ConfigAccess::findLocationBlock(const ConfigBlock *serverBlock, const std::string &path) {
 	const std::vector<ConfigElement*>& children = serverBlock->getChildren();
 	for (size_t i = 0; i < children.size(); ++i) {
@@ -49,6 +52,9 @@ ConfigBlock *ConfigAccess::findLocationBlock(const ConfigBlock *serverBlock, con
 	return NULL;
 }
 
+/*
+	To get all server blocks
+*/
 std::vector<ConfigBlock*> ConfigAccess::getAllServerBlocks(const ConfigBlock *rootBlock) {
 	std::vector<ConfigBlock*> servers;
 
@@ -56,7 +62,7 @@ std::vector<ConfigBlock*> ConfigAccess::getAllServerBlocks(const ConfigBlock *ro
 		return servers;
 	}
 
-	const std::vector<ConfigElement*>& elements = rootBlock->getElements();
+	const std::vector<ConfigElement*>& elements = rootBlock->getChildren();
 	for (size_t i = 0; i < elements.size(); ++i) {
 		ConfigBlock* httpBlock = dynamic_cast<ConfigBlock*>(elements[i]);
 		if (httpBlock && httpBlock->getName() == "http") {
@@ -72,4 +78,20 @@ std::vector<ConfigBlock*> ConfigAccess::getAllServerBlocks(const ConfigBlock *ro
 	return servers;
 }
 
+/*
+	To find event blocks
+*/
+ConfigBlock *ConfigAccess::findEventBlock(ConfigBlock* rootBlock) {
+	if (!rootBlock) {
+		return NULL;
+	}
 
+	const std::vector<ConfigElement*>& elements = rootBlock->getChildren();
+	for (size_t i = 0; i < elements.size(); ++i) {
+		ConfigBlock *eventBlock = dynamic_cast<ConfigBlock*>(elements[i]);
+		if (eventBlock && eventBlock->getName() == "events") {
+			return eventBlock;
+		}
+	}
+	return NULL;
+}

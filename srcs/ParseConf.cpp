@@ -3,7 +3,7 @@
 
 ParseConf::ParseConf(const std::string& confFileName) {
 	_webconf = new WebServConf();
-	parseFile(confFileName);
+	loadConfig(confFileName);
 }
 
 ParseConf::~ParseConf() {
@@ -77,7 +77,7 @@ void ParseConf::parseFromConfigBlock(ConfigBlock* rootBlock) {
 
 		if (ConfigAccess::getDirectiveValue(eventBlock, "worker_connections", workerConnections)) {
 			try {
-				int workerCount = std::atoi(workerConnections);
+				int workerCount = std::atoi(workerConnections.c_str());
 				if (workerCount < 1) {
 					Logger::log(Logger::ERROR, "Invalid worker_connections value, must be >= 1");
 				} else {
@@ -91,6 +91,9 @@ void ParseConf::parseFromConfigBlock(ConfigBlock* rootBlock) {
 		if (ConfigAccess::getDirectiveValue(eventBlock, "use", useMethod)) {
 			eventConf.setUseMethods(useMethod);
 		}
+	} else { // event block not found
+		Logger::log(Logger::INFO, "No `events` block found. Skipping event configuration");
+		return;
 	}
 }
 

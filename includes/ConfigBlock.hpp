@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "ConfigElement.hpp"
+#include "ConfigDirective.hpp"
 
 class ConfigBlock : public ConfigElement {
 	private:
