@@ -5,32 +5,24 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "ConfigElement.hpp"
 
 class ConfigDirective : public ConfigElement {
 	private:
 		std::string name;
 		std::vector<std::string> parameters;
 
+		ConfigDirective();
+
 	public:
-		ConfigDirective(const std::string& name, const std::vector<std::string>& params)
-			: name(name), parameters(params) {}
+		ConfigDirective(const std::string& name, const std::vector<std::string>& params);
+		~ConfigDirective();
 
-		const std::string& getName() const { return name; }
-		const std::vector<std::string>& getParameters() const { return parameters; }
+		const std::string& getName() const;
+		const std::vector<std::string>& getParameters() const;
 
-		void addParameter(const std::string& param) {
-			parameters.push_back(param);
-		}
-
-		std::string toString(int indent = 0) const {
-			std::string result(indent, ' ');
-			result += name;
-			for (size_t i = 0; i < parameters.size(); ++i) {
-				result += " " + parameters[i];
-			}
-			result += ";\n";
-			return result;
-		}
+		void addParameter(const std::string& param);
+		std::string toString(int indent = 0) const;
 };
 
 #endif
