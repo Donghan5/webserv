@@ -1,4 +1,4 @@
-#include "../includes/utils.hpp"
+#include "../includes/Utils.hpp"
 
 std::string Utils::intToString(int num) {
 	std::ostringstream oss;

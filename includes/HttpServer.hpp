@@ -40,6 +40,7 @@ protected:
     std::vector<struct pollfd> poll_fds;
     std::map<int, std::string> partial_requests;
     std::map<int, std::string> partial_responses;
+	std::map<std::string, int> server_name_to_fd;
 
     static void make_non_blocking(int fd);
     static bool file_exists(const std::string& path);

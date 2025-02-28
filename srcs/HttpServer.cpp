@@ -77,13 +77,62 @@ std::string HttpServer::process_request(const std::string &request) {
 }
 
 void HttpServer::handle_client_read(int client_fd) {
+	if (client_fd <= 0) {
+		Logger::log(Logger::ERROR, "Attempted to read from an invalid client_fd: client_fd=" + Utils::intToString(client_fd));
+		return;
+	}
+
+	int socket_status = fcntl(client_fd, F_GETFL, 0);
+	if (socket_status == -1) {
+		Logger::log(Logger::ERROR, "Invalid socket: client_fd=" + Utils::intToString(client_fd));
+		close_client(client_fd);
+		return;
+	}
+
 	char buffer[BUFFER_SIZE];
+
+	int check = recv(client_fd, buffer, 1, MSG_PEEK);
+
+	if (check == 0) {
+		Logger::log(Logger::DEBUG, "Client disconnected before read: client_fd=" + Utils::intToString(client_fd));
+		return;
+	}
+
+	if (check < 0) {
+		if (errno == ENOTCONN) {
+			Logger::log(Logger::ERROR, "Client not connected: client_fd=" + Utils::intToString(client_fd));
+			close_client(client_fd);
+			return;
+		}
+		if (errno == EAGAIN || errno == EWOULDBLOCK) {
+			Logger::log(Logger::DEBUG, "Temporary read error, retrying: client_fd=" + Utils::intToString(client_fd));
+			return;
+		}
+		Logger::log(Logger::ERROR, "Socket error before read: client_fd=" + Utils::intToString(client_fd) + ", errno=" + strerror(errno));
+		close_client(client_fd);
+		return;
+	}
+
 	ssize_t bytes_read = read(client_fd, buffer, BUFFER_SIZE);
 
-	if (bytes_read <= 0) {
-		if (bytes_read == 0 || errno != EAGAIN) {
+	if (bytes_read < 0) {
+		if (errno == ECONNRESET) {
+			Logger::log(Logger::ERROR, "Connection reset by peer: client_fd=" + Utils::intToString(client_fd));
+		}
+		else if (errno == EAGAIN || errno == EWOULDBLOCK) {
+			Logger::log(Logger::ERROR, "Temporary read error, retrying: client_fd=" + Utils::intToString(client_fd));
+			return;
+		}
+		else {
+			Logger::log(Logger::ERROR, "Read failed (closing connection): client_fd=" + Utils::intToString(client_fd) + ", errno=" + strerror(errno));
 			close_client(client_fd);
 		}
+		return ;
+	}
+
+	if (bytes_read == 0) {
+		Logger::log(Logger::ERROR, "Client disconnected: client_fd=" + Utils::intToString(client_fd));
+		close_client(client_fd);
 		return;
 	}
 
@@ -137,6 +186,10 @@ void HttpServer::handle_client_write(int client_fd) {
 }
 
 void HttpServer::close_client(int client_fd) {
+	if (client_fd < 0) return;
+
+	Logger::log(Logger::INFO, "Close client_fd=" + Utils::intToString(client_fd));
+	shutdown(client_fd, SHUT_RDWR);
 	close(client_fd);
 	partial_requests.erase(client_fd);
 	partial_responses.erase(client_fd);
@@ -157,14 +210,49 @@ HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(
 		throw std::runtime_error("No server configurations found in WebServConf");
 	}
 
+	std::map<int, int> port_to_fd;
 	std::vector<int> unique_ports;
+
 	for (size_t i = 0; i < serverConfigs.size(); ++i) {
 		int port = std::atoi(serverConfigs[i].getData("listen").c_str());
+		std::string server_name = serverConfigs[i].getData("server_name");
 		std::vector<int>::iterator it = std::find(unique_ports.begin(), unique_ports.end(), port);
 		if (port > 0 && it == unique_ports.end()) {
 			unique_ports.push_back(port);
 		}
+
+		if (!server_name.empty()) {
+			if (server_name_to_fd.find(server_name) == server_name_to_fd.end()) {
+				server_name_to_fd[server_name] = -1;
+			}
+		}
+
+		if (port > 0 && server_fds.find(port) != server_fds.end()) {
+			int server_fd = server_fds[port];
+			server_name_to_fd[server_name] = server_fd;
+			Logger::log(Logger::INFO, "Mapped Server Name: " + server_name + " -> FD: " + Utils::intToString(server_fd));
+		}
+
+		Logger::log(Logger::INFO, "Server Config - Port: " + Utils::intToString(port) +
+                ", Server Name: " + server_name +
+                ", Mapped FD: " + (server_name_to_fd.find(server_name) != server_name_to_fd.end() ?
+                Utils::intToString(server_name_to_fd[server_name]) : "Not Assigned"));
 	}
+
+	Logger::log(Logger::INFO, "===================== Start DEBUG ========================");
+
+	Logger::log(Logger::INFO, "===== Port to FD Mapping =====");
+	for (std::map<int, int>::iterator it = server_fds.begin(); it != server_fds.end(); ++it) {
+		Logger::log(Logger::INFO, "Port: " + Utils::intToString(it->first) + " -> FD: " + Utils::intToString(it->second));
+	}
+
+	Logger::log(Logger::INFO, "===== Server Name to FD Mapping =====");
+	for (std::map<std::string, int>::iterator it = server_name_to_fd.begin(); it != server_name_to_fd.end(); ++it) {
+		Logger::log(Logger::INFO, "Server Name: " + it->first + " -> FD: " + Utils::intToString(it->second));
+	}
+
+	Logger::log(Logger::INFO, "===================== End DEBUG ========================");
+
 
 	for (size_t i = 0; i < unique_ports.size(); ++i) {
 		int server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -173,7 +261,7 @@ HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(
 		}
 
 		int opt = 1;
-		if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+		if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
 			close(server_fd);
 			throw std::runtime_error("Failed to set socket options");
 		}
@@ -198,26 +286,19 @@ HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(
 
 		server_fds[unique_ports[i]] = server_fd;
 		std::cout << "Server bound and listening on port " << unique_ports[i] << std::endl;
+
+		// Add server socket to poll set
+		struct pollfd server_pollfd;
+		server_pollfd.fd = server_fd;
+		server_pollfd.events = POLLIN;
+		server_pollfd.revents = 0;
+		poll_fds.push_back(server_pollfd);
 	}
 }
 
 void HttpServer::start() {
 	running = true;
-
-	// Listen for connections
-	if (listen(server_fd, SOMAXCONN) < 0) {
-		Logger::log(Logger::ERROR, "Failed to listen");
-		throw std::runtime_error("Failed to listen");
-	}
-
 	Logger::log(Logger::INFO, "Start Server");
-
-	// Add server socket to poll set
-	struct pollfd server_pollfd;
-	server_pollfd.fd = server_fd;
-	server_pollfd.events = POLLIN;
-	server_pollfd.revents = 0;
-	poll_fds.push_back(server_pollfd);
 
 	while (running) {
 		int ready = poll(&poll_fds[0], poll_fds.size(), -1);
@@ -235,17 +316,23 @@ void HttpServer::start() {
 				continue;
 			}
 
-			if (current_fds[i].fd == server_fd) {
+			if (server_fds.find(current_fds[i].fd) != server_fds.end()) {
 				// Handle new connection
 				struct sockaddr_in client_addr;
 				socklen_t client_len = sizeof(client_addr);
-				int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
+				int client_fd = accept(current_fds[i].fd, (struct sockaddr*)&client_addr, &client_len);
 
 				if (client_fd < 0) {
 					if (errno != EAGAIN && errno != EWOULDBLOCK) {
 						Logger::log(Logger::ERROR, "Fail connection");
 						std::cerr << "Failed to accept connection" << std::endl;
 					}
+					continue;
+				}
+
+				if (client_fd < 0) {
+					Logger::log(Logger::ERROR, "Invalid client_fd" + Utils::intToString(client_fd));
+					close(client_fd);
 					continue;
 				}
 
@@ -267,6 +354,7 @@ void HttpServer::start() {
 					handle_client_write(current_fds[i].fd);
 				}
 				if (current_fds[i].revents & (POLLERR | POLLHUP | POLLNVAL)) {
+					Logger::log(Logger::ERROR, "Detected closed connection or error: client_fd=" + Utils::intToString(current_fds[i].fd));
 					close_client(current_fds[i].fd);
 				}
 			}

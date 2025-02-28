@@ -10,7 +10,7 @@
 
 class Logger {
 	public:
-		enum LogLevel { INFO, WARNING, ERROR };
+		enum LogLevel { INFO, WARNING, ERROR, DEBUG };
 		static void log(LogLevel level, const std::string &message);
 		static void init();
 
