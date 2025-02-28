@@ -316,7 +316,15 @@ void HttpServer::start() {
 				continue;
 			}
 
-			if (server_fds.find(current_fds[i].fd) != server_fds.end()) {
+			bool is_server_socket = false;
+            for (std::map<int, int>::iterator it = server_fds.begin(); it != server_fds.end(); ++it) {
+                if (current_fds[i].fd == it->second) {
+                    is_server_socket = true;
+                    break;
+                }
+            }
+
+			if (is_server_socket) {
 				// Handle new connection
 				struct sockaddr_in client_addr;
 				socklen_t client_len = sizeof(client_addr);
