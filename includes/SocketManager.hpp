@@ -16,6 +16,7 @@
 class SocketManager {
 	public:
 		static int createSocket();
+		static void setSocket(int fd);
 		static void makeNonBlocking(int fd);
 		static void bindSocket (int fd, int port);
 		static void listenSocket (int fd);

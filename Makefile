@@ -15,7 +15,8 @@ SRCS = $(SRC_DIR)/test.cpp $(SRC_DIR)/EventConf.cpp $(SRC_DIR)/HttpConf.cpp \
 	   $(SRC_DIR)/HttpServer.cpp $(SRC_DIR)/WebServConf.cpp $(SRC_DIR)/ParsedRequest.cpp \
 	   $(SRC_DIR)/FileHandler.cpp $(SRC_DIR)/Logger.cpp $(SRC_DIR)/CgiHandler.cpp \
 	   $(SRC_DIR)/ConfigAccess.cpp $(SRC_DIR)/ConfigParser.cpp $(SRC_DIR)/ConfigBlock.cpp \
-	   $(SRC_DIR)/ConfigDirective.cpp $(SRC_DIR)/Utils.cpp
+	   $(SRC_DIR)/ConfigDirective.cpp $(SRC_DIR)/Utils.cpp $(SRC_DIR)/ClientManager.cpp \
+	   $(SRC_DIR)/SocketManager.cpp $(SRC_DIR)/RequestHandler.cpp
 
 # Object files (convert .cpp to .o)
 OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)

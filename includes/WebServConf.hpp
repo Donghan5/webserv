@@ -56,6 +56,9 @@ class WebServConf {
 
 		std::string resolveRoot(std::string host, std::string requestPath) const;
 		std::string resolveRootFromServer(const ServerConf &serverConf, std::string requestPath, std::string httpRoot) const;
+
+		ServerConf *findMatchingServer(const std::string &host, int port);
+		LocationConf *findMatchingLocation(const ServerConf &server, const std::string &path);
 };
 
 #endif

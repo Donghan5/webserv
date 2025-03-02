@@ -1,5 +1,6 @@
 #include "../includes/RequestHandler.hpp"
 
+
 bool RequestHandler::file_exists(const std::string& path) {
 	struct stat buffer;
 	return (stat(path.c_str(), &buffer) == 0);
@@ -15,22 +16,32 @@ bool RequestHandler::ends_with(const std::string& str, const std::string& suffix
 
 // Process a complete HTTP request
 std::string RequestHandler::process_request(const std::string &request) {
+	Logger::log(Logger::DEBUG, "===== Processing Request =====");
+
 	ParsedRequest parser(request);
+	WebServConf webconf;
 
 	std::string method = parser.getMethod();
 	std::string path = parser.getPath();
 	std::string host = parser.getHost();
+	int port = parser.getPort();
 
 	// Default to index.html for root path
 	if (path == "/") {
 		path = "/index.html";
 	}
 
-	std::string resolved_root = _webconf.resolveRoot(host, path);
-	std::string full_path = resolved_root + path;
+	ServerConf *server = webconf.findMatchingServer(host, port);
+	if (!server) {
+		return "HTTP/1.1 404 Not Found\r\n\r\nNo matching server found";
+	}
 
-	Logger::log(Logger::INFO, "Resolved root: " + resolved_root);
-	Logger::log(Logger::INFO, "Directive to: " + full_path);
+	LocationConf *location = webconf.findMatchingLocation(*server, path);
+	if (!location) {
+		return "HTTP/1.1 404 Not Found\r\n\r\nNo matching location found";
+	}
+
+	std::string full_path = location->getRootDir() + path;
 	std::string extension = path.substr(path.find_last_of("."));
 	if (extension == ".py" || extension == ".php" || extension == ".pl" || extension == ".sh") {
 			CgiHandler cgi(full_path, parser.getHeaders(), parser.getBody());

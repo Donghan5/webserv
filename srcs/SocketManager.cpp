@@ -23,6 +23,13 @@ void SocketManager::makeNonBlocking(int fd) {
 	}
 }
 
+void SocketManager::setSocket(int fd) {
+	int opt = 1;
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+		close(fd);
+		throw std::runtime_error("Failed to set socket options");
+	}
+}
 
 void SocketManager::bindSocket(int fd, int port) {
 	struct sockaddr_in address;

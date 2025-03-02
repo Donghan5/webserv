@@ -48,20 +48,37 @@ std::string FileHandler::getContentType(const std::string &path) {
 /*
 	Boolean value: existance of the file
 */
-bool FileHandler::exists(const std::string &path) {
+int FileHandler::exists(const std::string &path) {
 	struct stat buffer;
-	return (stat(path.c_str(), &buffer) == 0);
+
+	if (stat(path.c_str(), &buffer) != 0) return 0;  // not exist
+
+	if (S_ISDIR(buffer.st_mode)) return 2;  // directory
+
+	return 1;  // file
 }
 
 /*
 	Handling GET request
 */
 std::string FileHandler::handleGetRequest(const std::string &path) {
-	if (!FileHandler::exists(path)) {
-		Logger::log(Logger::ERROR, "404 File Not Found\r\n\r\nCannot open file");
+	int fileType = FileHandler::exists(path);
+
+	if (fileType == 0) {
+		Logger::log(Logger::ERROR, "404 File Not Found: " + path);
 		return REQUEST404;
 	}
 
+	if (fileType == 2) {
+		std::string indexPath = path + "/index.html";
+		if (FileHandler::exists(indexPath) == 1) {
+			return handleGetRequest(indexPath);
+		}
+		Logger::log(Logger::ERROR, "403 Forbidden (Directory): " + path);
+		return REQUEST403;
+	}
+
+	// file
 	std::ifstream file(path.c_str(), std::ios::binary);
 	if (!file) {
 		Logger::log(Logger::ERROR, "403 Forbidden\r\n\r\n");

@@ -1,5 +1,6 @@
 #include "../includes/WebServConf.hpp"
 #include "../includes/Logger.hpp"
+#include "../includes/Utils.hpp"
 
 WebServConf::WebServConf() {
 	_hconf = new HttpConf();
@@ -129,4 +130,47 @@ std::string WebServConf::resolveRoot(std::string host, std::string requestPath) 
 	}
 	Logger::log(Logger::WARNING, "No matching server_name. Using default server");
 	return "./www";
+}
+
+
+ServerConf *WebServConf::findMatchingServer(const std::string &host, int port) {
+	ServerConf *defaultServer = NULL;
+
+	const std::vector<ServerConf> &servers = _hconf->getServerConfig();
+
+	for (size_t i = 0; i < servers.size(); ++i) {
+		if (servers[i].getData("listen") == Utils::intToString(port)) {
+			if (!defaultServer) { // first server is default server
+				defaultServer = const_cast<ServerConf*>(&servers[i]);
+			}
+		}
+
+		std::string serverNames = servers[i].getData("server_name");
+		if (!serverNames.empty()) {
+			std::vector<std::string> names = Utils::split(serverNames, ' ');
+			for(size_t j = 0; j < names.size(); ++j) {
+				if (names[j] == host) {
+					return const_cast<ServerConf*>(&servers[j]);
+				}
+			}
+		}
+	}
+	return defaultServer;
+}
+
+LocationConf *WebServConf::findMatchingLocation(const ServerConf &server, const std::string &path) {
+	std::string bestMatch = "";
+	LocationConf *bestLocation = NULL;
+	const std::vector<LocationConf>& locations = server.getLocations();
+
+	for (size_t i = 0; i < locations.size(); ++i) {
+		if (path.find(locations[i].getPath()) == 0) {
+			if (locations[i].getPath().length() > bestMatch.length()) { // select the longest path
+				bestMatch = locations[i].getPath();
+				bestLocation = const_cast<LocationConf*>(&locations[i]);
+			}
+		}
+	}
+
+	return bestLocation;
 }

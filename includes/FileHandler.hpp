@@ -23,7 +23,7 @@ class FileHandler {
 		static std::map<std::string, std::string> initMimeTypes();
 	public:
 		static std::string getContentType(const std::string &path);
-		static bool exists(const std::string &path);
+		static int exists(const std::string &path);
 		static std::string handleGetRequest(const std::string &path);
 		static std::string handlePostRequest(const std::string &path, const std::string &body);
 		static std::string handleDeleteRequest(const std::string &path);

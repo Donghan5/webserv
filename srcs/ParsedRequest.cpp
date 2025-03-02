@@ -56,9 +56,12 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 		_host = getData("host");
 		size_t colon = _host.find(':');
 		_host = _host.substr(0, colon);
+		_port = std::atoi(_host.substr(colon + 1).c_str());
 		_headers["host"] = _host;
+		_headers["port"] = _port;
 	} else {
-		_host = "default";
+		_host = "localhost";
+		_port = 8080;  // default port
 	}
 
 	if (_method == "POST") {
@@ -127,5 +130,7 @@ std::string ParsedRequest::getHost(void) const { return _host; }
 std::string ParsedRequest::getVersion(void) const { return _version; }
 
 std::string ParsedRequest::getBody(void) const { return _body; }
+
+int ParsedRequest::getPort(void) const { return _port; }
 
 string_map ParsedRequest::getHeaders(void) const { return _headers; }

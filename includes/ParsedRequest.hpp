@@ -20,6 +20,7 @@ class ParsedRequest {
 		std::string _version;
 		std::string _body;
 		string_map _headers;
+		int _port;
 
 		ParsedRequest(); // treate default request path(?)
 
@@ -37,6 +38,7 @@ class ParsedRequest {
 		std::string getHost(void) const;
 		std::string getVersion(void) const;
 		std::string getBody(void) const;
+		int getPort(void) const;
 		string_map getHeaders(void) const;
 
 
