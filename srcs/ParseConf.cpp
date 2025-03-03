@@ -31,6 +31,7 @@ void ParseConf::parseFromConfigBlock(ConfigBlock* rootBlock) {
 	EventConf& eventConf = _webconf->getEventConf();
 
 	std::vector<ConfigBlock*> serverBlocks = ConfigAccess::getAllServerBlocks(rootBlock);
+	Logger::log(Logger::DEBUG, "Total server blocks found: " + Utils::intToString(serverBlocks.size()));
 	for (size_t i = 0; i < serverBlocks.size(); ++i) {
 		ServerConf serverConf;
 
@@ -62,12 +63,15 @@ void ParseConf::parseFromConfigBlock(ConfigBlock* rootBlock) {
 				if (ConfigAccess::getDirectiveValue(locationBlock, "autoindex", autoindex)) {
 					locationConf.setData("autoindex", autoindex);
 				}
-
+				// Logger::log(Logger::DEBUG, "Calling showLocationData()");
+				// locationConf.showLocationData();
 				serverConf.addLocation(locationConf);
 			}
 		}
-
+		Logger::log(Logger::DEBUG, serverConf.getData("server_name"));
+		serverConf.showServerData();
 		httpConf.addServer(serverConf);
+		Logger::log(Logger::DEBUG, "Total server in HttpConf: " + Utils::intToString(httpConf.getServerConfig().size()));
 	}
 
 	// event blocks

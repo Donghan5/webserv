@@ -33,7 +33,7 @@ void SocketManager::setSocket(int fd) {
 
 void SocketManager::bindSocket(int fd, int port) {
 	struct sockaddr_in address;
-	memset(&adderss, 0, sizeof(address));
+	memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
 	address.sin_port = htons(port);

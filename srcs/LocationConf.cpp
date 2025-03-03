@@ -1,4 +1,5 @@
 #include "../includes/LocationConf.hpp"
+#include "../includes/Logger.hpp"
 
 LocationConf::LocationConf() {} // constructor
 
@@ -32,12 +33,15 @@ const string_map &LocationConf::getSettings(void) const {
 /*
 	Print all data in locations
 */
-void LocationConf::showLocationData(void) {
-	string_map::iterator it = this->_settings.begin();
-	for (; it != this->_settings.end(); ++it) {
-		std::cout << "Key: " << it->first << " Value: " << it->second << std::endl;
-	}
+void LocationConf::showLocationData() {
+    Logger::log(Logger::DEBUG, "===== showLocationData() exec =====");
+    Logger::log(Logger::DEBUG, "Location Path: [" + this->getPath() + "]");
+    Logger::log(Logger::DEBUG, "Root Dir: [" + this->getRootDir() + "]");
+    Logger::log(Logger::DEBUG, "Index: [" + this->getData("index") + "]");
+    Logger::log(Logger::DEBUG, "Autoindex: [" + this->getData("autoindex") + "]");
+    Logger::log(Logger::DEBUG, "===================================");
 }
+
 
 
 std::string LocationConf::getData(std::string key) const {

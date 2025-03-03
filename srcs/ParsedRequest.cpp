@@ -54,14 +54,21 @@ void ParsedRequest::parseHttpRequest(const std::string &request) {
 
 	if (_headers.find("host") != _headers.end()) {
 		_host = getData("host");
+		Logger::log(Logger::DEBUG, "host (before separation parseHttpRequest): " + _host);
 		size_t colon = _host.find(':');
-		_host = _host.substr(0, colon);
-		_port = std::atoi(_host.substr(colon + 1).c_str());
+
+		if (colon != std::string::npos && colon + 1 < _host.size()) {
+			std::string portStr = _host.substr(colon + 1);
+			_port = std::atoi(portStr.c_str());
+			_host = _host.substr(0, colon);
+			Logger::log(Logger::DEBUG, "host (after sep parseHttpReqeust): " + _host);
+		} else {
+			_port = 8080; // default port
+		}
 		_headers["host"] = _host;
-		_headers["port"] = _port;
+		_headers["port"] = Utils::intToString(_port);
 	} else {
 		_host = "localhost";
-		_port = 8080;  // default port
 	}
 
 	if (_method == "POST") {

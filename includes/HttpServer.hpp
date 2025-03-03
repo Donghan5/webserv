@@ -3,6 +3,8 @@
 #pragma once
 
 #include <iostream>
+#include <string>
+#include <cstring>
 #include <map>
 #include <errno.h>
 #include <algorithm>
@@ -18,10 +20,8 @@
 
 class HttpServer {
 	private:
-		int port;
 		WebServConf _webconf;
 		bool running;
-		static const int BUFFER_SIZE = 4096;
 		static const int MAX_EVENTS = 100;
 		std::map<int, int> server_fds;
 		std::vector<struct pollfd> poll_fds;

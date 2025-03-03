@@ -13,43 +13,15 @@ HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(
 	for (size_t i = 0; i < serverConfigs.size(); ++i) {
 		int port = std::atoi(serverConfigs[i].getData("listen").c_str());
 		std::string server_name = serverConfigs[i].getData("server_name");
-		std::vector<int>::iterator it = std::find(unique_ports.begin(), unique_ports.end(), port);
-		if (port > 0 && it == unique_ports.end()) {
+		if (port > 0 && server_fds.find(port) == server_fds.end()) {
 			unique_ports.push_back(port);
+			server_fds[port] = -1;
 		}
 
 		if (!server_name.empty()) {
-			if (server_name_to_fd.find(server_name) == server_name_to_fd.end()) {
-				server_name_to_fd[server_name] = -1;
-			}
+			server_name_to_fd[server_name] = -1;
 		}
-
-		if (port > 0 && server_fds.find(port) != server_fds.end()) {
-			int server_fd = server_fds[port];
-			server_name_to_fd[server_name] = server_fd;
-			Logger::log(Logger::INFO, "Mapped Server Name: " + server_name + " -> FD: " + Utils::intToString(server_fd));
-		}
-
-		Logger::log(Logger::INFO, "Server Config - Port: " + Utils::intToString(port) +
-                ", Server Name: " + server_name +
-                ", Mapped FD: " + (server_name_to_fd.find(server_name) != server_name_to_fd.end() ?
-                Utils::intToString(server_name_to_fd[server_name]) : "Not Assigned"));
 	}
-
-	Logger::log(Logger::INFO, "===================== Start DEBUG ========================");
-
-	Logger::log(Logger::INFO, "===== Port to FD Mapping =====");
-	for (std::map<int, int>::iterator it = server_fds.begin(); it != server_fds.end(); ++it) {
-		Logger::log(Logger::INFO, "Port: " + Utils::intToString(it->first) + " -> FD: " + Utils::intToString(it->second));
-	}
-
-	Logger::log(Logger::INFO, "===== Server Name to FD Mapping =====");
-	for (std::map<std::string, int>::iterator it = server_name_to_fd.begin(); it != server_name_to_fd.end(); ++it) {
-		Logger::log(Logger::INFO, "Server Name: " + it->first + " -> FD: " + Utils::intToString(it->second));
-	}
-
-	Logger::log(Logger::INFO, "===================== End DEBUG ========================");
-
 
 	for (size_t i = 0; i < unique_ports.size(); ++i) {
 		int server_fd = SocketManager::createSocket();
@@ -63,6 +35,7 @@ HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(
 		SocketManager::listenSocket(server_fd);
 
 		server_fds[unique_ports[i]] = server_fd;
+
 		std::cout << "Server bound and listening on port " << unique_ports[i] << std::endl;
 
 		// Add server socket to poll set
@@ -71,6 +44,31 @@ HttpServer::HttpServer(const WebServConf& webconf) : _webconf(webconf), running(
 		server_pollfd.events = POLLIN;
 		server_pollfd.revents = 0;
 		poll_fds.push_back(server_pollfd);
+	}
+
+	for (size_t i = 0; i < serverConfigs.size(); ++i) {
+		int port = std::atoi(serverConfigs[i].getData("listen").c_str());
+		std::string server_name = serverConfigs[i].getData("server_name");
+
+		if (!server_name.empty() && server_fds.find(port) != server_fds.end()) {
+			server_name_to_fd[server_name] = server_fds[port];
+			Logger::log(Logger::INFO, "Mapped Server Name: " + server_name + " -> FD: " + Utils::intToString(server_fds[port]));
+		}
+
+		Logger::log(Logger::INFO, "Server Config - Port: " + Utils::intToString(port) +
+                ", Server Name: " + server_name +
+                ", Mapped FD: " + (server_name_to_fd.find(server_name) != server_name_to_fd.end() ?
+                Utils::intToString(server_name_to_fd[server_name]) : "Not Assigned"));
+	}
+
+	Logger::log(Logger::INFO, "===== Port to FD Mapping =====");
+	for (std::map<int, int>::iterator it = server_fds.begin(); it != server_fds.end(); ++it) {
+		Logger::log(Logger::INFO, "Port: " + Utils::intToString(it->first) + " -> FD: " + Utils::intToString(it->second));
+	}
+
+	Logger::log(Logger::INFO, "===== Server Name to FD Mapping =====");
+	for (std::map<std::string, int>::iterator it = server_name_to_fd.begin(); it != server_name_to_fd.end(); ++it) {
+		Logger::log(Logger::INFO, "Server Name: " + it->first + " -> FD: " + Utils::intToString(it->second));
 	}
 }
 

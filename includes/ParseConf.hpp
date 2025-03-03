@@ -6,6 +6,7 @@
 #include "ConfigParser.hpp"
 #include "ConfigAccess.hpp"
 #include "WebServConf.hpp"
+#include "Utils.hpp"
 
 class WebServConf;
 

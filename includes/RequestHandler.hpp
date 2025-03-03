@@ -9,6 +9,7 @@
 #include "Logger.hpp"
 #include "CgiHandler.hpp"
 #include "WebServConf.hpp"
+#include "Utils.hpp"
 
 #define REQUEST200 "HTTP/1.1 200 OK\r\n\r\nFile deleted successfully"
 #define REQUEST201 "HTTP/1.1 201 Created\r\n\r\nFile uploaded successfully"

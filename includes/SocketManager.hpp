@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <cstring>
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <unistd.h>

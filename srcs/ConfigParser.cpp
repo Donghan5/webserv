@@ -1,4 +1,5 @@
 #include "../includes/ConfigParser.hpp"
+#include "../includes/Logger.hpp"
 
 void ConfigParser::skipWhitespace(void) {
 	while (pos < input.length() && (std::isspace(input[pos]) || input[pos] == '#')) {
@@ -81,7 +82,7 @@ ConfigBlock* ConfigParser::parseBlock(void) {
 			}
 			this->skipWhitespace();
 		}
-
+		// Logger::log(Logger::DEBUG, "Parsing line (parseBlock function):\n" + input);
 		if (pos < input.length() && input[pos] == '}') {
 			pos++;
 			return block;

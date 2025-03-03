@@ -135,10 +135,17 @@ std::string WebServConf::resolveRoot(std::string host, std::string requestPath) 
 
 ServerConf *WebServConf::findMatchingServer(const std::string &host, int port) {
 	ServerConf *defaultServer = NULL;
+	Logger::log(Logger::DEBUG, "Entered host (findMatchingServer): " + host);
 
 	const std::vector<ServerConf> &servers = _hconf->getServerConfig();
 
+	if (servers.empty()) {
+		Logger::log(Logger::ERROR, "Wait, what? servers is empty?");
+		return NULL;
+	}
+	
 	for (size_t i = 0; i < servers.size(); ++i) {
+		Logger::log(Logger::DEBUG, "listen value: " + servers[i].getData("listen"));
 		if (servers[i].getData("listen") == Utils::intToString(port)) {
 			if (!defaultServer) { // first server is default server
 				defaultServer = const_cast<ServerConf*>(&servers[i]);
@@ -146,15 +153,22 @@ ServerConf *WebServConf::findMatchingServer(const std::string &host, int port) {
 		}
 
 		std::string serverNames = servers[i].getData("server_name");
+		Logger::log(Logger::DEBUG, "server_name: " + serverNames);
 		if (!serverNames.empty()) {
 			std::vector<std::string> names = Utils::split(serverNames, ' ');
+			if (names.empty()) {
+				Logger::log(Logger::ERROR, "No server name found in" + serverNames);
+			}
 			for(size_t j = 0; j < names.size(); ++j) {
+				Logger::log(Logger::DEBUG, "Checking server name: [" + names[j] + "] vs Host: [" + host + "]");
+				Logger::log(Logger::DEBUG, "Checking server name: " + names[j]);
 				if (names[j] == host) {
-					return const_cast<ServerConf*>(&servers[j]);
+					return const_cast<ServerConf*>(&servers[i]);
 				}
 			}
 		}
 	}
+	Logger::log(Logger::ERROR, "No matching server found, return defalut server");
 	return defaultServer;
 }
 
