@@ -28,7 +28,7 @@ const std::string& ConfigBlock::getName() const { return name; }
 
 const std::vector<std::string>& ConfigBlock::getParameters() const { return parameters; }
 
-std::string ConfigBlock::toString(int indent) const {
+std::string ConfigBlock::toString(int indent = 0) const {
 	std::string result(indent, ' ');
 	result += name;
 	for (size_t i = 0; i < parameters.size(); ++i) {

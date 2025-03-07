@@ -44,7 +44,7 @@ std::string Logger::logLevelToString(LogLevel level) {
 	Save the log
 */
 void Logger::log(LogLevel level, const std::string &message) {
-	std::string logEntry = "[" + Logger::getCurrentTime() + "] " + Logger::logLevelToString(level) + ": " + message;
+	std::string logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
 
 	if (logFile.is_open()) {
 		logFile << logEntry << std::endl;

@@ -9,7 +9,7 @@ const std::string& ConfigDirective::getName() const { return name; }
 const std::vector<std::string>& ConfigDirective::getParameters() const { return parameters; }
 
 void ConfigDirective::addParameter(const std::string& param) {
-parameters.push_back(param);
+	parameters.push_back(param);
 }
 
 std::string ConfigDirective::toString(int indent) const {

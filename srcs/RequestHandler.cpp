@@ -19,7 +19,6 @@ std::string RequestHandler::process_request(const std::string &request) {
 	Logger::log(Logger::DEBUG, "===== Processing Request =====");
 
 	ParsedRequest parser(request);
-	WebServConf webconf;
 
 	std::string method = parser.getMethod();
 	std::string path = parser.getPath();
@@ -34,15 +33,7 @@ std::string RequestHandler::process_request(const std::string &request) {
 	Logger::log(Logger::DEBUG, "Host (process_request): " + host);
 	Logger::log(Logger::DEBUG, "Port (process_request): " + Utils::intToString(port));
 	Utils::trimString(host);
-	ServerConf *server = webconf.findMatchingServer(host, port);
-	if (!server) {
-		return "HTTP/1.1 404 Not Found\r\n\r\nNo matching server found";
-	}
 
-	LocationConf *location = webconf.findMatchingLocation(*server, path);
-	if (!location) {
-		return "HTTP/1.1 404 Not Found\r\n\r\nNo matching location found";
-	}
 
 	std::string full_path = location->getRootDir() + path;
 	std::string extension = path.substr(path.find_last_of("."));

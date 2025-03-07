@@ -6,6 +6,13 @@ std::string Utils::intToString(int num) {
 	return oss.str();
 }
 
+int Utils::stringToInt(const std::string& str) {
+    std::stringstream ss(str);
+    int result;
+    ss >> result;
+    return result;
+}
+
 std::string &Utils::trimString(std::string &str) {
 	const std::string whitespace = " \t\r\n";
 	size_t start = str.find_first_not_of(whitespace);

@@ -12,6 +12,7 @@
 class Utils {
 	public:
 		static std::string intToString(int num);
+		static int stringToInt(const std::string& str);
 		static std::string &trimString(std::string &str);
 		static std::vector<std::string> split(const std::string &str, char delimiter);
 };

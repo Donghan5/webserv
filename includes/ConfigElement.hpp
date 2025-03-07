@@ -1,10 +1,8 @@
-#ifndef ACONFIGELEMENT_HPP
-#define ACONFIGELEMENT_HPP
+#ifndef CONFIGELEMENT_HPP
+#define CONFIGELEMENT_HPP
 #pragma once
 
 #include <string>
-#include <vector>
-#include <map>
 
 class ConfigElement {
 	public:

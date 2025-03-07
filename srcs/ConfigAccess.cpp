@@ -1,6 +1,6 @@
 #include "../includes/ConfigAccess.hpp"
 
-bool ConfigAccess::getDirectiveValue(const ConfigBlock *block, const std::string &directiveName, std::string &outValue, size_t paramIndex) {
+static bool ConfigAccess::getDirectiveValue(const ConfigBlock* block, const std::string& directiveName, std::string& outValue, size_t paramIndex) {
 	const std::vector<ConfigElement*>& children = block->getChildren();
 	for (size_t i = 0; i < children.size(); ++i) {
 		const ConfigDirective* directive = dynamic_cast<const ConfigDirective*>(children[i]);
@@ -15,11 +15,8 @@ bool ConfigAccess::getDirectiveValue(const ConfigBlock *block, const std::string
 	return false;
 }
 
-ConfigBlock *ConfigAccess::findFirstServerBlock(const ConfigBlock *rootBlock) {
-	if (!rootBlock) {
-		return NULL;
-	}
-	const std::vector<ConfigElement*>& elements = rootBlock->getChildren();
+static ConfigBlock* ConfigAccess::findFirstServerBlock(const Config* config) {
+	const std::vector<ConfigElement*>& elements = config->getElements();
 	for (size_t i = 0; i < elements.size(); ++i) {
 		ConfigBlock* httpBlock = dynamic_cast<ConfigBlock*>(elements[i]);
 		if (httpBlock && httpBlock->getName() == "http") {
@@ -35,10 +32,10 @@ ConfigBlock *ConfigAccess::findFirstServerBlock(const ConfigBlock *rootBlock) {
 	return NULL;
 }
 
-/*
-	To get location block
-*/
-ConfigBlock *ConfigAccess::findLocationBlock(const ConfigBlock *serverBlock, const std::string &path) {
+static ConfigBlock* ConfigAccess::findLocationBlock(
+	const ConfigBlock* serverBlock,
+	const std::string& path
+) {
 	const std::vector<ConfigElement*>& children = serverBlock->getChildren();
 	for (size_t i = 0; i < children.size(); ++i) {
 		ConfigBlock* locationBlock = dynamic_cast<ConfigBlock*>(children[i]);
@@ -52,17 +49,9 @@ ConfigBlock *ConfigAccess::findLocationBlock(const ConfigBlock *serverBlock, con
 	return NULL;
 }
 
-/*
-	To get all server blocks
-*/
-std::vector<ConfigBlock*> ConfigAccess::getAllServerBlocks(const ConfigBlock *rootBlock) {
+static std::vector<ConfigBlock*> ConfigAccess::getAllServerBlocks(const Config* config) {
 	std::vector<ConfigBlock*> servers;
-
-	if (!rootBlock) {
-		return servers;
-	}
-
-	const std::vector<ConfigElement*>& elements = rootBlock->getChildren();
+	const std::vector<ConfigElement*>& elements = config->getElements();
 	for (size_t i = 0; i < elements.size(); ++i) {
 		ConfigBlock* httpBlock = dynamic_cast<ConfigBlock*>(elements[i]);
 		if (httpBlock && httpBlock->getName() == "http") {
@@ -78,20 +67,14 @@ std::vector<ConfigBlock*> ConfigAccess::getAllServerBlocks(const ConfigBlock *ro
 	return servers;
 }
 
-/*
-	To find event blocks
-*/
-ConfigBlock *ConfigAccess::findEventBlock(ConfigBlock* rootBlock) {
-	if (!rootBlock) {
-		return NULL;
-	}
-
-	const std::vector<ConfigElement*>& elements = rootBlock->getChildren();
-	for (size_t i = 0; i < elements.size(); ++i) {
-		ConfigBlock *eventBlock = dynamic_cast<ConfigBlock*>(elements[i]);
-		if (eventBlock && eventBlock->getName() == "events") {
-			return eventBlock;
+static std::vector<ConfigDirective*> ConfigAccess::getDirectives(const ConfigBlock* block, const std::string& directiveName) {
+	std::vector<ConfigDirective*> directives;
+	const std::vector<ConfigElement*>& children = block->getChildren();
+	for (size_t i = 0; i < children.size(); ++i) {
+		ConfigDirective* directive = dynamic_cast<ConfigDirective*>(children[i]);
+		if (directive && directive->getName() == directiveName) {
+			directives.push_back(directive);
 		}
 	}
-	return NULL;
+	return directives;
 }

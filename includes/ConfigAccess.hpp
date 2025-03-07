@@ -2,18 +2,18 @@
 #define CONFIGACCESS_HPP
 
 #include <iostream>
-#include <string>
-#include <vector>
-#include "ConfigBlock.hpp"
-#include "ParseConf.hpp"
 
 class ConfigAccess {
 	public:
 		static bool getDirectiveValue(const ConfigBlock* block, const std::string& directiveName, std::string& outValue, size_t paramIndex = 0);
-		static ConfigBlock* findFirstServerBlock(const ConfigBlock* rootBlock);
+
+		static ConfigBlock* findFirstServerBlock(const Config* config);
+
 		static ConfigBlock* findLocationBlock(const ConfigBlock* serverBlock, const std::string& path);
-		static std::vector<ConfigBlock*> getAllServerBlocks(const ConfigBlock* rootBlock);
-		static ConfigBlock *findEventBlock(ConfigBlock* rootBlock);
+
+		static std::vector<ConfigBlock*> getAllServerBlocks(const Config* config);
+
+		static std::vector<ConfigDirective*> getDirectives(const ConfigBlock* block, const std::string& directiveName);
 };
 
 #endif // CONFIGACCESS_HPP
