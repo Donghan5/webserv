@@ -8,20 +8,7 @@
 #include <sstream>
 #include <algorithm>
 
-// Helper function to make socket non-blocking
-void HttpServer::make_non_blocking(int fd)
-{
-	int flags = fcntl(fd, F_GETFL, 0);
-	if (flags == -1)
-	{
-		throw std::runtime_error("Failed to get socket flags");
-	}
-	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
-	{
-		throw std::runtime_error("Failed to set socket non-blocking");
-	}
-}
-
+// Go to Utils class.....?????
 // Helper function to check if file exists
 bool HttpServer::file_exists(const std::string &path)
 {
@@ -241,6 +228,9 @@ HttpServer::HttpServer(Config* conf) : running(false) {
     }
 }
 
+/*
+	Find server block in the vector
+*/
 ServerConfig* HttpServer::findMatchingServer(const std::string& host, int port) {
     ServerConfig* default_server = NULL;
 
@@ -263,6 +253,9 @@ ServerConfig* HttpServer::findMatchingServer(const std::string& host, int port) 
     return default_server;
 }
 
+/*
+	Finding the location in the vector
+*/
 Location* HttpServer::findMatchingLocation(const ServerConfig& server, const std::string& path) {
     std::cerr << "DEBUG: Finding location for path: " << path << std::endl;
 
@@ -366,7 +359,7 @@ void HttpServer::start()
                     continue;
                 }
 
-                make_non_blocking(client_fd);
+                Socket::makeNonBlocking(client_fd);
 
                 // Add to poll set
                 struct pollfd client_pollfd;
@@ -424,8 +417,8 @@ HttpServer::~HttpServer() {
 			stop();
 		}
 		clearResources();
-	} catch (...) {
-		// Ensure no exceptions escape destructor
+	} catch (const std::exception &e) {
+		(void)e;
 	}
 }
 
@@ -460,6 +453,7 @@ void HttpServer::initializeServerBlock(ConfigBlock* serverBlock, ServerConfig& c
     processLocationBlocks(serverBlock, config);
 
     // Check for SSL configuration
+	// Remove ssl part
     std::string ssl_cert, ssl_key;
     if (ConfigAccess::getDirectiveValue(serverBlock, "ssl_certificate", ssl_cert)) {
         config.ssl_enabled = true;
@@ -661,7 +655,7 @@ void HttpServer::processLocationBlock(ConfigBlock* locationBlock, Location& loca
                 std::cerr << "DEBUG: Added allowed method: " << upperMethod << " for path: " << location.path << std::endl;
             }
         }
-        else if (directive->getName() == "root") {
+        else if (directive->getName() == "root") {  // root directive
             // If explicit root is specified, it overrides the combined path
             std::string path_value = directive->getParameters()[0];
             if (path_value[0] != '/') {
@@ -747,7 +741,7 @@ void HttpServer::processLocationBlock(ConfigBlock* locationBlock, Location& loca
         }
     }
 
-    // Process autoindex
+    // Process autoindex autoindex in boolean value?
     std::string autoindex;
     if (ConfigAccess::getDirectiveValue(locationBlock, "autoindex", autoindex)) {
         location.autoindex = (autoindex == "on");
@@ -1035,7 +1029,7 @@ std::string HttpServer::handleDELETE(const std::string& path, Location* location
 
 std::string HttpServer::process_request(const std::string& request) {
     // Parse method and path
-    size_t method_end = request.find(' ');
+    size_t method_end = request.find(' '); // method is in front of all
     if (method_end == std::string::npos) {
         return createResponse(400, "text/plain", "Bad Request");
     }
@@ -1099,7 +1093,7 @@ std::string HttpServer::process_request(const std::string& request) {
                 std::cerr << "DEBUG: POST body length: " << body.length() << std::endl;
             }
 
-            if (body.empty()) {
+            if (body.empty()) {  // Empty body
                 std::cerr << "DEBUG: Empty POST body" << std::endl;
                 return createResponse(400, "text/plain", "Empty request body");
             }
@@ -1129,7 +1123,7 @@ std::string HttpServer::saveUploadedFile(const std::string& path, const std::str
     size_t pos = path.find_last_of('/');
     if (pos != std::string::npos) {
         std::string dir = path.substr(0, pos);
-        system(("mkdir -p '" + dir + "'").c_str());
+        system(("mkdir -p '" + dir + "'").c_str()); // create directory
     }
 
     // Save the file
@@ -1163,7 +1157,7 @@ std::string HttpServer::getMimeType(const std::string& path) {
 }
 
 bool HttpServer::isMethodAllowed(const Location* location, const std::string& method) {
-    if (!location) {
+    if (!location) { // invalid format?
         std::cerr << "DEBUG: No location for method check" << std::endl;
         return false;
     }

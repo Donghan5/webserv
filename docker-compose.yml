@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+   webserv:
+     build: .
+     container_name: webserv
+     volumes:
+       - "/Users/donghank/webserv:/mnt/project"
+     ports:
+      - "80:80"
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+      - "8083:8083"
+      - "8084:8084"
+      - "8085:8085"
+      - "8086:8086"
+      - "8087:8087"
+     tty: true
