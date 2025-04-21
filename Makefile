@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -pthread -Iincludes
+CFLAGS = -std=c++98 -Iincludes #-Wall -Wextra -Werror
 
 # Target executable name
 NAME = webserv
@@ -10,13 +10,11 @@ SRC_DIR = srcs
 OBJ_DIR = objs
 
 # Source files
-SRCS = $(SRC_DIR)/test.cpp $(SRC_DIR)/EventConf.cpp $(SRC_DIR)/HttpConf.cpp \
-       $(SRC_DIR)/LocationConf.cpp $(SRC_DIR)/ParseConf.cpp $(SRC_DIR)/ServerConf.cpp \
-	   $(SRC_DIR)/HttpServer.cpp $(SRC_DIR)/WebServConf.cpp $(SRC_DIR)/ParsedRequest.cpp \
-	   $(SRC_DIR)/FileHandler.cpp $(SRC_DIR)/Logger.cpp $(SRC_DIR)/CgiHandler.cpp \
-	   $(SRC_DIR)/ConfigAccess.cpp $(SRC_DIR)/ConfigParser.cpp $(SRC_DIR)/ConfigBlock.cpp \
-	   $(SRC_DIR)/ConfigDirective.cpp $(SRC_DIR)/Utils.cpp $(SRC_DIR)/ClientManager.cpp \
-	   $(SRC_DIR)/SocketManager.cpp $(SRC_DIR)/RequestHandler.cpp
+SRCS =  $(SRC_DIR)/AConfigBase.cpp $(SRC_DIR)/HttpConfig.cpp $(SRC_DIR)/LocationConfig.cpp \
+		$(SRC_DIR)/ServerConfig.cpp $(SRC_DIR)/main.cpp $(SRC_DIR)/Parser.cpp \
+		$(SRC_DIR)/PollServer.cpp  $(SRC_DIR)/RequestsManager.cpp $(SRC_DIR)/Request.cpp \
+		$(SRC_DIR)/Response.cpp $(SRC_DIR)/CgiHandler.cpp \
+		$(SRC_DIR)/Logger.cpp $(SRC_DIR)/Utils.cpp
 
 # Object files (convert .cpp to .o)
 OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)

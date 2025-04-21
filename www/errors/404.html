@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
+    
+    @keyframes twinkle {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+    
+    .container {
+      text-align: center;
+      z-index: 1;
+      padding: 2rem;
+      background-color: rgba(15, 23, 42, 0.7);
+      border-radius: 1rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 90%;
+      width: 600px;
+    }
+    
+    h1 {
+      font-size: 8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: #94a3b8;
+    }
+    
+    p {
+      margin-bottom: 2rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    
+    .button {
+      display: inline-block;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      color: white;
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.3);
+    }
+    
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 25px -5px rgba(56, 189, 248, 0.4);
+    }
+    
+    .ufo {
+      position: relative;
+      width: 200px;
+      height: 100px;
+      margin: 0 auto 2rem;
+    }
+    
+    .ufo-body {
+      position: absolute;
+      top: 40px;
+      left: 50px;
+      width: 100px;
+      height: 30px;
+      background: linear-gradient(to bottom, #818cf8, #4f46e5);
+      border-radius: 50px;
+      box-shadow: 0 0 20px rgba(129, 140, 248, 0.6);
+    }
+    
+    .ufo-cockpit {
+      position: absolute;
+      top: 20px;
+      left: 75px;
+      width: 50px;
+      height: 25px;
+      background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
+      border-radius: 25px 25px 0 0;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+    }
+    
+    .beam {
+      position: absolute;
+      top: 70px;
+      left: 85px;
+      width: 30px;
+      height: 50px;
+      background: linear-gradient(to bottom, rgba(56, 189, 248, 0.7), rgba(56, 189, 248, 0));
+      border-radius: 15px;
+      animation: beam 2s ease-in-out infinite;
+    }
+    
+    @keyframes beam {
+      0%, 100% { height: 30px; opacity: 0.5; }
+      50% { height: 50px; opacity: 0.8; }
+    }
+    
+    .lost-astronaut {
+      position: absolute;
+      width: 30px;
+      height: 40px;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(5deg); }
+      50% { transform: translateY(-10px) rotate(-5deg); }
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 5rem;
+      }
+      .subtitle {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  
+  <div class="container">
+    <div class="ufo">
+      <div class="ufo-cockpit"></div>
+      <div class="ufo-body"></div>
+      <div class="beam">
+        <svg class="lost-astronaut" viewBox="0 0 24 24" fill="white">
+          <path d="M12,3C10.89,3 10,3.89 10,5C10,6.11 10.89,7 12,7C13.11,7 14,6.11 14,5C14,3.89 13.11,3 12,3M12,8C8.69,8 6,10.69 6,14C6,17.31 8.69,20 12,20C15.31,20 18,17.31 18,14C18,10.69 15.31,8 12,8Z" />
+        </svg>
+      </div>
+    </div>
+    <h1>404</h1>
+    <div class="subtitle">Houston, we have a problem!</div>
+    <p>The page you're looking for has drifted off into space or never existed in the first place. Let's get you back to familiar territory.</p>
+    <a href="/" class="button">Return to Home</a>
+  </div>
+
+  <script>
+    // Create twinkling stars
+    const starsContainer = document.getElementById('stars');
+    const numberOfStars = 100;
+    
+    for (let i = 0; i < numberOfStars; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      
+      // Random size between 1-3px
+      const size = Math.random() * 2 + 1;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      
+      // Random position
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      
+      // Random animation delay
+      star.style.animationDelay = `${Math.random() * 2}s`;
+      
+      starsContainer.appendChild(star);
+    }
+  </script>
+</body>
+</html>

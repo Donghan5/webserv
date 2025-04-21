@@ -1,0 +1,240 @@
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f5f6fa;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --text-color: #2c3e50;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.header h1 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.cookie-form, .cookie-display {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    box-shadow: var(--shadow);
+}
+
+form div {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+label {
+    min-width: 120px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+button[type="submit"] {
+    background: var(--primary-color);
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background: #357abd;
+}
+
+.logout-btn {
+    background: var(--danger-color);
+    color: white;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+.delete-btn {
+    background: var(--danger-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+.refresh-btn {
+    background: var(--success-color);
+    color: white;
+    margin-top: 1rem;
+}
+
+.refresh-btn:hover {
+    background: #27ae60;
+}
+
+#cookieList {
+    margin-top: 1rem;
+}
+
+#cookieList ul {
+    list-style: none;
+    padding: 0;
+}
+
+#cookieList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: var(--secondary-color);
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+#cookieList li:hover {
+    background: #e8eaf6;
+}
+
+.cookie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: var(--secondary-color);
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.cookie-item:hover {
+    background: #e8eaf6;
+    transform: translateX(5px);
+}
+
+.cookie-content {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.cookie-name {
+    font-weight: bold;
+    color: var(--primary-color);
+    min-width: 120px;
+}
+
+.cookie-value {
+    color: var(--text-color);
+    word-break: break-all;
+}
+
+#message {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    text-align: center;
+    padding: 1rem;
+    background: #fee;
+    border-radius: 4px;
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--secondary-color);
+}
+
+.auth-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.auth-links a:hover {
+    color: #357abd;
+}
+
+.cookie-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cookie-info small {
+    color: #666;
+    font-style: italic;
+    font-size: 0.8em;
+}

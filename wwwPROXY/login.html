@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Cookie Manager</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-cookie-bite"></i> Cookie Manager</h1>
+        </div>
+        <div class="cookie-form">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div>
+                    <label for="username"><i class="fas fa-user"></i> Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div>
+                    <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div style="justify-content: center;">
+                    <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+                </div>
+            </form>
+            <div id="message"></div>
+            <div class="auth-links">
+                <p>Don't have an account? <a href="/register.html">Register here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    credentials: 'include',
+                    body: new URLSearchParams({
+                        'username': document.getElementById('username').value,
+                        'password': document.getElementById('password').value
+                    })
+                });
+                
+                const text = await response.text();
+                console.log('Raw response:', text);  // Debug log
+
+                try {
+                    const data = JSON.parse(text);
+                    if (response.ok) {
+                        messageDiv.textContent = 'Login successful!';
+                        window.location.href = '/index.html';
+                    } else {
+                        messageDiv.textContent = data.message || 'Login failed';
+                    }
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    messageDiv.textContent = 'Server error: Invalid response format';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

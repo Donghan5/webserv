@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 Forbidden</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        
+        .error-container {
+            max-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .error-code {
+            font-size: 96px;
+            font-weight: 700;
+            color: #dc3545;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        
+        .error-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        
+        .error-actions {
+            margin-top: 30px;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #0d6efd;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .button:hover {
+            background-color: #0b5ed7;
+        }
+        
+        .error-help {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .error-help ul {
+            text-align: left;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .error-help li {
+            margin-bottom: 8px;
+        }
+        
+        .error-icon {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            .error-container {
+                padding: 30px 20px;
+            }
+            
+            .error-code {
+                font-size: 72px;
+            }
+            
+            .error-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        </div>
+        <h1 class="error-code">403</h1>
+        <h2 class="error-title">Forbidden</h2>
+        <p class="error-message">You don't have permission to access this resource. The server understood the request but refuses to authorize it.</p>
+        
+        <div class="error-help">
+            <h3>Possible causes:</h3>
+            <ul>
+                <li>You don't have sufficient permissions</li>
+                <li>Your IP address is blocked</li>
+                <li>Access to this directory is restricted</li>
+                <li>Security policies prevent access to this resource</li>
+            </ul>
+        </div>
+        
+        <div class="error-actions">
+            <a href="/" class="button">Return to Homepage</a>
+        </div>
+    </div>
+</body>
+</html>
