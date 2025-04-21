@@ -76,9 +76,9 @@ void PollServer::setConfig(HttpConfig *config) {
 	 for (std::map<int, STR>::iterator it = unique_servers.begin(); it != unique_servers.end(); ++it) {
         int port = it->first;
         STR server_addr_str = it->second;
-        
+
         Logger::log(Logger::INFO, "Setting up server on " + server_addr_str + ":" + intToString(port));
-        
+
         // Create socket
         int server_socket = socket(AF_INET, SOCK_STREAM, 0);
         if (server_socket < 0) {
@@ -89,7 +89,7 @@ void PollServer::setConfig(HttpConfig *config) {
         // struct timeval timeout;
         // timeout.tv_sec = 5;  // Increased to 5 seconds for better handling
         // timeout.tv_usec = 0;
-        
+
         // if (setsockopt(server_socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0) {
         //     close(server_socket);
         //     throw std::runtime_error("Failed to set receive timeout: " + std::string(strerror(errno)));
@@ -113,7 +113,7 @@ void PollServer::setConfig(HttpConfig *config) {
             close(server_socket);
             throw std::runtime_error("Failed to get socket flags: " + std::string(strerror(errno)));
         }
-        
+
         if (fcntl(server_socket, F_SETFL, flags | O_NONBLOCK) == -1) {
             close(server_socket);
             throw std::runtime_error("Failed to set non-blocking mode: " + std::string(strerror(errno)));
@@ -124,7 +124,7 @@ void PollServer::setConfig(HttpConfig *config) {
         memset(&addr, 0, sizeof(addr));
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);
-        
+
         if (server_addr_str == "0.0.0.0") {
             addr.sin_addr.s_addr = htonl(INADDR_ANY);
         } else {
@@ -137,28 +137,28 @@ void PollServer::setConfig(HttpConfig *config) {
             int status = getaddrinfo(server_addr_str.c_str(), NULL, &hints, &result);
             if (status != 0) {
                 close(server_socket);
-                throw std::runtime_error("Failed to parse IP address: " + 
+                throw std::runtime_error("Failed to parse IP address: " +
                                          std::string(gai_strerror(status)));
             }
 
             memcpy(&addr.sin_addr,
                    &((struct sockaddr_in*)result->ai_addr)->sin_addr,
                    sizeof(struct in_addr));
-            
+
             freeaddrinfo(result);
         }
 
         // Bind socket
         if (bind(server_socket, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
             close(server_socket);
-            throw std::runtime_error("Failed to bind to " + server_addr_str + ":" + 
+            throw std::runtime_error("Failed to bind to " + server_addr_str + ":" +
                                      intToString(port) + " - " + std::string(strerror(errno)));
         }
 
         // Listen for connections
         if (listen(server_socket, SOMAXCONN) < 0) {
             close(server_socket);
-            throw std::runtime_error("Failed to listen on port " + intToString(port) + 
+            throw std::runtime_error("Failed to listen on port " + intToString(port) +
                                      ": " + std::string(strerror(errno)));
         }
 
@@ -181,15 +181,15 @@ void PollServer::setConfig(HttpConfig *config) {
 	struct epoll_event event;
 	event.events = events;
 	event.data.fd = fd;
-	
+
 	if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, fd, &event) < 0) {
 		Logger::cerrlog(Logger::ERROR, "Failed to add fd to epoll");
 		return false;
 	}
-    
+
     // Store the fd type
     _fd_types[fd] = type;
-    
+
 	return true;
 }
 
@@ -206,7 +206,7 @@ bool PollServer::ModifyFd(int fd, uint32_t events) {
 	struct epoll_event event;
 	event.events = events;
 	event.data.fd = fd;
-	
+
 	if (epoll_ctl(_epoll_fd, EPOLL_CTL_MOD, fd, &event) < 0) {
 		Logger::cerrlog(Logger::ERROR, "Failed to modify fd in epoll");
 		return false;
@@ -221,22 +221,22 @@ bool PollServer::RemoveFd(int fd) {
         Logger::cerrlog(Logger::DEBUG, "RemoveFd: File descriptor " + Utils::intToString(fd) + " not found in tracking map");
         return true; // Return success if the fd wasn't in our map
     }
-    
+
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, fd, NULL) < 0) {
         if (errno == EBADF || errno == ENOENT) {
             // The fd is invalid or was already removed, just clean up our tracking
-            Logger::cerrlog(Logger::DEBUG, "RemoveFd: File descriptor " + Utils::intToString(fd) + 
+            Logger::cerrlog(Logger::DEBUG, "RemoveFd: File descriptor " + Utils::intToString(fd) +
                         " was already closed or removed from epoll");
         } else {
-            Logger::cerrlog(Logger::ERROR, "Failed to remove fd from epoll: " + 
+            Logger::cerrlog(Logger::ERROR, "Failed to remove fd from epoll: " +
                         std::string(strerror(errno)));
             return false;
         }
     }
-    
+
     // Remove from fd type tracking
     _fd_types.erase(fd);
-    
+
     return true;
 }
 
@@ -250,24 +250,24 @@ bool PollServer::AddServerSocket(int port, int socket_fd) {
 void PollServer::AcceptClient(int server_fd) {
 	struct sockaddr_in client_addr;
 	socklen_t client_len = sizeof(client_addr);
-	
+
 	int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_len);
 	if (client_fd < 0) {
 		Logger::cerrlog(Logger::ERROR, "Failed to accept client connection");
 		return;
 	}
-	
+
 	// Set non-blocking
 	int flags = fcntl(client_fd, F_GETFL, 0);
 	fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
-	
+
 	// Add to epoll for read events
 	if (!AddFd(client_fd, EPOLLIN | EPOLLET, CLIENT_FD)) {
 		Logger::cerrlog(Logger::ERROR, "Failed to add client fd to epoll");
 		close(client_fd);
 		return;
 	}
-	
+
 	Logger::cerrlog(Logger::INFO, "New client connection accepted: " + intToString(client_fd));
 }
 
@@ -280,44 +280,44 @@ void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
         close(cgi_fd);
         return;
     }
-    
+
     int client_fd = it->second;
     Logger::cerrlog(Logger::INFO, "Processing CGI output for client: " + intToString(client_fd));
-    
+
     try {
         // Process the CGI output
         int result = manager.HandleCgiOutput(cgi_fd);
-        
+
         if (result > 0) {
             // CGI completed, switch client to write mode
             if (!ModifyFd(client_fd, EPOLLOUT | EPOLLET)) {
                 Logger::cerrlog(Logger::ERROR, "Failed to modify client fd for writing");
                 CloseClient(client_fd);
             }
-            
+
             // Remove the CGI fd from epoll and tracking
             RemoveFd(cgi_fd);
             _cgi_to_client.erase(it);
-            
+
             // Don't close the fd here, the Response object owns it
         } else if (result == 0) {
             // Error occurred, clean up
             RemoveFd(cgi_fd);
             _cgi_to_client.erase(it);
             close(cgi_fd);
-            
+
             // Close the client as well
             CloseClient(client_fd);
         }
         // result < 0 means CGI still running, keep monitoring
     } catch (const std::exception& e) {
         Logger::cerrlog(Logger::ERROR, "Error handling CGI output: " + std::string(e.what()));
-        
+
         // Clean up
         RemoveFd(cgi_fd);
         _cgi_to_client.erase(it);
         close(cgi_fd);
-        
+
         // Close the client as well
         CloseClient(client_fd);
     }
@@ -326,7 +326,7 @@ void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
 // Fix the WaitAndService method to properly handle CGI events
 bool PollServer::WaitAndService(RequestsManager &manager) {
     int num_events = epoll_wait(_epoll_fd, &_events[0], MAX_EVENTS, -1);
-    
+
     if (num_events < 0) {
         if (errno == EINTR) {
             // Just a signal interruption, not a real error
@@ -338,10 +338,10 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
             return false;
         }
     }
-    
+
     for (int i = 0; i < num_events; i++) {
         int fd = _events[i].data.fd;
-        
+
         // Get the fd type (if known)
         FdType fd_type = SERVER_FD; // Default to prevent issues
         if (_fd_types.find(fd) != _fd_types.end()) {
@@ -350,11 +350,11 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
             Logger::cerrlog(Logger::WARNING, "Unknown fd type for fd: " + intToString(fd));
             continue; // Skip this fd if we don't know what it is
         }
-        
+
         // Check for errors first
         if (_events[i].events & (EPOLLERR | EPOLLHUP)) {
             Logger::cerrlog(Logger::INFO, "Socket error or hangup for fd: " + intToString(fd));
-            
+
             if (fd_type == SERVER_FD) {
                 Logger::cerrlog(Logger::ERROR, "Error on server socket: " + intToString(fd));
                 // Handle server socket error - possibly try to reopen
@@ -366,10 +366,10 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
                 std::map<int, int>::iterator it = _cgi_to_client.find(fd);
                 if (it != _cgi_to_client.end()) {
                     int client_fd = it->second;
-                    
+
                     // Note: Even a hangup might have produced output we need to read
                     manager.setClientFd(client_fd);
-                    
+
                     try {
                         // Try to read any available data before closing
                         HandleCgiOutput(fd, manager);
@@ -395,7 +395,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
             }
             continue;
         }
-        
+
         // Handle events based on fd type
         if (fd_type == SERVER_FD && (_events[i].events & EPOLLIN)) {
             // Server socket has incoming connection
@@ -405,7 +405,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
             Logger::cerrlog(Logger::INFO, "Event for client fd: " + intToString(fd));
             manager.setClientFd(fd);
             int status = manager.HandleClient(_events[i].events);
-            
+
             if (status == 0) {
                 // Remove client
                 CloseClient(fd);
@@ -441,13 +441,13 @@ void PollServer::CloseClient(int client_fd) {
     if (type_it != _fd_types.end()) {
         _fd_types.erase(type_it);
     }
-    
+
     // Remove from epoll
 	RemoveFd(client_fd);
-    
+
     // Close socket
 	close(client_fd);
-    
+
     // Clear request/response data
 	_partial_requests.erase(client_fd);
 	_partial_responses.erase(client_fd);

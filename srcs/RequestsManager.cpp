@@ -60,14 +60,14 @@ static STR intToString(int num) {
 }
 
 int RequestsManager::HandleRead() {
-    Request request;
+    static Request request;
     static long long body_read = -1;
 
     try {
-        char buffer[1000000];
+        char buffer[1500000];
         int nbytes = 1;
 
-        nbytes = read(_client_fd, buffer, 1000000);
+        nbytes = read(_client_fd, buffer, 1500000);
         if (nbytes <= 0) {
             if (nbytes == 0) {
                 std::cerr << "nbytes == 0\n";
@@ -134,6 +134,7 @@ int RequestsManager::HandleRead() {
 
         if (body_read != -1 && body_read >= (long long)request._body_size) {
             Logger::cerrlog(Logger::INFO, "RequestsManager::HandleRead Full body read!");
+			std::cerr << "body_read is " << body_read << "\n";
             body_read = -1;
 
             request.clear();

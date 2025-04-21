@@ -1,11 +1,23 @@
 
 --- CGI env ---
-CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundarydsNW7fOtKmHb1YoK
-HTTP_COOKIE: visits=1
+CONTENT_LENGTH: 1412797
+CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundary6gyF6Ohgz3hBNXZV
+HTTP_COOKIE: 
 HTTP_HOST: localhost
 QUERY_STRING: 
 REQUEST_METHOD: POST
 SCRIPT_NAME: ./www/cgi-bin/upload.py
-SERVER_PORT: 3434
+SERVER_PORT: 8088
 SERVER_PROTOCOL: HTTP/1.1
 LC_CTYPE: C.UTF-8
+
+--- FORM DATA ---
+Form keys: []
+Form contains 'filename': False
+
+--- POST DATA CHECK ---
+CONTENT_LENGTH: 1412797
+CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundary6gyF6Ohgz3hBNXZV
+stdin data first 100 bytes length: 0
+stdin data first 100 bytes (hex): 
+Detected boundary: ----WebKitFormBoundary6gyF6Ohgz3hBNXZV

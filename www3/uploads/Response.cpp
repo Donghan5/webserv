@@ -187,6 +187,13 @@ void	init_status_codes(std::map<int, STR>	&status_codes) {
 	status_codes[511] = "511 Network Authentication Required";
 }
 
+Response::Response(Request *request, HttpConfig *config) {
+	init_mimetypes(_all_mime_types);
+	init_status_codes(_all_status_codes);
+	_request = request;
+	_config = config;
+}
+
 STR Response::createResponse(int statusCode, const STR& contentType, const STR& body, const STR& extra) {
     std::stringstream response;
     response << "HTTP/1.1 " << _all_status_codes[statusCode] << "\r\n"
@@ -203,22 +210,12 @@ STR Response::createResponse(int statusCode, const STR& contentType, const STR& 
     return response.str();
 }
 
-Response::Response() {
+Response::Response()
+{
 	init_mimetypes(_all_mime_types);
 	init_status_codes(_all_status_codes);
 	_request = NULL;
 	_config = NULL;
-    _cgi_handler = NULL;
-    _state = READY;
-}
-
-Response::Response(Request *request, HttpConfig *config) {
-	init_mimetypes(_all_mime_types);
-	init_status_codes(_all_status_codes);
-	_request = request;
-	_config = config;
-    _cgi_handler = NULL;
-    _state = READY;
 }
 
 Response::Response(const Response &obj) {
@@ -226,31 +223,11 @@ Response::Response(const Response &obj) {
 	_all_status_codes = obj._all_status_codes;
 	_request = obj._request;
 	_config = obj._config;
-    _cgi_handler = NULL; // Don't copy the CGI handler
-    _state = READY;
 }
 
 Response::~Response() {
-    if (_cgi_handler) {
-        delete _cgi_handler;
-        _cgi_handler = NULL;
-    }
+
 }
-
-void Response::clear() {
-	_request = NULL;
-	_config = NULL;
-
-    if (_cgi_handler) {
-        delete _cgi_handler;
-        _cgi_handler = NULL;
-    }
-
-    _state = READY;
-    _response_buffer.clear();
-}
-
-
 
 void Response::setRequest(Request *request) {
 	_request = request;
@@ -470,7 +447,7 @@ STR	Response::selectIndexAll(LocationConfig* location, STR dir_path) {
 }
 
 FileType Response::checkFile(const STR& path) {
-	if (path.empty()) {
+    if (path.empty()) {
 		Logger::cerrlog(Logger::ERROR, "Error: Empty path provided.");
         return NotFound;
     }
@@ -505,11 +482,10 @@ STR	Response::handleGET(STR full_path, bool isDIR) {
 }
 
 STR Response::handlePOST(STR full_path) {
-	Logger::log(Logger::DEBUG, "Response::handlePOST: start");
+	// std::cerr << "DEBUG Response::handlePOST start\n";
 
     // Check if directory exists to upload to
     STR dir_path = full_path.substr(0, full_path.find_last_of('/'));
-	Logger::log(Logger::DEBUG, "Response::handlePOST: dir_path is " + dir_path);
     if (access(dir_path.c_str(), W_OK) != 0) {
         return createErrorResponse(403, "text/plain", "HANDLEPOST ERROR (Forbidden - Cannot write to directory)", NULL);
     }
@@ -896,8 +872,11 @@ STR Response::getResponse() {
 
 	if (_request->_file_path.size() > 1 && _request->_file_path.at(_request->_file_path.size() - 1) == '/') {
 		isDIR = true;
+
+		// std::cerr << "IS DIR : " << _request->_file_path;
 		_request->_file_path = _request->_file_path.substr(0, _request->_file_path.size() - 1);
 		_request->_file_name += '\0';
+		// std::cerr << ", new: " << _request->_file_path << "\n";
 	}
 
 	matchLocation = buildDirPath(matchServer, dir_path, isDIR);
@@ -914,40 +893,6 @@ STR Response::getResponse() {
 	if (temp_str != "")
 		return temp_str;
 
-	//if it's a script file - execute it
-	if (ends_with(dir_path, ".py") || ends_with(dir_path, ".php") || ends_with(dir_path, ".pl") || ends_with(dir_path, ".sh")) {
-		std::map<STR, STR> env;
-
-		env["REQUEST_METHOD"] = _request->_method;
-		env["SCRIPT_NAME"] = dir_path;
-		env["QUERY_STRING"] = _request->_query_string.empty() ? "" : _request->_query_string;
-		env["CONTENT_TYPE"] = _request->_http_content_type.empty() ? "text/plain" : _request->_http_content_type;
-		env["CONTENT_LENGTH"] = Utils::intToString(_request->_body.length());
-		env["HTTP_HOST"] = _request->_host;
-		env["SERVER_PORT"] = Utils::intToString(_request->_port);
-		env["SERVER_PROTOCOL"] = _request->_http_version;
-		env["HTTP_COOKIE"] = _request->_cookies;
-
-		std::cerr << "Body (limited) and length: " << _request->_body.substr(0, 250) << " " << _request->_body.length() << "\n";
-
-        // Create a new CGI handler and start it asynchronously
-        if (_cgi_handler) {
-            delete _cgi_handler;
-        }
-
-        _cgi_handler = new CgiHandler(dir_path, env, _request->_body);
-
-        if (_cgi_handler->startCgi()) {
-            // Successfully started CGI, switch state
-            _state = PROCESSING_CGI;
-            return ""; // Return empty string to indicate that processing is not complete
-        } else {
-            // Failed to start CGI
-            delete _cgi_handler;
-            _cgi_handler = NULL;
-            return createErrorResponse(500, "text/plain", "Failed to start CGI process", matchServer);
-        }
-	}
 	if (_request->_method == "POST") {
 		Logger::log(Logger::INFO, "Response::getResponse POST path " + dir_path + " isDIR " + Utils::floatToString(isDIR));
 
@@ -966,12 +911,9 @@ STR Response::getResponse() {
 		}
 		return (handlePOST(dir_path));
 	}
+
 	file_path = dir_path;
 
-	std::cout << "DEBUG GETRESPONSE: file_path is " << file_path << "\n";
-	std::cout << "DEBUG GETRESPONSE: dir_path is " << dir_path << "\n";
-
-	std::cout << "Passing first checkFile\n";
 	//serve file if path is a file
 	if (checkFile(file_path) == NormalFile) {
 		return (matchMethod(file_path, false, matchLocation));
@@ -983,10 +925,11 @@ STR Response::getResponse() {
 		return createErrorResponse(404, "text/plain", "Not Found", matchServer);
 	//--check dir
 
+	// REDIRECT TO 301 path with slash
+
+
 	//add index file name to file_path
 	buildIndexPath(matchLocation, file_path, dir_path);
-
-	std::cout << "After buildIndexPath: file_path is " << file_path << "\n";
 
 	//index file exists - serve it
 	if (checkFile(file_path) == NormalFile) {
@@ -1003,68 +946,5 @@ STR Response::getResponse() {
 	}
 
 	return createErrorResponse(403, "text/plain", "TERRIBLE ERROR (Impossible)", matchLocation);
-}
 
-int Response::getCgiOutputFd() const {
-    if (_state == PROCESSING_CGI && _cgi_handler) {
-        return _cgi_handler->getOutputFd();
-    }
-    return -1;
-}
-
-bool Response::processCgiOutput() {
-    if (_state != PROCESSING_CGI || !_cgi_handler) {
-        return true; // Nothing to process
-    }
-
-    // Read available data from CGI
-    STR output = _cgi_handler->readFromCgi();
-    if (!output.empty()) {
-        _response_buffer += output;
-    }
-
-    // Check if CGI has completed
-    if (_cgi_handler->checkCgiStatus()) {
-        _state = COMPLETE;
-        return true;
-    }
-
-    return false;
-}
-
-STR Response::getFinalResponse() {
-    if (_state != COMPLETE || !_cgi_handler) {
-        return ""; // Not ready yet
-    }
-
-    // Format the response
-    if (_response_buffer.find("HTTP/") == 0) {
-        // The CGI script returned a complete HTTP response
-        STR response = _response_buffer;
-        _response_buffer.clear();
-        _state = READY;
-
-        if (_cgi_handler) {
-            delete _cgi_handler;
-            _cgi_handler = NULL;
-        }
-
-        return response;
-    } else {
-        // Need to wrap the CGI output in an HTTP response
-        STR response = "HTTP/1.1 200 OK\r\n"
-                       "Content-Type: text/html\r\n"
-                       "Content-Length: " + Utils::intToString(_response_buffer.length()) + "\r\n"
-                       "\r\n" + _response_buffer;
-
-        _response_buffer.clear();
-        _state = READY;
-
-        if (_cgi_handler) {
-            delete _cgi_handler;
-            _cgi_handler = NULL;
-        }
-
-        return response;
-    }
 }

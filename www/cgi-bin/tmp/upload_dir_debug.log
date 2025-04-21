@@ -1,0 +1,5 @@
+directory: ./www/cgi-bin/tmp
+exists: True
+is_writable: True
+parent_exists: True
+parent_is_writable: True
