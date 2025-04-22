@@ -1,57 +1,129 @@
 #!/usr/bin/python3
 
-import cgi, os, sys
+import os, sys
 import cgitb
 import time
 import mimetypes
+import re
+import traceback
+import tempfile
 
 cgitb.enable(display=0, logdir='./www/cgi-bin/tmp')
 
-debug_info = "\n--- CGI env ---\n"
-for key, value in os.environ.items():
-	debug_info += f"{key}: {value}\n"
-
-# 디버그용 로그 디렉토리 설정
 debug_dir = './www/cgi-bin/tmp'
 if not os.path.exists(debug_dir):
     os.makedirs(debug_dir)
 
-debug_info += "\n--- FORM DATA ---\n"
-form = cgi.FieldStorage()
-debug_info += f"Form keys: {list(form.keys())}\n"
-debug_info += f"Form contains 'filename': {'filename' in form}\n"
-if 'filename' in form:
-    debug_info += f"Filename value type: {type(form['filename'])}\n"
-    debug_info += f"Filename has filename attr: {hasattr(form['filename'], 'filename')}\n"
-    if hasattr(form['filename'], 'filename'):
-        debug_info += f"Filename.filename: {form['filename'].filename}\n"
+def log_progress(message, filename="upload_progress.log"):
+    """Log progress information with timestamp."""
+    progress_log_path = os.path.join(debug_dir, filename)
+    with open(progress_log_path, 'a') as f:
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"[{timestamp}] {message}\n")
 
-# Add to your CGI script for more detailed debugging
-debug_info += "\n--- POST DATA CHECK ---\n"
-debug_info += f"CONTENT_LENGTH: {os.environ.get('CONTENT_LENGTH', 'Not set')}\n"
-debug_info += f"CONTENT_TYPE: {os.environ.get('CONTENT_TYPE', 'Not set')}\n"
+# 로그 초기화
+log_progress("========== NEW UPLOAD REQUEST ==========")
 
-try:
-    # Try to read start of raw POST data
-    raw_data = sys.stdin.buffer.read(100)
-    debug_info += f"stdin data first 100 bytes length: {len(raw_data)}\n"
-    debug_info += f"stdin data first 100 bytes (hex): {raw_data.hex()[:200]}\n"
+debug_info = "\n--- CGI env ---\n"
+for key, value in os.environ.items():
+    debug_info += f"{key}: {value}\n"
 
-    # Check boundary
-    content_type = os.environ.get('CONTENT_TYPE', '')
-    if 'boundary=' in content_type:
-        boundary = content_type.split('boundary=')[1].strip()
-        debug_info += f"Detected boundary: {boundary}\n"
-    else:
-        debug_info += "No boundary detected in Content-Type\n"
-except Exception as e:
-    debug_info += f"Error reading stdin: {str(e)}\n"
+# 직접 multipart 폼 데이터 처리
+content_type = os.environ.get('CONTENT_TYPE', '')
+content_length = int(os.environ.get('CONTENT_LENGTH', '0'))
 
+debug_info += "\n--- DIRECT FORM PROCESSING ---\n"
+debug_info += f"Content-Type: {content_type}\n"
+debug_info += f"Content-Length: {content_length}\n"
+
+# boundary 추출
+boundary = None
+if 'boundary=' in content_type:
+    boundary = '--' + content_type.split('boundary=')[1].strip()
+    debug_info += f"Detected boundary: {boundary}\n"
+else:
+    debug_info += "No boundary detected in Content-Type\n"
+
+uploaded_file = None
+filename = None
+file_content = None
+
+if boundary:
+    try:
+        log_progress("Reading raw POST data from stdin")
+        # stdin에서 전체 데이터 읽기
+        post_data = sys.stdin.buffer.read(content_length)
+        log_progress(f"Read {len(post_data)} bytes from stdin")
+        debug_info += f"Raw data size: {len(post_data)} bytes\n"
+
+        if len(post_data) > 0:
+            # boundary로 데이터 분할
+            parts = post_data.split(boundary.encode('utf-8'))
+            debug_info += f"Split into {len(parts)} parts\n"
+
+            # 각 부분 처리
+            for part in parts:
+                # 빈 부분 또는 마지막 경계선 스킵
+                if not part or part == b'--\r\n' or part == b'--':
+                    continue
+
+                # 헤더와 본문 분리
+                try:
+                    headers_end = part.find(b'\r\n\r\n')
+                    if headers_end > 0:
+                        headers = part[:headers_end].decode('utf-8', errors='ignore')
+                        body = part[headers_end + 4:]  # +4는 '\r\n\r\n'의 길이
+
+                        # 파일 업로드 파트 찾기
+                        if 'filename=' in headers:
+                            log_progress("Found file part in multipart data")
+                            # 파일명 추출
+                            filename_match = re.search(r'filename="([^"]*)"', headers)
+                            if filename_match:
+                                filename = filename_match.group(1)
+                                log_progress(f"Extracted filename: {filename}")
+
+                                # name 필드 추출
+                                name_match = re.search(r'name="([^"]*)"', headers)
+                                if name_match:
+                                    form_name = name_match.group(1)
+                                    log_progress(f"Form field name: {form_name}")
+
+                                # Content-Type 추출
+                                content_type_match = re.search(r'Content-Type: ([^\r\n]*)', headers)
+                                file_type = "application/octet-stream"
+                                if content_type_match:
+                                    file_type = content_type_match.group(1)
+                                    log_progress(f"File content type: {file_type}")
+
+                                # 파일 본문 저장
+                                file_content = body
+
+                                # 마지막 \r\n 있으면 제거 (경계 구분자 앞의 줄바꿈)
+                                if file_content.endswith(b'\r\n'):
+                                    file_content = file_content[:-2]
+
+                                log_progress(f"Extracted file content: {len(file_content)} bytes")
+                                debug_info += f"File field: {form_name}, Filename: {filename}, Content-Type: {file_type}, Size: {len(file_content)}\n"
+
+                                if len(file_content) > 100:
+                                    debug_info += f"File content first 100 bytes (hex): {file_content[:100].hex()[:200]}\n"
+                except Exception as e:
+                    log_progress(f"Error parsing part: {str(e)}")
+                    debug_info += f"Error parsing part: {str(e)}\n"
+                    debug_info += traceback.format_exc() + "\n"
+        else:
+            debug_info += "No data received from stdin\n"
+    except Exception as e:
+        log_progress(f"Error processing multipart data: {str(e)}")
+        debug_info += f"Error processing multipart data: {str(e)}\n"
+        debug_info += traceback.format_exc() + "\n"
+else:
+    debug_info += "Cannot process form data without boundary\n"
+
+# 디버그 정보 저장
 with open(os.path.join(debug_dir, 'debug.log'), 'w') as f:
     f.write(debug_info)
-
-with open(os.path.join(debug_dir, 'debug.log'), 'w') as f:
-	f.write(debug_info)
 
 def get_file_size_str(size_bytes):
     """Convert file size in bytes to human-readable format."""
@@ -63,14 +135,6 @@ def get_file_size_str(size_bytes):
         return f"{size_bytes/(1024*1024):.2f} MB"
     else:
         return f"{size_bytes/(1024*1024*1024):.2f} GB"
-
-def log_progress(message, filename="upload_progress.log"):
-    """Log progress information with timestamp."""
-    progress_log_path = os.path.join(debug_dir, filename)
-    with open(progress_log_path, 'a') as f:
-        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        f.write(f"[{timestamp}] {message}\n")
-
 
 html_start = """<!DOCTYPE html>
 <html lang="en">
@@ -207,161 +271,139 @@ try:
         for key, value in upload_dir_debug.items():
             f.write(f"{key}: {value}\n")
 
-    log_progress("Starting to process form data")
-    form = cgi.FieldStorage()
-
-    if 'filename' not in form:
+    if not filename or not file_content:
         log_progress("Error: No file was provided in the form")
         print(html_start)
         print('<div class="result-card error">')
         print('<h1>⚠️ Upload Error</h1>')
-        print('<p>No file was provided. Please select a file to upload.</p>')
+        print('<p>No file was provided or could not be processed. Please select a file to upload.</p>')
         print('</div>')
         print(html_end)
     else:
-        log_progress("Form contains filename field")
-        fileitem = form['filename']
+        log_progress(f"Successfully extracted file: {filename}")
 
-        if fileitem.filename:
-            log_progress(f"Starting to process file: {fileitem.filename}")
-            filename = os.path.basename(fileitem.filename)
-            log_progress(f"Parsed basename: {filename}")
+        # 파일명에서 basename만 추출 (경로 제거)
+        if '\\' in filename:
+            filename = filename.split('\\')[-1]
+        if '/' in filename:
+            filename = filename.split('/')[-1]
 
-            # 파일 읽기에 진행률 로깅 추가
-            log_progress(f"Starting to read file content")
-            file_content = b''
-            chunk_size = 8192  # 8KB 청크 크기
-            total_size = 0
+        log_progress(f"Using basename: {filename}")
 
-            # 청크로 파일 읽기
-            try:
-                while True:
-                    chunk = fileitem.file.read(chunk_size)
-                    if not chunk:
-                        break
-                    file_content += chunk
-                    total_size += len(chunk)
-                    log_progress(f"Read chunk: {len(chunk)} bytes, Total so far: {total_size} bytes")
-            except Exception as e:
-                log_progress(f"Error during file reading: {str(e)}")
-                raise
+        file_size = len(file_content)
+        log_progress(f"File content size: {file_size} bytes")
+        file_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+        log_progress(f"File type detected: {file_type}")
 
-            file_size = len(file_content)
-            log_progress(f"Completed file reading. Total size: {file_size} bytes")
-            file_type = mimetypes.guess_type(filename)[0] or "Unknown"
-            log_progress(f"File type detected: {file_type}")
+        filepath = os.path.join(upload_dir, filename)
 
-            filepath = os.path.join(upload_dir, filename)
+        # 디버그: 파일 업로드 시도 정보
+        upload_attempt_info = {
+            "time": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "filename": filename,
+            "filepath": filepath,
+            "file_size": file_size,
+            "file_type": file_type,
+            "upload_dir_exists": os.path.exists(upload_dir),
+            "upload_dir_writable": os.access(upload_dir, os.W_OK) if os.path.exists(upload_dir) else False
+        }
 
-            # 디버그: 파일 업로드 시도 정보
-            upload_attempt_info = {
-                "time": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "filename": filename,
-                "filepath": filepath,
-                "file_size": file_size,
-                "file_type": file_type,
-                "upload_dir_exists": os.path.exists(upload_dir),
-                "upload_dir_writable": os.access(upload_dir, os.W_OK) if os.path.exists(upload_dir) else False
-            }
+        with open(os.path.join(debug_dir, 'upload_attempt.log'), 'a') as f:
+            f.write("\n--- New Upload Attempt ---\n")
+            for key, value in upload_attempt_info.items():
+                f.write(f"{key}: {value}\n")
 
-            with open(os.path.join(debug_dir, 'upload_attempt.log'), 'a') as f:
-                f.write("\n--- New Upload Attempt ---\n")
-                for key, value in upload_attempt_info.items():
-                    f.write(f"{key}: {value}\n")
+        # 파일 저장 - 청크별로 저장하고 진행 상황 기록
+        log_progress(f"Starting to write file to: {filepath}")
+        try:
+            with open(filepath, 'wb') as f:
+                chunk_size = 4096  # 4KB 청크로 나눔
+                total_written = 0
 
-            # 파일 저장 - 청크별로 저장하고 진행 상황 기록
-            log_progress(f"Starting to write file to: {filepath}")
-            try:
-                with open(filepath, 'wb') as f:
-                    chunk_size = 8192  # 8KB 청크
-                    total_written = 0
+                # 진행 상황 기록을 위해 청크로 나누어 저장
+                for i in range(0, len(file_content), chunk_size):
+                    chunk = file_content[i:i+chunk_size]
+                    f.write(chunk)
+                    total_written += len(chunk)
 
-                    # 진행 상황 기록을 위해 청크로 나누어 저장
-                    for i in range(0, len(file_content), chunk_size):
-                        chunk = file_content[i:i+chunk_size]
-                        f.write(chunk)
-                        total_written += len(chunk)
-                        percent = int((total_written / file_size) * 100) if file_size > 0 else 100
-                        log_progress(f"Writing progress: {percent}% ({total_written}/{file_size} bytes)")
+                    # 10% 간격으로만 로깅
+                    if file_size > 0:
+                        percent = (total_written * 100) // file_size
+                        if percent % 10 == 0 and (total_written - len(chunk)) * 100 // file_size < percent:
+                            log_progress(f"Writing progress: {percent}% ({total_written}/{file_size} bytes)")
 
-                log_progress(f"File successfully written to disk: {filepath}")
-            except Exception as e:
-                log_progress(f"Error during file writing: {str(e)}")
-                raise
+            # 쓰기 완료 후 동기화 확인
+            log_progress(f"File successfully written to disk: {filepath}")
+        except Exception as e:
+            log_progress(f"Error during file writing: {str(e)}")
+            log_progress(traceback.format_exc())
+            raise
 
-            # 디버그: 파일 저장 성공 확인
-            upload_success_info = {
-                "time": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "file_saved": os.path.exists(filepath),
-                "actual_size": os.path.getsize(filepath) if os.path.exists(filepath) else 0,
-                "expected_size": file_size,
-                "size_match": (os.path.getsize(filepath) == file_size) if os.path.exists(filepath) else False
-            }
+        # 디버그: 파일 저장 성공 확인
+        upload_success_info = {
+            "time": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "file_saved": os.path.exists(filepath),
+            "actual_size": os.path.getsize(filepath) if os.path.exists(filepath) else 0,
+            "expected_size": file_size,
+            "size_match": (os.path.getsize(filepath) == file_size) if os.path.exists(filepath) else False
+        }
 
-            with open(os.path.join(debug_dir, 'upload_success.log'), 'a') as f:
-                f.write("\n--- Upload Status ---\n")
-                for key, value in upload_success_info.items():
-                    f.write(f"{key}: {value}\n")
+        with open(os.path.join(debug_dir, 'upload_success.log'), 'a') as f:
+            f.write("\n--- Upload Status ---\n")
+            for key, value in upload_success_info.items():
+                f.write(f"{key}: {value}\n")
 
-            print(html_start)
-            print('<div class="result-card success">')
-            print(f'<h1>✅ File Upload Successful</h1>')
-            print(f'<p>Your file has been uploaded successfully.</p>')
+        print(html_start)
+        print('<div class="result-card success">')
+        print(f'<h1>✅ File Upload Successful</h1>')
+        print(f'<p>Your file has been uploaded successfully.</p>')
 
-            # 디버그 로그 정보 표시
-            print('<div class="debug-info">')
-            print('<h3>Debug Information</h3>')
-            print('<details>')
-            print('<summary>Click to view upload progress logs</summary>')
-            print('<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; max-height: 200px; overflow-y: auto;">')
+        # 디버그 로그 정보 표시
+        print('<div class="debug-info">')
+        print('<h3>Debug Information</h3>')
+        print('<details>')
+        print('<summary>Click to view upload progress logs</summary>')
+        print('<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; max-height: 200px; overflow-y: auto;">')
 
-            # 진행 로그 표시
-            log_path = os.path.join(debug_dir, 'upload_progress.log')
-            if os.path.exists(log_path):
-                with open(log_path, 'r') as f:
-                    log_content = f.read()
-                print(log_content.replace('<', '&lt;').replace('>', '&gt;'))
-            else:
-                print("No progress log available.")
-
-            print('</pre>')
-            print('</details>')
-            print('</div>')
-
-            print('<div class="file-info">')
-            print('<table>')
-            print(f'<tr><th>File Name</th><td>{filename}</td></tr>')
-            print(f'<tr><th>File Size</th><td>{get_file_size_str(file_size)}</td></tr>')
-            print(f'<tr><th>File Type</th><td>{file_type}</td></tr>')
-            print(f'<tr><th>Upload Time</th><td>{time.strftime("%Y-%m-%d %H:%M:%S")}</td></tr>')
-            print(f'<tr><th>Saved Path</th><td>{filepath}</td></tr>')
-            print('</table>')
-            print('</div>')
-
-            if file_type and file_type.startswith('image/'):
-                print('<div class="file-preview">')
-                print('<h3>File Preview</h3>')
-                # 이미지 미리보기 경로도 디버그 정보에 저장
-                img_path = f"/cgi-bin/tmp/{filename}"
-                with open(os.path.join(debug_dir, 'image_preview.log'), 'a') as f:
-                    f.write(f"\n--- Image Preview Info ---\n")
-                    f.write(f"Actual file path: {filepath}\n")
-                    f.write(f"Preview path: {img_path}\n")
-                    f.write(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-
-                print(f'<img src="/cgi-bin/tmp/{filename}" alt="{filename}">')
-                print('</div>')
-
-            print('</div>')
-            print(html_end)
+        # 진행 로그 표시
+        log_path = os.path.join(debug_dir, 'upload_progress.log')
+        if os.path.exists(log_path):
+            with open(log_path, 'r') as f:
+                log_content = f.read()
+            print(log_content.replace('<', '&lt;').replace('>', '&gt;'))
         else:
-            log_progress("Error: Invalid filename")
-            print(html_start)
-            print('<div class="result-card error">')
-            print('<h1>⚠️ Upload Error</h1>')
-            print('<p>The file has an invalid filename. Please try again with a valid file.</p>')
+            print("No progress log available.")
+
+        print('</pre>')
+        print('</details>')
+        print('</div>')
+
+        print('<div class="file-info">')
+        print('<table>')
+        print(f'<tr><th>File Name</th><td>{filename}</td></tr>')
+        print(f'<tr><th>File Size</th><td>{get_file_size_str(file_size)}</td></tr>')
+        print(f'<tr><th>File Type</th><td>{file_type}</td></tr>')
+        print(f'<tr><th>Upload Time</th><td>{time.strftime("%Y-%m-%d %H:%M:%S")}</td></tr>')
+        print(f'<tr><th>Saved Path</th><td>{filepath}</td></tr>')
+        print('</table>')
+        print('</div>')
+
+        if file_type and file_type.startswith('image/'):
+            print('<div class="file-preview">')
+            print('<h3>File Preview</h3>')
+            # 이미지 미리보기 경로도 디버그 정보에 저장
+            img_path = f"/cgi-bin/tmp/{filename}"
+            with open(os.path.join(debug_dir, 'image_preview.log'), 'a') as f:
+                f.write(f"\n--- Image Preview Info ---\n")
+                f.write(f"Actual file path: {filepath}\n")
+                f.write(f"Preview path: {img_path}\n")
+                f.write(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+
+            print(f'<img src="/cgi-bin/tmp/{filename}" alt="{filename}">')
             print('</div>')
-            print(html_end)
+
+        print('</div>')
+        print(html_end)
 
 except Exception as e:
     # 디버그: 오류 정보 저장

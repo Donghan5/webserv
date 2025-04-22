@@ -388,7 +388,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
         }
 
         // Handle events based on fd type
-        if (fd_type == SERVER_FD && (_events[i].events & EPOLLIN)) {
+        if (fd_type == SERVER_FD && (_events[i].events & (EPOLLIN | EPOLLOUT))) {
             // Server socket has incoming connection
             AcceptClient(fd);
         } else if (fd_type == CLIENT_FD) {

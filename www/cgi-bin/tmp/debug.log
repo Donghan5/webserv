@@ -1,7 +1,7 @@
 
 --- CGI env ---
-CONTENT_LENGTH: 266674
-CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundaryiMiCAioBL0kqwOMA
+CONTENT_LENGTH: 224258
+CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundaryLdrDDN24lcAehg96
 HTTP_COOKIE: 
 HTTP_HOST: localhost
 QUERY_STRING: 
@@ -11,13 +11,11 @@ SERVER_PORT: 8088
 SERVER_PROTOCOL: HTTP/1.1
 LC_CTYPE: C.UTF-8
 
---- FORM DATA ---
-Form keys: []
-Form contains 'filename': False
-
---- POST DATA CHECK ---
-CONTENT_LENGTH: 266674
-CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundaryiMiCAioBL0kqwOMA
-stdin data first 100 bytes length: 0
-stdin data first 100 bytes (hex): 
-Detected boundary: ----WebKitFormBoundaryiMiCAioBL0kqwOMA
+--- DIRECT FORM PROCESSING ---
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryLdrDDN24lcAehg96
+Content-Length: 224258
+Detected boundary: ------WebKitFormBoundaryLdrDDN24lcAehg96
+Raw data size: 224258 bytes
+Split into 3 parts
+File field: filename, Filename: Intra Profile Home.html, Content-Type: text/html, Size: 224058
+File content first 100 bytes (hex): 3c21444f43545950452068746d6c3e0a3c212d2d2073617665642066726f6d2075726c3d28303032392968747470733a2f2f70726f66696c652e696e7472612e34322e66722f23202d2d3e0a3c68746d6c206c616e673d22656e223e3c73637269707420

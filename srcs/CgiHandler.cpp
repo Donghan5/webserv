@@ -220,9 +220,11 @@ bool CgiHandler::startCgi() {
         close(_input_pipe[0]);
         close(_output_pipe[1]);
 
-        // Write request body to CGI script's stdin
+		_process_running = true;
+
+		// Write request body to CGI script's stdin
         if (!_body.empty()) {
-			Logger::cerrlog(Logger::INFO, "Sending body to CGI script, size: " + Utils::intToString(_body.size()) + " bytes");
+			// Logger::cerrlog(Logger::INFO, "Sending body to CGI script, size: " + Utils::intToString(_body.size()) + " bytes");
 			bool write_success = writeToCgi(_body.c_str(), _body.size());
 
 			if (!write_success) {
@@ -230,6 +232,7 @@ bool CgiHandler::startCgi() {
 				closeCgi();
 				return false;
 			}
+			// writeToCgi(_body.c_str(), _body.size());
         }
 
         // Close input pipe after writing, so the CGI process gets EOF on stdin
@@ -237,7 +240,8 @@ bool CgiHandler::startCgi() {
         _input_pipe[1] = -1;
 
         // Mark the process as running
-        _process_running = true;
+		// _process_running = true;
+
         return true;
     }
 }
@@ -263,19 +267,25 @@ bool CgiHandler::startCgi() {
 //     return true;
 // }
 
+// testing
 bool CgiHandler::writeToCgi(const char* data, size_t len) {
     if (!_process_running || _input_pipe[1] == -1) {
+        Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: process not running or pipe closed");
         return false;
     }
 
-    // Write data to the CGI process
+    Logger::cerrlog(Logger::INFO, "Starting to write " + Utils::intToString(len) + " bytes to CGI script");
+
+    const size_t chunk_size = 1024;  // chunk size for writing
     size_t total_written = 0;
+
     while (total_written < len) {
-        ssize_t written = write(_input_pipe[1], data + total_written, len - total_written);
+        size_t to_write = std::min(chunk_size, len - total_written);
+        ssize_t written = write(_input_pipe[1], data + total_written, to_write);
 
         if (written < 0) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                // Resource temporarily unavailable, try again
+                // wait for a moment and redo
                 continue;
             }
             Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + std::string(strerror(errno)));
@@ -283,21 +293,65 @@ bool CgiHandler::writeToCgi(const char* data, size_t len) {
         }
 
         if (written == 0) {
-            // This shouldn't happen, but if it does, avoid infinite loop
+            Logger::cerrlog(Logger::ERROR, "Write returned 0 bytes unexpectedly");
             break;
         }
 
         total_written += written;
+
+        // Logging progress
+        if (len > 10000 && (total_written % (len / 10) < written)) {
+            Logger::cerrlog(Logger::INFO, "Written " + Utils::intToString(total_written) +
+                            " of " + Utils::intToString(len) + " bytes (" +
+                            Utils::intToString((total_written * 100) / len) + "%)");
+        }
     }
 
-    // Only close the pipe after ALL data has been written --> will be testing after check the leak
-    // if (total_written == len) {
-    //     close(_input_pipe[1]);
-    //     _input_pipe[1] = -1;
-    // }
+    if (total_written < len) {
+        Logger::cerrlog(Logger::ERROR, "Only wrote " + Utils::intToString(total_written) +
+                       " of " + Utils::intToString(len) + " bytes");
+        return false;
+    }
 
+    Logger::cerrlog(Logger::INFO, "Successfully wrote all " + Utils::intToString(len) + " bytes to CGI");
     return true;
 }
+
+// bool CgiHandler::writeToCgi(const char* data, size_t len) {
+//     if (!_process_running || _input_pipe[1] == -1) {
+//         return false;
+//     }
+
+//     // Write data to the CGI process
+//     size_t total_written = 0;
+//     while (total_written < len) {
+//         ssize_t written = write(_input_pipe[1], data + total_written, len - total_written);
+
+//         if (written < 0) {
+//             if (errno == EAGAIN || errno == EWOULDBLOCK) {
+//                 // Resource temporarily unavailable, try again
+//                 continue;
+//             }
+//             Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + std::string(strerror(errno)));
+//             return false;
+//         }
+
+//         if (written == 0) {
+//             // This shouldn't happen, but if it does, avoid infinite loop
+//             break;
+//         }
+
+//         total_written += written;
+//     }
+
+//     // Only close the pipe after ALL data has been written --> will be testing after check the leak
+//     // if (total_written == len) {
+//     //     close(_input_pipe[1]);
+//     //     _input_pipe[1] = -1;
+//     // }
+
+//     return true;
+// }
 
 std::string CgiHandler::readFromCgi() {
     if (!_process_running || _output_pipe[0] == -1) {
