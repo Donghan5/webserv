@@ -37,15 +37,6 @@ PollServer::~PollServer() {
     }
 }
 
-static STR intToString(int num) {
-	std::ostringstream oss;
-
-	oss << num;
-
-	return oss.str();
-}
-
-
 void PollServer::setConfig(HttpConfig *config) {
 	if (!config)
 		throw std::runtime_error("Config does not exist");
@@ -77,7 +68,7 @@ void PollServer::setConfig(HttpConfig *config) {
         int port = it->first;
         STR server_addr_str = it->second;
 
-        Logger::log(Logger::INFO, "Setting up server on " + server_addr_str + ":" + intToString(port));
+        Logger::log(Logger::INFO, "Setting up server on " + server_addr_str + ":" + Utils::intToString(port));
 
         // Create socket
         int server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -152,13 +143,13 @@ void PollServer::setConfig(HttpConfig *config) {
         if (bind(server_socket, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
             close(server_socket);
             throw std::runtime_error("Failed to bind to " + server_addr_str + ":" +
-                                     intToString(port) + " - " + std::string(strerror(errno)));
+                                     Utils::intToString(port) + " - " + std::string(strerror(errno)));
         }
 
         // Listen for connections
         if (listen(server_socket, SOMAXCONN) < 0) {
             close(server_socket);
-            throw std::runtime_error("Failed to listen on port " + intToString(port) +
+            throw std::runtime_error("Failed to listen on port " + Utils::intToString(port) +
                                      ": " + std::string(strerror(errno)));
         }
 
@@ -172,7 +163,7 @@ void PollServer::setConfig(HttpConfig *config) {
 			throw std::runtime_error("Failed to add server socket to epoll");
 		}
 
-        Logger::log(Logger::INFO, "Server listening on " + server_addr_str + ":" + intToString(port));
+        Logger::log(Logger::INFO, "Server listening on " + server_addr_str + ":" + Utils::intToString(port));
     }
 }
 
@@ -268,21 +259,21 @@ void PollServer::AcceptClient(int server_fd) {
 		return;
 	}
 
-	Logger::cerrlog(Logger::INFO, "New client connection accepted: " + intToString(client_fd));
+	Logger::cerrlog(Logger::INFO, "New client connection accepted: " + Utils::intToString(client_fd));
 }
 
 void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
     // Find the associated client
     std::map<int, int>::iterator it = _cgi_to_client.find(cgi_fd);
     if (it == _cgi_to_client.end()) {
-        Logger::cerrlog(Logger::ERROR, "CGI fd without associated client: " + intToString(cgi_fd));
+        Logger::cerrlog(Logger::ERROR, "CGI fd without associated client: " + Utils::intToString(cgi_fd));
         RemoveFd(cgi_fd);
         close(cgi_fd);
         return;
     }
 
     int client_fd = it->second;
-    Logger::cerrlog(Logger::INFO, "Processing CGI output for client: " + intToString(client_fd));
+    Logger::cerrlog(Logger::INFO, "Processing CGI output for client: " + Utils::intToString(client_fd));
 
     try {
         // Process the CGI output
@@ -347,16 +338,16 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
         if (_fd_types.find(fd) != _fd_types.end()) {
             fd_type = _fd_types[fd];
         } else {
-            Logger::cerrlog(Logger::WARNING, "Unknown fd type for fd: " + intToString(fd));
+            Logger::cerrlog(Logger::WARNING, "Unknown fd type for fd: " + Utils::intToString(fd));
             continue; // Skip this fd if we don't know what it is
         }
 
         // Check for errors first
         if (_events[i].events & (EPOLLERR | EPOLLHUP)) {
-            Logger::cerrlog(Logger::INFO, "Socket error or hangup for fd: " + intToString(fd));
+            Logger::cerrlog(Logger::INFO, "Socket error or hangup for fd: " + Utils::intToString(fd));
 
             if (fd_type == SERVER_FD) {
-                Logger::cerrlog(Logger::ERROR, "Error on server socket: " + intToString(fd));
+                Logger::cerrlog(Logger::ERROR, "Error on server socket: " + Utils::intToString(fd));
                 // Handle server socket error - possibly try to reopen
             } else if (fd_type == CLIENT_FD) {
                 // This is a client socket - just close it
@@ -402,7 +393,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
             AcceptClient(fd);
         } else if (fd_type == CLIENT_FD) {
             // Client socket has activity
-            Logger::cerrlog(Logger::INFO, "Event for client fd: " + intToString(fd));
+            Logger::cerrlog(Logger::INFO, "Event for client fd: " + Utils::intToString(fd));
             manager.setClientFd(fd);
             int status = manager.HandleClient(_events[i].events);
 
@@ -452,7 +443,7 @@ void PollServer::CloseClient(int client_fd) {
 	_partial_requests.erase(client_fd);
 	_partial_responses.erase(client_fd);
 
-    Logger::cerrlog(Logger::INFO, "Client connection closed: " + intToString(client_fd));
+    Logger::cerrlog(Logger::INFO, "Client connection closed: " + Utils::intToString(client_fd));
 }
 
 void PollServer::start() {

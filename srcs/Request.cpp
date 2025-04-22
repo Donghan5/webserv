@@ -348,6 +348,7 @@ Request::Request(STR request) {
 	_host = "localhost";
 	_port = 80;
 	_content_type = "";
+	_http_content_type = "";  // added
 	_body = "";
 	_body_size = 0;
 	parseHeader();
@@ -366,6 +367,7 @@ Request::Request(const Request &obj) {
 	_host = obj._host;
 	_port = obj._port;
 	_content_type = obj._content_type;
+	_http_content_type = obj._http_content_type;
 	_accepted_types = obj._accepted_types;
 	_body = obj._body;
 	_body_size = obj._body_size;

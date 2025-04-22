@@ -222,7 +222,14 @@ bool CgiHandler::startCgi() {
 
         // Write request body to CGI script's stdin
         if (!_body.empty()) {
-            writeToCgi(_body.c_str(), _body.size());
+			Logger::cerrlog(Logger::INFO, "Sending body to CGI script, size: " + Utils::intToString(_body.size()) + " bytes");
+			bool write_success = writeToCgi(_body.c_str(), _body.size());
+
+			if (!write_success) {
+				Logger::cerrlog(Logger::ERROR, "Failed to write request body to CGI");
+				closeCgi();
+				return false;
+			}
         }
 
         // Close input pipe after writing, so the CGI process gets EOF on stdin
@@ -283,11 +290,11 @@ bool CgiHandler::writeToCgi(const char* data, size_t len) {
         total_written += written;
     }
 
-    // Only close the pipe after ALL data has been written
-    if (total_written == len) {
-        close(_input_pipe[1]);
-        _input_pipe[1] = -1;
-    }
+    // Only close the pipe after ALL data has been written --> will be testing after check the leak
+    // if (total_written == len) {
+    //     close(_input_pipe[1]);
+    //     _input_pipe[1] = -1;
+    // }
 
     return true;
 }

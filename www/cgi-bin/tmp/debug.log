@@ -1,7 +1,7 @@
 
 --- CGI env ---
-CONTENT_LENGTH: 1412797
-CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundary6gyF6Ohgz3hBNXZV
+CONTENT_LENGTH: 266674
+CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundaryiMiCAioBL0kqwOMA
 HTTP_COOKIE: 
 HTTP_HOST: localhost
 QUERY_STRING: 
@@ -16,8 +16,8 @@ Form keys: []
 Form contains 'filename': False
 
 --- POST DATA CHECK ---
-CONTENT_LENGTH: 1412797
-CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundary6gyF6Ohgz3hBNXZV
+CONTENT_LENGTH: 266674
+CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundaryiMiCAioBL0kqwOMA
 stdin data first 100 bytes length: 0
 stdin data first 100 bytes (hex): 
-Detected boundary: ----WebKitFormBoundary6gyF6Ohgz3hBNXZV
+Detected boundary: ----WebKitFormBoundaryiMiCAioBL0kqwOMA
