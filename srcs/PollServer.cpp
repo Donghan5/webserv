@@ -1,7 +1,7 @@
 #include "PollServer.hpp"
 #include "Logger.hpp"
 
-PollServer::PollServer() {
+PollServer::PollServer() : MAX_EVENTS(64) {
     config = NULL;
     running = false;
     _epoll_fd = epoll_create1(0);
@@ -11,7 +11,7 @@ PollServer::PollServer() {
     _events.resize(MAX_EVENTS);
 }
 
-PollServer::PollServer(const PollServer &obj) {
+PollServer::PollServer(const PollServer &obj) : MAX_EVENTS(64) {
     this->config = obj.config;
     running = false;
     _epoll_fd = epoll_create1(0);
@@ -21,7 +21,7 @@ PollServer::PollServer(const PollServer &obj) {
     _events.resize(MAX_EVENTS);
 }
 
-PollServer::PollServer(HttpConfig *config){
+PollServer::PollServer(HttpConfig *config) : MAX_EVENTS(64) {
     running = false;
     _epoll_fd = epoll_create1(0);
     if (_epoll_fd < 0) {
@@ -64,7 +64,7 @@ void PollServer::setConfig(HttpConfig *config) {
     }
 
 	 // Create sockets for unique server entries
-	 for (std::map<int, STR>::iterator it = unique_servers.begin(); it != unique_servers.end(); ++it) {
+	 for (MAP<int, STR>::iterator it = unique_servers.begin(); it != unique_servers.end(); ++it) {
         int port = it->first;
         STR server_addr_str = it->second;
 
@@ -73,7 +73,7 @@ void PollServer::setConfig(HttpConfig *config) {
         // Create socket
         int server_socket = socket(AF_INET, SOCK_STREAM, 0);
         if (server_socket < 0) {
-            throw std::runtime_error("Failed to create socket: " + std::string(strerror(errno)));
+            throw std::runtime_error("Failed to create socket: " + STR(strerror(errno)));
         }
 
         // // For server sockets, keep the timeout but consider using level-triggered mode
@@ -83,31 +83,31 @@ void PollServer::setConfig(HttpConfig *config) {
 
         // if (setsockopt(server_socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0) {
         //     close(server_socket);
-        //     throw std::runtime_error("Failed to set receive timeout: " + std::string(strerror(errno)));
+        //     throw std::runtime_error("Failed to set receive timeout: " + STR(strerror(errno)));
         // }
 
         // if (setsockopt(server_socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout)) < 0) {
         //     close(server_socket);
-        //     throw std::runtime_error("Failed to set send timeout: " + std::string(strerror(errno)));
+        //     throw std::runtime_error("Failed to set send timeout: " + STR(strerror(errno)));
         // }
 
         // Set reuse address option
         int reuse = 1;
         if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
             close(server_socket);
-            throw std::runtime_error("Failed to set reuse address: " + std::string(strerror(errno)));
+            throw std::runtime_error("Failed to set reuse address: " + STR(strerror(errno)));
         }
 
         // Set non-blocking mode
         int flags = fcntl(server_socket, F_GETFL, 0);
         if (flags == -1) {
             close(server_socket);
-            throw std::runtime_error("Failed to get socket flags: " + std::string(strerror(errno)));
+            throw std::runtime_error("Failed to get socket flags: " + STR(strerror(errno)));
         }
 
         if (fcntl(server_socket, F_SETFL, flags | O_NONBLOCK) == -1) {
             close(server_socket);
-            throw std::runtime_error("Failed to set non-blocking mode: " + std::string(strerror(errno)));
+            throw std::runtime_error("Failed to set non-blocking mode: " + STR(strerror(errno)));
         }
 
         // Set up server address
@@ -129,7 +129,7 @@ void PollServer::setConfig(HttpConfig *config) {
             if (status != 0) {
                 close(server_socket);
                 throw std::runtime_error("Failed to parse IP address: " +
-                                         std::string(gai_strerror(status)));
+                                         STR(gai_strerror(status)));
             }
 
             memcpy(&addr.sin_addr,
@@ -143,14 +143,14 @@ void PollServer::setConfig(HttpConfig *config) {
         if (bind(server_socket, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
             close(server_socket);
             throw std::runtime_error("Failed to bind to " + server_addr_str + ":" +
-                                     Utils::intToString(port) + " - " + std::string(strerror(errno)));
+                                     Utils::intToString(port) + " - " + STR(strerror(errno)));
         }
 
         // Listen for connections
         if (listen(server_socket, SOMAXCONN) < 0) {
             close(server_socket);
             throw std::runtime_error("Failed to listen on port " + Utils::intToString(port) +
-                                     ": " + std::string(strerror(errno)));
+                                     ": " + STR(strerror(errno)));
         }
 
         // Store socket in map
@@ -220,7 +220,7 @@ bool PollServer::RemoveFd(int fd) {
                         " was already closed or removed from epoll");
         } else {
             Logger::cerrlog(Logger::ERROR, "Failed to remove fd from epoll: " +
-                        std::string(strerror(errno)));
+                        STR(strerror(errno)));
             return false;
         }
     }
@@ -264,7 +264,7 @@ void PollServer::AcceptClient(int server_fd) {
 
 void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
     // Find the associated client
-    std::map<int, int>::iterator it = _cgi_to_client.find(cgi_fd);
+    MAP<int, int>::iterator it = _cgi_to_client.find(cgi_fd);
     if (it == _cgi_to_client.end()) {
         Logger::cerrlog(Logger::ERROR, "CGI fd without associated client: " + Utils::intToString(cgi_fd));
         RemoveFd(cgi_fd);
@@ -273,7 +273,6 @@ void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
     }
 
     int client_fd = it->second;
-    Logger::cerrlog(Logger::INFO, "Processing CGI output for client: " + Utils::intToString(client_fd));
 
     try {
         // Process the CGI output
@@ -302,7 +301,7 @@ void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
         }
         // result < 0 means CGI still running, keep monitoring
     } catch (const std::exception& e) {
-        Logger::cerrlog(Logger::ERROR, "Error handling CGI output: " + std::string(e.what()));
+        Logger::cerrlog(Logger::ERROR, "Error handling CGI output: " + STR(e.what()));
 
         // Clean up
         RemoveFd(cgi_fd);
@@ -325,7 +324,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
             return true;
         } else {
             // A real error occurred
-            Logger::cerrlog(Logger::ERROR, "Epoll wait failed: " + std::string(strerror(errno)));
+            Logger::cerrlog(Logger::ERROR, "Epoll wait failed: " + STR(strerror(errno)));
             return false;
         }
     }
@@ -344,8 +343,6 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
 
         // Check for errors first
         if (_events[i].events & (EPOLLERR | EPOLLHUP)) {
-            Logger::cerrlog(Logger::INFO, "Socket error or hangup for fd: " + Utils::intToString(fd));
-
             if (fd_type == SERVER_FD) {
                 Logger::cerrlog(Logger::ERROR, "Error on server socket: " + Utils::intToString(fd));
                 // Handle server socket error - possibly try to reopen
@@ -354,7 +351,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
                 CloseClient(fd);
             } else if (fd_type == CGI_FD) {
                 // CGI error or completion
-                std::map<int, int>::iterator it = _cgi_to_client.find(fd);
+                MAP<int, int>::iterator it = _cgi_to_client.find(fd);
                 if (it != _cgi_to_client.end()) {
                     int client_fd = it->second;
 
@@ -365,7 +362,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
                         // Try to read any available data before closing
                         HandleCgiOutput(fd, manager);
                     } catch (const std::exception& e) {
-                        Logger::cerrlog(Logger::ERROR, "Error handling CGI output on hangup: " + std::string(e.what()));
+                        Logger::cerrlog(Logger::ERROR, "Error handling CGI output on hangup: " + STR(e.what()));
                         // Clean up CGI resources
                         RemoveFd(fd);
                         _cgi_to_client.erase(it);
@@ -388,10 +385,12 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
         }
 
         // Handle events based on fd type
+        // if (fd_type == SERVER_FD && (_events[i].events & (EPOLLIN | EPOLLOUT))) {
+
         if (fd_type == SERVER_FD && (_events[i].events & (EPOLLIN | EPOLLOUT))) {
             // Server socket has incoming connection
             AcceptClient(fd);
-        } else if (fd_type == CLIENT_FD) {
+        } else if (fd_type == CLIENT_FD && (_events[i].events & (EPOLLIN | EPOLLOUT))) {
             // Client socket has activity
             Logger::cerrlog(Logger::INFO, "Event for client fd: " + Utils::intToString(fd));
             manager.setClientFd(fd);
@@ -418,7 +417,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
                     manager.setClientFd(fd);
                 }
             }
-        } else if (fd_type == CGI_FD && (_events[i].events & EPOLLIN)) {
+        } else if (fd_type == CGI_FD && (_events[i].events & (EPOLLIN))) {
             // CGI output ready
             HandleCgiOutput(fd, manager);
         }
@@ -428,7 +427,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
 
 void PollServer::CloseClient(int client_fd) {
     // Clean up client resources
-    std::map<int, FdType>::iterator type_it = _fd_types.find(client_fd);
+    MAP<int, FdType>::iterator type_it = _fd_types.find(client_fd);
     if (type_it != _fd_types.end()) {
         _fd_types.erase(type_it);
     }

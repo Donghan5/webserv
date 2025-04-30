@@ -1,13 +1,14 @@
 #include "Utils.hpp"
+#include "AConfigBase.hpp"
 
-std::string  Utils::intToString(int num) {
+STR  Utils::intToString(int num) {
 	std::ostringstream oss;
 	oss << num;
 
 	return oss.str();
 }
 
-std::string  Utils::floatToString(float num) {
+STR  Utils::floatToString(float num) {
 	std::ostringstream oss;
 	oss << num;
 

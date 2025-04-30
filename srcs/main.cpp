@@ -16,26 +16,26 @@ int	init_start_webserv(HttpConfig *config) {
 		try {
 			poll_server.setConfig(config);
 		} catch (const std::exception& e) {
-			Logger::cerrlog(Logger::ERROR, "Poll Initialization error: " + std::string(e.what()));
+			Logger::cerrlog(Logger::ERROR, "Poll Initialization error: " + STR(e.what()));
 			return 0;
 		}
 
 		try {
 			poll_server.start();
 		} catch (const std::exception& e) {
-			Logger::cerrlog(Logger::ERROR, "Poll Running error: " + std::string(e.what()));
+			Logger::cerrlog(Logger::ERROR, "Poll Running error: " + STR(e.what()));
 			return 0;
 		}
 	return 0;
 }
 
-typedef std::map<int, STR> MAP_INT_STR;
-typedef std::map<STR, LocationConfig*> MAP_STR_LOC;
+typedef MAP<int, STR> MAP_INT_STR;
+typedef MAP<STR, LocationConfig*> MAP_STR_LOC;
 
 // Printing functions
 void printLocationConfig(const LocationConfig* loc, int indent = 2) {
     if (!loc) return;
-    std::string pad(indent, ' ');
+    STR pad(indent, ' ');
     std::cout << pad << "LocationConfig:\n";
     std::cout << pad << "  _proxy_pass_host: " << loc->_proxy_pass_host << "\n";
     std::cout << pad << "  _proxy_pass_port: " << loc->_proxy_pass_port << "\n";
@@ -75,7 +75,7 @@ void printLocationConfig(const LocationConfig* loc, int indent = 2) {
 
 void printServerConfig(const ServerConfig* server, int indent = 2) {
     if (!server) return;
-    std::string pad(indent, ' ');
+    STR pad(indent, ' ');
     std::cout << pad << "ServerConfig:\n";
     std::cout << pad << "  _add_header: " << server->_add_header << "\n";
     std::cout << pad << "  _listen_port: " << server->_listen_port << "\n";
@@ -108,7 +108,7 @@ void printServerConfig(const ServerConfig* server, int indent = 2) {
 }
 
 void printHttpConfig(const HttpConfig& http, int indent = 0) {
-    std::string pad(indent, ' ');
+    STR pad(indent, ' ');
     std::cout << pad << "HttpConfig:\n";
     std::cout << pad << "  _global_user: " << http._global_user << "\n";
     std::cout << pad << "  _global_worker_process: " << http._global_worker_process << "\n";
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
         newConf = parser.Parse();
     } catch (const std::exception& e) {
 		// Using logger
-		Logger::cerrlog(Logger::ERROR, "Parsing failure: " + std::string(e.what()));
+		Logger::cerrlog(Logger::ERROR, "Parsing failure: " + STR(e.what()));
         return 1;
     }
 
@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
     try {
         init_start_webserv(newConf);
     } catch (const std::exception& e) {
-		Logger::cerrlog(Logger::ERROR, "Running failure: " + std::string(e.what()));
+		Logger::cerrlog(Logger::ERROR, "Running failure: " + STR(e.what()));
         newConf->_self_destruct();
         return 1;
     }

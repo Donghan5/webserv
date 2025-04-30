@@ -12,7 +12,7 @@ struct LocationConfig : AConfigBase {
 	MAP<STR, bool>					_allowed_methods;
 	MAP<STR, LocationConfig*>		_locations;
 	STR								_upload_store;
-	STR								_alias;
+
 
 	void							_self_destruct();
 
@@ -23,8 +23,7 @@ struct LocationConfig : AConfigBase {
 		_return_code(-1),
 		_return_url(""),
         _autoindex(false),
-		_upload_store(""),
-		_alias("")
+		_upload_store("")
     {
 		_allowed_methods["GET"] = false;
 		_allowed_methods["POST"] = false;

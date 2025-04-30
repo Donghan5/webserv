@@ -13,6 +13,7 @@ Parser::Parser(STR file) {
 
 Parser::Parser(const Parser &obj) {
 	_config = obj._config;
+	_filepath = obj._filepath;
 }
 
 Parser &Parser::operator=(const Parser &obj) {
@@ -25,7 +26,7 @@ Parser::~Parser() {
 	// 	delete _config;
 }
 
-int Parser::verifyPort(std::string port_str) {
+int Parser::verifyPort(STR port_str) {
 	std::stringstream ss(port_str);
 	int port;
 
@@ -35,7 +36,7 @@ int Parser::verifyPort(std::string port_str) {
 	return port;
 }
 
-bool Parser::verifyAutoIndex(std::string autoindex_str) {
+bool Parser::verifyAutoIndex(STR autoindex_str) {
 	bool autoindex = false;
 	if (autoindex_str == "on") {
 		autoindex = true;
@@ -55,10 +56,10 @@ bool Parser::verifyAutoIndex(std::string autoindex_str) {
  *
  * default is 1M
 */
-long long Parser::verifyClientMaxBodySize(std::string client_max_body_size_str) {
+long long Parser::verifyClientMaxBodySize(STR client_max_body_size_str) {
 	std::stringstream ss(client_max_body_size_str);
 	long long value;
-	std::string unit;
+	STR unit;
 
 	if (!(ss >> value)) {
 		return -1;
@@ -96,7 +97,7 @@ VECTOR<STR>	split(STR string, char delim, bool use_whitespaces_delim) {
 
 	// Split by any whitespace (>> skips at the beginning and then stops at any whitespace by default)
 	if (use_whitespaces_delim) {
-        std::string token;
+        STR token;
 
         while (string_stream >> token) {
             result.push_back(token);
@@ -282,8 +283,6 @@ bool	Parser::ValidateConfig(STR full_config) {
 	return true;
 }
 
-#define VAR_NAME(var) #var
-
 bool FillDirective(AConfigBase* block, STR line, int position) {
 	VECTOR<STR> tokens;
 	STR 		trimmed_line;
@@ -318,8 +317,18 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 				httpConf->_index.push_back(tokens[j]);
 			}
 		} else if (tokens[0] == "error_page") {
-			int code = atoi(tokens[1].c_str());
-			httpConf->_error_pages[code] = tokens[2];  // Assumes "error_page 404 /404.html"
+			// Handle multiple error codes for a single page
+			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
+			
+			// Process all error codes (all tokens except first and last)
+			for (size_t j = 1; j < tokens.size() - 1; j++) {
+				int code = atoi(tokens[j].c_str());
+				if (code > 0) { // Only process valid numeric codes
+					httpConf->_error_pages[code] = page_path;
+				} else {
+					Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
+				}
+			}
 		} else {
 			Logger::cerrlog(Logger::ERROR, "CHECKFillDirective HttpConfig extra type " + tokens[0]);
 			return false;
@@ -362,8 +371,18 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 				serverConf->_index.push_back(tokens[j]);
 			}
 		} else if (tokens[0] == "error_page") {
-			int code = atoi(tokens[1].c_str());
-			serverConf->_error_pages[code] = tokens[2];
+			// Handle multiple error codes for a single page
+			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
+			
+			// Process all error codes (all tokens except first and last)
+			for (size_t j = 1; j < tokens.size() - 1; j++) {
+				int code = atoi(tokens[j].c_str());
+				if (code > 0) { // Only process valid numeric codes
+					serverConf->_error_pages[code] = page_path;
+				} else {
+					Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
+				}
+			}
 		} else if (tokens[0] == "client_max_body_size") {
 			serverConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);
 			if (serverConf->_client_max_body_size == -1) {
@@ -450,8 +469,18 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 				locConf->_index.push_back(tokens[j]);
 			}
 		} else if (tokens[0] == "error_page") {
-            int code = atoi(tokens[1].c_str());
-            locConf->_error_pages[code] = tokens[2];
+			// Handle multiple error codes for a single page
+			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
+			
+			// Process all error codes (all tokens except first and last)
+			for (size_t j = 1; j < tokens.size() - 1; j++) {
+				int code = atoi(tokens[j].c_str());
+				if (code > 0) { // Only process valid numeric codes
+					locConf->_error_pages[code] = page_path;
+				} else {
+					Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
+				}
+			}
         } else if (tokens[0] == "allowed_methods") {
 			for (size_t j = 1; j < tokens.size(); j++) {
 				if (tokens[j] != "GET" && tokens[j] != "POST" && tokens[j] != "DELETE")
@@ -460,6 +489,8 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 			}
         } else if (tokens[0] == "upload_store") {
 			locConf->_upload_store = tokens[1];
+		} else if (tokens[0] == "alias") {
+			locConf->_alias = tokens[1];
 		} else {
 			Logger::cerrlog(Logger::ERROR, "CHECKFillDirective LocationConfig extra type " + tokens[0]);
 			return false;

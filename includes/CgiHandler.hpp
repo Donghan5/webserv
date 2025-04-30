@@ -45,7 +45,6 @@ class CgiHandler {
 
 		// Traditional synchronous execution (for backward compatibility)
 		std::string executeCgi();
-		std::string executeProxy();
         
 		// New asynchronous methods for use with epoll
 		bool startCgi(); // Returns true if successfully started

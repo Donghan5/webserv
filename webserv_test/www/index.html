@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEBSERV | Testing Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Our enhanced styles will be added inline for demonstration -->
+    <style>
+        /* Core styling from our enhanced CSS */
+        :root {
+            --bg-primary: #0d0d1e;
+            --bg-secondary: #12122a;
+            --bg-tertiary: #1a1a36;
+            --accent-main: #bc61f3;
+            --accent-second: #2e95e4;
+            --accent-third: #37cdbe;
+            --text: #e3e3f8;
+            --text-dim: #9595c5;
+            --border: rgba(188, 97, 243, 0.2);
+            --success: #27d896;
+            --danger: #f24c5f;
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .blob-effect {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+            top: 10%;
+            left: 30%;
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-second));
+            animation: subtle-float 20s ease-in-out infinite;
+        }
+
+        .blob-effect:nth-child(2) {
+            top: 60%;
+            left: 70%;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent-second), var(--accent-third));
+            animation-delay: -10s;
+        }
+
+        .hero-shape {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-second));
+            opacity: 0.15;
+            filter: blur(5px);
+            animation: morph 10s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px 2px rgba(188, 97, 243, 0.2); }
+            50% { box-shadow: 0 0 20px 4px rgba(188, 97, 243, 0.4); }
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            25% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+            50% { border-radius: 30% 70% 30% 70% / 70% 30% 70% 30%; }
+            75% { border-radius: 70% 30% 70% 30% / 30% 70% 30% 70%; }
+        }
+
+        /* Enhanced header with gradient underline */
+        header h1 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-second), var(--accent-third));
+            background-size: 200% 100%;
+            animation: gradient-flow 4s linear infinite;
+        }
+
+        /* Enhanced hero section */
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(120deg, var(--accent-main), var(--accent-second), var(--accent-third));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 100%;
+            animation: gradient-flow 6s linear infinite;
+        }
+
+        /* Enhanced modules with hover effects */
+        .module::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-main), transparent);
+        }
+
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Enhanced buttons with hover effect */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Enhanced feature cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 1rem;
+            padding: 1.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--accent-main);
+            position: relative;
+            overflow: hidden;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-card:nth-child(2) {
+            border-left-color: var(--accent-second);
+        }
+        
+        .feature-card:nth-child(3) {
+            border-left-color: var(--accent-third);
+        }
+        
+        .feature-card:nth-child(4) {
+            border-left-color: var(--success);
+        }
+        
+        .feature-card:nth-child(5) {
+            border-left-color: var(--danger);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-main), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-7px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-left-width: 5px;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-icon svg {
+            color: var(--accent-main);
+            filter: drop-shadow(0 0 5px rgba(188, 97, 243, 0.3));
+        }
+        
+        .feature-card:nth-child(2) .feature-icon svg {
+            color: var(--accent-second);
+            filter: drop-shadow(0 0 5px rgba(46, 149, 228, 0.3));
+        }
+        
+        .feature-card:nth-child(3) .feature-icon svg {
+            color: var(--accent-third);
+            filter: drop-shadow(0 0 5px rgba(55, 205, 190, 0.3));
+        }
+        
+        .feature-card:nth-child(4) .feature-icon svg {
+            color: var(--success);
+            filter: drop-shadow(0 0 5px rgba(39, 216, 150, 0.3));
+        }
+        
+        .feature-card:nth-child(5) .feature-icon svg {
+            color: var(--danger);
+            filter: drop-shadow(0 0 5px rgba(242, 76, 95, 0.3));
+        }
+        
+        .feature-icon span {
+            font-weight: 600;
+            background: linear-gradient(120deg, var(--accent-main), var(--accent-second));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+        
+        .feature-description {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .feature-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-top: auto;
+        }
+        
+        .feature-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-second);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            position: relative;
+            padding-left: 0;
+        }
+        
+        .feature-link::before {
+            content: '→';
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            transition: all 0.2s ease;
+            transform: translateX(-10px);
+        }
+        
+        .feature-link:hover {
+            color: var(--accent-main);
+            padding-left: 15px;
+        }
+        
+        .feature-link:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Server Status Section */
+        .server-status {
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 1rem;
+            padding: 1.75rem;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .server-status:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.25);
+        }
+
+        .server-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-second), transparent);
+        }
+        
+        .server-status h3 {
+            color: var(--accent-second);
+            margin-bottom: 1.25rem;
+            font-size: 1.35rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .server-status h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-second), var(--accent-third));
+            opacity: 0.5;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(13, 13, 30, 0.3);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .status-item:hover {
+            background: rgba(19, 19, 42, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .status-item::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+        
+        .status-item span {
+            font-weight: 500;
+        }
+
+        /* Enhanced footer with gradient separator */
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-main), transparent);
+        }
+
+        .logo-mark {
+            color: var(--accent-main);
+            font-weight: 800;
+        }
+        
+        /* Section title styling */
+        .section-title {
+            margin: 2.5rem 0 1.5rem;
+            text-align: center;
+            font-size: 2.25rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30%;
+            width: 40%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-second));
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Blob effects will be added by JavaScript -->
+
+    <header>
+        <h1><span class="logo-mark">WEBSERV</span> Testing Suite</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <!-- Hero shapes will be added by JavaScript -->
+        <div class="hero-content">
+            <h2>Webserv Test Center</h2>
+            <p class="header-subtitle">A comprehensive testing environment for HTTP server capabilities, CGI handling, file operations, and more</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="module">
+            <div class="module-header">
+                <h2 class="module-title">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
+                    </svg>
+                    Quick Access CGI Panel
+                </h2>
+                <span class="badge badge-primary">Testing Dashboard</span>
+            </div>
+            <div class="module-body">
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="runCGI('/cgi-bin/test.py')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        Python CGI
+                    </button>
+                    <button class="btn btn-outline" onclick="runCGI('/cgi-bin/test.php')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        PHP CGI
+                    </button>
+                    <button class="btn btn-outline" onclick="runCGI('/cgi-bin/test.pl')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        Perl CGI
+                    </button>
+                    <button class="btn btn-outline" onclick="runCGI('/cgi-bin/test.sh')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        Bash CGI
+                    </button>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-content" id="cgi-output">
+                        <span class="terminal-line">Ready for execution. Select a CGI script to run.</span>
+                        <span class="typed-cursor"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Complete Testing Features</h2>
+        
+        <div class="feature-grid">
+            <!-- CGI Tests -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <span>CGI Testing</span>
+                </div>
+                <p class="feature-description">Test the server's capability to execute CGI scripts across multiple languages, including advanced environment variable handling.</p>
+                <div class="feature-links">
+                    <a href="/cgi-bin/test.py" class="feature-link">Python Script Test</a>
+                    <a href="/cgi-bin/test.php" class="feature-link">PHP Script Test</a>
+                    <a href="/cgi-bin/test.pl" class="feature-link">Perl Script Test</a>
+                    <a href="/cgi-bin/test.sh" class="feature-link">Bash Script Test</a>
+                    <a href="/cgi-bin/env.py" class="feature-link">Environment Variables</a>
+                </div>
+            </div>
+            
+            <!-- Advanced CGI -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>Advanced CGI</span>
+                </div>
+                <p class="feature-description">Test advanced CGI features like session management, multi-CGI execution, and more complex request processing.</p>
+                <div class="feature-links">
+                    <a href="/cgi-bin/session.py" class="feature-link">Session Management</a>
+                    <a href="/cgi-bin/multi_cgi.py" class="feature-link">Multiple CGI Execution</a>
+                    <a href="/cgi-bin/form.py" class="feature-link">Form Handling</a>
+                </div>
+            </div>
+            
+            <!-- File Operations -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    <span>File Operations</span>
+                </div>
+                <p class="feature-description">Test file uploads, downloads, and directory listing capabilities of the server with various file types.</p>
+                <div class="feature-links">
+                    <a href="/upload.html" class="feature-link">File Upload Interface</a>
+                    <a href="/direct_upload.html" class="feature-link">Direct Upload Handler</a>
+                    <a href="/uploads/" class="feature-link">Directory Listing</a>
+                </div>
+            </div>
+            
+            <!-- Form Processing -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    <span>Form Processing</span>
+                </div>
+                <p class="feature-description">Test HTML form handling with different methods (GET/POST) and various form field types.</p>
+                <div class="feature-links">
+                    <a href="/contact.html" class="feature-link">Contact Form</a>
+                    <a href="/cgi-bin/form.py?name=TestUser&email=test@example.com" class="feature-link">GET Method Form</a>
+                </div>
+            </div>
+            
+            <!-- Error Handling -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span>Error Handling</span>
+                </div>
+                <p class="feature-description">Test the server's error handling capabilities with various HTTP status codes and custom error pages.</p>
+                <div class="feature-links">
+                    <a href="/nonexistent" class="feature-link">404 Page Not Found</a>
+                    <a href="/forbidden-directory/" class="feature-link">403 Forbidden</a>
+                    <a href="/cgi-bin/error.py" class="feature-link">500 Server Error</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">WEBSERV <span class="logo-mark">NEXUS</span></div>
+            <p class="footer-tagline">Advanced Web Server Technology</p>
+            <p class="footer-copyright">&copy; 2025 WEBSERV PROJECT • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- Include our enhanced script -->
+    <script>
+        // Add blob effects to the body
+        function addBlobEffects() {
+            const body = document.body;
+            
+            // Create two blob effects and append to body
+            for (let i = 0; i < 2; i++) {
+                const blob = document.createElement('div');
+                blob.className = 'blob-effect';
+                body.prepend(blob);
+                
+                // Random movement animation
+                setInterval(() => {
+                    const xPos = Math.random() * 10 - 5;
+                    const yPos = Math.random() * 10 - 5;
+                    blob.style.transform = `translate(${xPos}px, ${yPos}px)`;
+                }, 2000);
+            }
+        }
+
+        // Add hero shapes to hero section
+        function addHeroShapes() {
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                // Create three hero shapes and append to hero section
+                for (let i = 0; i < 3; i++) {
+                    const shape = document.createElement('div');
+                    shape.className = 'hero-shape';
+                    hero.appendChild(shape);
+                }
+            }
+        }
+        
+        // Function to create typing effect - faster version
+        function typeText(element, text, callback) {
+            // Fast mode for immediate text display
+            const span = document.createElement('span');
+            span.className = 'terminal-line';
+            span.textContent = text;
+            element.innerHTML = '';
+            element.appendChild(span);
+            
+            // Add cursor at the end
+            const cursor = document.createElement('span');
+            cursor.className = 'typed-cursor';
+            element.appendChild(cursor);
+            
+            // Execute callback immediately if provided
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }
+        
+        // Function to run CGI scripts - optimized for speed
+        function runCGI(cgiPath) {
+            const outputEl = document.getElementById("cgi-output");
+            if (!outputEl) return;
+            
+            // Show immediate loading message
+            typeText(outputEl, "Executing " + cgiPath + "...");
+            
+            // Fetch the CGI script immediately
+            fetch(cgiPath)
+                .then(response => response.text())
+                .then(data => {
+                    let htmlContent = data;
+                    
+                    // Extract content after headers
+                    const separators = ["\r\n\r\n", "\n\n", "\r\r"];
+                    for (const separator of separators) {
+                        const index = htmlContent.indexOf(separator);
+                        if (index !== -1) {
+                            htmlContent = htmlContent.substring(index + separator.length);
+                            break;
+                        }
+                    }
+                    
+                    // Create an iframe to display the content
+                    const iframe = document.createElement('iframe');
+                    iframe.style.width = '100%';
+                    iframe.style.height = '400px';
+                    iframe.style.border = 'none';
+                    iframe.style.borderRadius = '4px';
+                    iframe.style.backgroundColor = 'transparent';
+                    iframe.scrolling = 'auto';
+                    iframe.srcdoc = htmlContent;
+                    
+                    outputEl.innerHTML = "";
+                    outputEl.appendChild(iframe);
+                    
+                    iframe.onload = function() {
+                        try {
+                            iframe.style.height = (iframe.contentWindow.document.body.scrollHeight + 20) + 'px';
+                        } catch(e) {
+                            console.error("Unable to adjust iframe height:", e);
+                        }
+                    };
+                })
+                .catch(error => {
+                    typeText(outputEl, "Error: " + error.message);
+                });
+        }
+        
+        // Initialize everything on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add visual effects
+            addBlobEffects();
+            addHeroShapes();
+            
+            // Initialize the terminal effect
+            const outputEl = document.getElementById("cgi-output");
+            if (outputEl) {
+                typeText(outputEl, "Ready for execution. Select a CGI script to run.");
+            }
+        });
+    </script>
+</body>

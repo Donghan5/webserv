@@ -63,7 +63,58 @@ int RequestsManager::HandleRead() {
     static Request request;
     static long long body_read = -1;
 
+    // Figure out why this here doesn't work (instead of two inside)
+    // if (body_read != -1 && body_read >= (long long)request._body_size) {
+    //     Logger::cerrlog(Logger::INFO, "RequestsManager::HandleRead Full body read!");
+    //     std::cerr << "body_read is " << body_read << "\n";
+    //     body_read = -1;
+
+    //     request.clear();
+    //     if (!request.setRequest(_partial_requests[_client_fd])) {
+    //         Logger::cerrlog(Logger::ERROR, "Request HandleRead: Error parsing request");
+    //         _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+    //         return 2;
+    //     }
+    //     if (!request.parseBody()) {
+    //         Logger::cerrlog(Logger::ERROR, "Request HandleRead: Error parsing body");
+    //         _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+    //         return 2;
+    //     }
+
+    //     // Create a response object for this request
+    //     Response* response = new Response();
+    //     response->setConfig(_config);
+    //     response->setRequest(request);
+
+    //     // Process the request
+    //     STR response_text = response->getResponse();
+
+    //     // Check if we need to handle CGI
+    //     if (response_text.empty() && !response->isResponseReady()) {
+    //         // This is a CGI request that's being processed asynchronously
+    //         _active_responses[_client_fd] = response;
+
+    //         // Register the CGI output file descriptor with epoll
+    //         int cgi_fd = response->getCgiOutputFd();
+    //         if (cgi_fd != -1) {
+    //             return RegisterCgiFd(cgi_fd, _client_fd);
+    //         } else {
+    //             Logger::cerrlog(Logger::ERROR, "Invalid CGI file descriptor");
+    //             delete response;
+    //             _active_responses.erase(_client_fd);
+    //             _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
+    //             return 2;
+    //         }
+    //     } else {
+    //         // Normal response
+    //         _partial_responses[_client_fd] = response_text;
+    //         delete response;
+    //         return 2;
+    //     }
+    // }
+
     try {
+        //Figure out mystery about why small ones don't work
         char buffer[1500000];
         int nbytes = 1;
 
@@ -79,6 +130,7 @@ int RequestsManager::HandleRead() {
         }
 
         if (body_read != -1) {
+            // std::cerr << "body_read is " << body_read << "\n";
             body_read += nbytes;
         }
 
@@ -94,14 +146,69 @@ int RequestsManager::HandleRead() {
                 return 2;
             }
 
+            //HANDLE BODY IN if (body_read < (long long)request._body_size) else CASE, DON'T GO TO POLLOUT, body needed
+            //           it's the same function - unify
+            
             if (request._body_size > 0) {
                 Logger::cerrlog(Logger::DEBUG, "RequestManager::HandleRead Body needed of size " + intToString(request._body_size));
                 body_read = _partial_requests[_client_fd].size() - header_end - 4;
+				if (body_read < (long long)request._body_size) {
+                    Logger::log(Logger::INFO, "Body partially received: " +
+                               intToString(body_read) + "/" + intToString(request._body_size));
+                    return 1; // Keep in POLLIN mode
+                } else {
+                    Logger::cerrlog(Logger::INFO, "RequestsManager::HandleRead Full body read!");
+                    std::cerr << "body_read is " << body_read << "\n";
+                    body_read = -1;
+
+                    request.clear();
+                    if (!request.setRequest(_partial_requests[_client_fd])) {
+                        Logger::cerrlog(Logger::ERROR, "Request HandleRead: Error parsing request");
+                        _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                        return 2;
+                    }
+                    if (!request.parseBody()) {
+                        Logger::cerrlog(Logger::ERROR, "Request HandleRead: Error parsing body");
+                        _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                        return 2;
+                    }
+
+                    // Create a response object for this request
+                    Response* response = new Response();
+                    response->setConfig(_config);
+                    response->setRequest(request);
+
+                    // Process the request
+                    STR response_text = response->getResponse();
+
+                    // Check if we need to handle CGI
+                    if (response_text.empty() && !response->isResponseReady()) {
+                        // This is a CGI request that's being processed asynchronously
+                        _active_responses[_client_fd] = response;
+
+                        // Register the CGI output file descriptor with epoll
+                        int cgi_fd = response->getCgiOutputFd();
+                        if (cgi_fd != -1) {
+                            return RegisterCgiFd(cgi_fd, _client_fd);
+                        } else {
+                            Logger::cerrlog(Logger::ERROR, "Invalid CGI file descriptor");
+                            delete response;
+                            _active_responses.erase(_client_fd);
+                            _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
+                            return 2;
+                        }
+                    } else {
+                        // Normal response
+                        _partial_responses[_client_fd] = response_text;
+                        delete response;
+                        return 2;
+                    }
+                }
             } else {
                 // Create a response object for this request
                 Response* response = new Response();
                 response->setConfig(_config);
-                response->setRequest(&request);
+                response->setRequest(request);
 
                 // Process the request
                 STR response_text = response->getResponse();
@@ -152,7 +259,7 @@ int RequestsManager::HandleRead() {
             // Create a response object for this request
             Response* response = new Response();
             response->setConfig(_config);
-            response->setRequest(&request);
+            response->setRequest(request);
 
             // Process the request
             STR response_text = response->getResponse();
@@ -182,7 +289,7 @@ int RequestsManager::HandleRead() {
         }
     } catch (const std::exception& e) {
         body_read = -1;
-        Logger::cerrlog(Logger::ERROR, "Request HandleRead: Error reading request: " + std::string(e.what()));
+        Logger::cerrlog(Logger::ERROR, "Request HandleRead: Error reading request: " + STR(e.what()));
         _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
         return 0;
     }
@@ -201,16 +308,26 @@ int RequestsManager::HandleWrite() {
         ssize_t bytes_written = write(_client_fd, response.c_str(), response.length());
 
         if (bytes_written <= 0) {
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                // Socket buffer is full, try again later
-                Logger::cerrlog(Logger::DEBUG, "HandleWrite: Socket buffer full, will retry");
-                return 2; // Keep monitoring for write events
-            } else {
-                // Real error
-                Logger::cerrlog(Logger::ERROR, "HandleWrite error: " + std::string(strerror(errno)));
+            if (bytes_written == 0) {
+                // Socket closed by peer
+                Logger::cerrlog(Logger::INFO, "HandleWrite: Socket closed by peer");
                 CloseClient();
                 return 0;
             }
+            // if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            //     // Socket buffer is full, try again later
+            //     Logger::cerrlog(Logger::DEBUG, "HandleWrite: Socket buffer full, will retry");
+            //     return 2; // Keep monitoring for write events
+            // } else {
+            //     // Real error
+            //     Logger::cerrlog(Logger::ERROR, "HandleWrite error: " + STR(strerror(errno)));
+            //     CloseClient();
+            //     return 0;
+            // }
+            // Real error
+            Logger::cerrlog(Logger::ERROR, "HandleWrite error: " + STR(strerror(errno)));
+            CloseClient();
+            return 0;
         }
 
         Logger::cerrlog(Logger::INFO, "HandleWrite: Wrote " + Utils::intToString(bytes_written) +
@@ -240,7 +357,7 @@ int RequestsManager::HandleWrite() {
         }
     }
     catch(const std::exception& e) {
-        Logger::cerrlog(Logger::ERROR, "HandleWrite error: " + std::string(e.what()));
+        Logger::cerrlog(Logger::ERROR, "HandleWrite error: " + STR(e.what()));
         CloseClient();
         return 0;
     }
@@ -285,7 +402,7 @@ int RequestsManager::HandleCgiOutput(int cgi_fd) {
             return client_fd;
         }
     } catch (const std::exception& e) {
-        Logger::cerrlog(Logger::ERROR, "Error processing CGI output: " + std::string(e.what()));
+        Logger::cerrlog(Logger::ERROR, "Error processing CGI output: " + STR(e.what()));
 
         // Create an error response
         _partial_responses[client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);

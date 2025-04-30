@@ -1,8 +1,8 @@
 #include "../includes/Logger.hpp"
-
+#include "../includes/AConfigBase.hpp"
 
 // get current time
-std::string Logger::getCurrentTime() {
+STR Logger::getCurrentTime() {
 	time_t now = time(0);
 	struct tm tstruct;
 	char buf[80];
@@ -10,31 +10,31 @@ std::string Logger::getCurrentTime() {
 	tstruct = *localtime(&now);
 	strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
 
-	return std::string(buf);
+	return STR(buf);
 }
 
 // convert log level to string
-std::string Logger::logLevelToString(LogLevel level) {
+STR Logger::logLevelToString(LogLevel level) {
 	switch(level) {
-		case INFO: return std::string(BLUE) + "INFO" + std::string(END);
-		case WARNING: return std::string(YELLOW) + "WARNING" + std::string(END);
-		case ERROR: return std::string(RED) + "ERROR" + std::string(END);
-		case DEBUG: return std::string(GREEN) + "DEBUG" + std::string(END);
+		case INFO: return STR(BLUE) + "INFO" + STR(END);
+		case WARNING: return STR(YELLOW) + "WARNING" + STR(END);
+		case ERROR: return STR(RED) + "ERROR" + STR(END);
+		case DEBUG: return STR(GREEN) + "DEBUG" + STR(END);
 		default: return "UNKNOWN";
 	}
 }
 
 // Just print the log cout
-void Logger::log(LogLevel level, const std::string &message) {
+void Logger::log(LogLevel level, const STR &message) {
 
-	std::string logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
+	STR logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
 
 	std::cout << logEntry << std::endl;
 }
 
 // separate error log using cerr
-void Logger::cerrlog(LogLevel level, const std::string &message) {
-	std::string logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
+void Logger::cerrlog(LogLevel level, const STR &message) {
+	STR logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
 
 	std::cerr << logEntry << std::endl;
 }

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Webserv Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Core styling enhancements */
+        :root {
+            --bg-primary: #0d0d1e;
+            --bg-secondary: #12122a;
+            --bg-tertiary: #1a1a36;
+            --accent-main: #bc61f3;
+            --accent-second: #2e95e4;
+            --accent-third: #37cdbe;
+            --text: #e3e3f8;
+            --text-dim: #9595c5;
+            --border: rgba(188, 97, 243, 0.2);
+            --success: #27d896;
+            --danger: #f24c5f;
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px 2px rgba(188, 97, 243, 0.2); }
+            50% { box-shadow: 0 0 20px 4px rgba(188, 97, 243, 0.4); }
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text);
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(188, 97, 243, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(46, 149, 228, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(55, 205, 190, 0.03) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+
+        .blob-effect {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+            top: 10%;
+            left: 30%;
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-second));
+            animation: subtle-float 20s ease-in-out infinite;
+        }
+
+        .blob-effect:nth-child(2) {
+            top: 60%;
+            left: 70%;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent-second), var(--accent-third));
+            animation-delay: -10s;
+        }
+
+        /* Enhanced header with gradient underline */
+        header {
+            background-color: rgba(13, 13, 30, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.25rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(188, 97, 243, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+            margin: 0;
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-second), var(--accent-third));
+            background-size: 200% 100%;
+            animation: gradient-flow 4s linear infinite;
+        }
+
+        .logo-mark {
+            color: var(--accent-main);
+            font-weight: 800;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-main);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-second));
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Contact form container */
+        .contact-container {
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin: 3rem auto;
+            max-width: 600px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-main), transparent);
+        }
+
+        .contact-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .contact-container h2 {
+            margin-bottom: 1.5rem;
+            color: var(--accent-main);
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-second));
+            border-radius: 3px;
+        }
+
+        /* Enhanced form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .form-group:focus-within label {
+            color: var(--accent-main);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(13, 13, 30, 0.5);
+            border: 1px solid rgba(188, 97, 243, 0.2);
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-main);
+            box-shadow: 0 0 0 2px rgba(188, 97, 243, 0.2);
+            background-color: rgba(13, 13, 30, 0.7);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-second));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .form-button:hover {
+            box-shadow: 0 5px 15px rgba(188, 97, 243, 0.4);
+        }
+
+        .form-button:hover::before {
+            left: 100%;
+        }
+
+        /* Enhanced footer */
+        footer {
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-main), transparent);
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 5;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .footer-tagline {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* Floating label effect */
+        .form-floating {
+            position: relative;
+        }
+
+        .form-floating .form-control {
+            padding: 1rem;
+            height: calc(3.5rem + 2px);
+        }
+
+        .form-floating > label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 1rem;
+            pointer-events: none;
+            border: 1px solid transparent;
+            transform-origin: 0 0;
+            transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+        }
+
+        .form-floating .form-control:focus ~ label,
+        .form-floating .form-control:not(:placeholder-shown) ~ label {
+            opacity: .65;
+            transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+        }
+    </style>
+</head>
+<body>
+    <!-- Blob effects -->
+    <div class="blob-effect"></div>
+    <div class="blob-effect"></div>
+
+    <header>
+        <h1><span class="logo-mark">WEBSERV</span> Project</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contact-container">
+        <h2>Send Us a Message</h2>
+        <form action="/cgi-bin/form.py" method="post">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
+            </div>
+            
+            <div>
+                <button type="submit" class="form-button">Send Message</button>
+            </div>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">WEBSERV <span class="logo-mark">NEXUS</span></div>
+            <p class="footer-tagline">Advanced Web Server Technology</p>
+            <p class="footer-copyright">&copy; 2025 WEBSERV PROJECT • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add slight movement to blob effects
+            const blobs = document.querySelectorAll('.blob-effect');
+            blobs.forEach(blob => {
+                setInterval(() => {
+                    const xPos = Math.random() * 10 - 5;
+                    const yPos = Math.random() * 10 - 5;
+                    blob.style.transform = `translate(${xPos}px, ${yPos}px)`;
+                }, 2000);
+            });
+            
+            // Add hover effects to navigation
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.color = 'var(--accent-main)';
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    this.style.color = '';
+                });
+            });
+            
+            // Add subtle animations to the contact container
+            const contactContainer = document.querySelector('.contact-container');
+            if (contactContainer) {
+                contactContainer.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 15px 35px -5px rgba(0, 0, 0, 0.3)';
+                });
+                
+                contactContainer.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 10px 30px -5px rgba(0, 0, 0, 0.2)';
+                });
+            }
+            
+            // Add interactive form effects
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(input => {
+                // Focus effect
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+                
+                // Add subtle glow effect on input
+                input.addEventListener('input', function() {
+                    if (this.value.length > 0) {
+                        this.style.borderColor = 'var(--accent-main)';
+                        this.style.boxShadow = '0 0 5px rgba(188, 97, 243, 0.2)';
+                    } else {
+                        this.style.borderColor = 'rgba(188, 97, 243, 0.2)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+            });
+            
+            // Add button effects
+            const formButton = document.querySelector('.form-button');
+            if (formButton) {
+                formButton.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                formButton.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

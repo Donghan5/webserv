@@ -1,7 +1,8 @@
 #include "../includes/CgiHandler.hpp"
+#include "../includes/AConfigBase.hpp"
 #include "Logger.hpp"
 
-CgiHandler::CgiHandler(const std::string &scriptPath, const std::map<std::string, std::string> &env, const std::string &body):
+CgiHandler::CgiHandler(const STR &scriptPath, const MAP<STR, STR> &env, const STR &body):
     _scriptPath(scriptPath), _env(env), _body(body), _cgi_pid(-1), _process_running(false) {
 	_interpreters[".py"] = "/usr/bin/python3";
 	_interpreters[".php"] = "/usr/bin/php";
@@ -23,9 +24,9 @@ CgiHandler::~CgiHandler() {
 char **CgiHandler::convertEnvToCharArray(void) {
 	char **envp = new char*[_env.size() + 1];
 	int i = 0;
-	std::map<std::string, std::string>::const_iterator it = _env.begin();
+	MAP<STR, STR>::const_iterator it = _env.begin();
 	for (; it != _env.end(); it++) {
-		std::string envEntry = it->first + "=" + it->second;
+		STR envEntry = it->first + "=" + it->second;
 		envp[i] = strdup(envEntry.c_str());
 		i++;
 	}
@@ -36,7 +37,7 @@ char **CgiHandler::convertEnvToCharArray(void) {
 /*
 	args to launch cgi
 */
-char **CgiHandler::convertArgsToCharArray(const std::string &interpreter) {
+char **CgiHandler::convertArgsToCharArray(const STR &interpreter) {
 	char **args = new char*[3];
 	args[0] = strdup(interpreter.c_str());
 	args[1] = strdup(_scriptPath.c_str());
@@ -44,7 +45,7 @@ char **CgiHandler::convertArgsToCharArray(const std::string &interpreter) {
 	return (args);
 }
 
-std::string CgiHandler::createErrorResponse(const std::string& status, const std::string& message) {
+STR CgiHandler::createErrorResponse(const STR& status, const STR& message) {
     return "HTTP/1.1 " + status + " Error\r\n"
            "Content-Type: text/plain\r\n"
            "Content-Length: " + Utils::intToString(message.length()) + "\r\n"
@@ -53,7 +54,7 @@ std::string CgiHandler::createErrorResponse(const std::string& status, const std
 }
 
 // Traditional synchronous execution (for backward compatibility)
-std::string CgiHandler::executeCgi() {
+STR CgiHandler::executeCgi() {
 	int pipefd_in[2], pipefd_out[2];
 
 	if (pipe(pipefd_in) == -1 || pipe(pipefd_out) == -1) {
@@ -76,8 +77,8 @@ std::string CgiHandler::executeCgi() {
 		close(pipefd_in[1]);
 
 		char **envp = convertEnvToCharArray();
-		std::string extension = _scriptPath.substr(_scriptPath.find_last_of("."));
-		std::map<std::string, std::string>::const_iterator it = _interpreters.find(extension);
+		STR extension = _scriptPath.substr(_scriptPath.find_last_of("."));
+		MAP<STR, STR>::const_iterator it = _interpreters.find(extension);
 		if (it == _interpreters.end()) { // free the memory
 			for(size_t i = 0; envp[i] != NULL; i++) {
 				free(envp[i]);
@@ -110,7 +111,7 @@ std::string CgiHandler::executeCgi() {
 		close(pipefd_in[1]);
 
 		char buffer[4096];
-		std::string output;
+		STR output;
 		int byteRead;
 
 		while ((byteRead = read(pipefd_out[0], buffer, sizeof(buffer))) > 0) {
@@ -132,19 +133,19 @@ std::string CgiHandler::executeCgi() {
 bool CgiHandler::startCgi() {
     // Create pipes for communication with the CGI process
     if (pipe(_input_pipe) == -1 || pipe(_output_pipe) == -1) {
-        Logger::cerrlog(Logger::ERROR, "Failed to create pipes for CGI: " + std::string(strerror(errno)));
+        Logger::cerrlog(Logger::ERROR, "Failed to create pipes for CGI: " + STR(strerror(errno)));
         return false;
     }
 
     // Set the output pipe to non-blocking mode for epoll
     int flags = fcntl(_output_pipe[0], F_GETFL, 0);
     if (flags == -1) {
-        Logger::cerrlog(Logger::ERROR, "Failed to get flags for CGI output pipe: " + std::string(strerror(errno)));
+        Logger::cerrlog(Logger::ERROR, "Failed to get flags for CGI output pipe: " + STR(strerror(errno)));
         closeCgi();
         return false;
     }
     if (fcntl(_output_pipe[0], F_SETFL, flags | O_NONBLOCK) == -1) {
-        Logger::cerrlog(Logger::ERROR, "Failed to set non-blocking mode for CGI output pipe: " + std::string(strerror(errno)));
+        Logger::cerrlog(Logger::ERROR, "Failed to set non-blocking mode for CGI output pipe: " + STR(strerror(errno)));
         closeCgi();
         return false;
     }
@@ -159,7 +160,7 @@ bool CgiHandler::startCgi() {
     // Fork a child process to execute the CGI script
     _cgi_pid = fork();
     if (_cgi_pid < 0) {
-        Logger::cerrlog(Logger::ERROR, "Failed to fork for CGI: " + std::string(strerror(errno)));
+        Logger::cerrlog(Logger::ERROR, "Failed to fork for CGI: " + STR(strerror(errno)));
         closeCgi();
         return false;
     }
@@ -181,8 +182,8 @@ bool CgiHandler::startCgi() {
         char **envp = convertEnvToCharArray();
 
         // Find the appropriate interpreter
-        std::string extension = _scriptPath.substr(_scriptPath.find_last_of("."));
-        std::map<std::string, std::string>::const_iterator it = _interpreters.find(extension);
+        STR extension = _scriptPath.substr(_scriptPath.find_last_of("."));
+        MAP<STR, STR>::const_iterator it = _interpreters.find(extension);
         if (it == _interpreters.end()) {
             Logger::cerrlog(Logger::ERROR, "No interpreter found for extension: " + extension);
             for(size_t i = 0; envp[i] != NULL; i++) {
@@ -198,11 +199,14 @@ bool CgiHandler::startCgi() {
         // Debug output
         Logger::cerrlog(Logger::INFO, "Executing CGI script: " + it->second + " " + _scriptPath);
 
-        // Execute the interpreter with the script
         execve(args[0], args, envp);
 
-        // If execve fails, clean up and exit
-        Logger::cerrlog(Logger::ERROR, "Failed to execute CGI script: " + std::string(strerror(errno)));
+        //----------------------------------------------------------------------------------RECHECK, SOMETIMES FAILS (bad python)
+        // If execve() returns, it means it failed
+        int err = errno; // Save errno because other system calls might change it
+        Logger::cerrlog(Logger::ERROR, "Failed to execute CGI script: " + STR(strerror(err)));
+
+        // Clean up resources
         for (size_t i = 0; envp[i] != NULL; i++) {
             free(envp[i]);
         }
@@ -213,6 +217,7 @@ bool CgiHandler::startCgi() {
         }
         delete[] args;
 
+        // Exit the child process with error code
         exit(1);
     } else {
         // Parent process
@@ -254,7 +259,7 @@ bool CgiHandler::startCgi() {
 //     // Write data to the CGI process
 //     ssize_t written = write(_input_pipe[1], data, len);
 //     if (written < 0) {
-//         Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + std::string(strerror(errno)));
+//         Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + STR(strerror(errno)));
 //         return false;
 //     }
 
@@ -288,7 +293,7 @@ bool CgiHandler::writeToCgi(const char* data, size_t len) {
                 // wait for a moment and redo
                 continue;
             }
-            Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + std::string(strerror(errno)));
+            Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + STR(strerror(errno)));
             return false;
         }
 
@@ -332,7 +337,7 @@ bool CgiHandler::writeToCgi(const char* data, size_t len) {
 //                 // Resource temporarily unavailable, try again
 //                 continue;
 //             }
-//             Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + std::string(strerror(errno)));
+//             Logger::cerrlog(Logger::ERROR, "Failed to write to CGI: " + STR(strerror(errno)));
 //             return false;
 //         }
 
@@ -353,13 +358,13 @@ bool CgiHandler::writeToCgi(const char* data, size_t len) {
 //     return true;
 // }
 
-std::string CgiHandler::readFromCgi() {
+STR CgiHandler::readFromCgi() {
     if (!_process_running || _output_pipe[0] == -1) {
         return "";
     }
 
     char buffer[4096];
-    std::string output;
+    STR output;
     ssize_t bytesRead;
 
     // Read available data from the CGI process
@@ -368,7 +373,7 @@ std::string CgiHandler::readFromCgi() {
     }
 
     if (bytesRead < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
-        Logger::cerrlog(Logger::ERROR, "Failed to read from CGI: " + std::string(strerror(errno)));
+        Logger::cerrlog(Logger::ERROR, "Failed to read from CGI: " + STR(strerror(errno)));
     }
 
     _output_buffer += output;
@@ -400,7 +405,7 @@ bool CgiHandler::checkCgiStatus() {
         }
     } else {
         // Error checking status
-        Logger::cerrlog(Logger::ERROR, "Failed to check CGI status: " + std::string(strerror(errno)));
+        Logger::cerrlog(Logger::ERROR, "Failed to check CGI status: " + STR(strerror(errno)));
         _process_running = false;
         return true;
     }

@@ -23,31 +23,32 @@
 enum FdType {
     SERVER_FD,
     CLIENT_FD,
-    CGI_FD
+    CGI_FD,
+    POST_FD  // 추가된 타입: POST 작업 파일 디스크립터
 };
 
 class PollServer {
 	private:
-		HttpConfig 					*config;
-		bool						running;
-		std::map<int, int>			_server_sockets;      // port -> socket_fd
-		std::map<int, STR>			_partial_requests;
-		std::map<int, STR>			_partial_responses;
-        std::map<int, FdType>       _fd_types;           // Track fd types
-        std::map<int, int>          _cgi_to_client;      // Map CGI fd to client fd
-		int							_epoll_fd;
-		VECTOR<struct epoll_event>	_events;
-		const int MAX_EVENTS = 64;
+	HttpConfig 					*config;
+	bool						running;
+	std::map<int, int>			_server_sockets;      // port -> socket_fd
+	std::map<int, STR>			_partial_requests;
+	std::map<int, STR>			_partial_responses;
+	std::map<int, FdType>       _fd_types;           // Track fd types
+	std::map<int, int>          _cgi_to_client;      // Map CGI fd to client fd
+	int							_epoll_fd;
+	VECTOR<struct epoll_event>	_events;
+	const int 					MAX_EVENTS;
 
-		bool						WaitAndService(RequestsManager &requests);
-		void						AcceptClient(int new_fd);
-		void 						CloseClient(int client_fd);
-        void                        HandleCgiOutput(int cgi_fd, RequestsManager &requests);
-		bool AddFd(int fd, uint32_t events, FdType type);
-		bool ModifyFd(int fd, uint32_t events);
-		bool RemoveFd(int fd);
-		bool AddServerSocket(int port, int socket_fd);
-        bool AddCgiFd(int cgi_fd, int client_fd);
+	bool						WaitAndService(RequestsManager &requests);
+	void						AcceptClient(int new_fd);
+	void 						CloseClient(int client_fd);
+	void                        HandleCgiOutput(int cgi_fd, RequestsManager &requests);
+	bool AddFd(int fd, uint32_t events, FdType type);
+	bool ModifyFd(int fd, uint32_t events);
+	bool RemoveFd(int fd);
+	bool AddServerSocket(int port, int socket_fd);
+	bool AddCgiFd(int cgi_fd, int client_fd);
 
 	public:
 		PollServer();

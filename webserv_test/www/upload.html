@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Test | Webserv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .upload-container {
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .upload-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .upload-header h2 {
+            color: var(--accent-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-header p {
+            color: var(--text-dim);
+        }
+
+        .file-input-container {
+            background: rgba(12, 12, 28, 0.3);
+            border: 2px dashed rgba(188, 97, 243, 0.2);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            display: block;
+            width: auto;
+            overflow: hidden;
+        }
+
+        .file-input-container:hover {
+            border-color: var(--accent-main);
+            background: rgba(12, 12, 28, 0.5);
+        }
+
+        .file-input-container input[type="file"] {
+            display: none;
+        }
+
+        .file-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-second));
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .file-text {
+            margin-bottom: 1rem;
+        }
+
+        .file-text strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-text span {
+            color: var(--text-dim);
+        }
+
+        .progress {
+            height: 6px;
+            background-color: rgba(188, 97, 243, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-second));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .upload-list {
+            background: rgba(12, 12, 28, 0.3);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .upload-list h3 {
+            color: var(--accent-second);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(46, 149, 228, 0.2);
+        }
+
+        .upload-path {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(12, 12, 28, 0.5);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            border-left: 3px solid var(--accent-second);
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .file-list li {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: rgba(26, 26, 54, 0.5);
+            transition: background 0.2s ease;
+        }
+
+        .file-list li:hover {
+            background: rgba(26, 26, 54, 0.8);
+        }
+
+        .file-list-icon {
+            margin-right: 1rem;
+            color: var(--accent-main);
+        }
+
+        .file-list-name {
+            flex: 1;
+        }
+
+        .file-list-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .file-list-actions a {
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            transition: color 0.2s ease;
+        }
+
+        .file-list-actions a:hover {
+            color: var(--accent-main);
+        }
+
+        .terminal {
+            margin-top: 1.5rem;
+        }
+
+        .file-preview {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(12, 12, 28, 0.3);
+            border-radius: 0.75rem;
+            text-align: center;
+            border: 1px solid rgba(188, 97, 243, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 0.5rem;
+            display: none;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .file-preview-placeholder {
+            color: var(--text-dim);
+            font-style: italic;
+            text-align: center;
+            width: 100%;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="blob-effect"></div>
+    <div class="blob-effect"></div>
+
+    <header>
+        <h1>Webserv Testing Suite</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" style="padding: 4rem 2rem;">
+        <div class="hero-content">
+            <h2>Quantum Upload System</h2>
+            <p class="hero-tagline">Test the server's file upload capabilities with various file types</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="upload-container">
+            <div class="upload-header">
+                <h2>Test File Upload</h2>
+                <p>Upload files to test the server's handling of multipart/form-data</p>
+            </div>
+
+            <form id="upload-form" action="/cgi-bin/upload.py" method="post" enctype="multipart/form-data">
+                <label for="file" class="file-input-container">
+                    <div class="file-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <div class="file-text">
+                        <strong>Drop files here or click to browse</strong>
+                        <span>Maximum file size: 10MB</span>
+                    </div>
+                    <input type="file" id="file" name="filename" required>
+                </label>
+
+                <div id="file-info" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 1rem; background: rgba(12, 12, 28, 0.3); padding: 1rem; border-radius: 0.5rem;">
+                        <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent-main), var(--accent-second)); border-radius: 0.5rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <div id="file-name" style="font-weight: 500; margin-bottom: 0.25rem;"></div>
+                            <div id="file-size" style="font-size: 0.8rem; color: var(--text-dim);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="file-preview">
+                    <img id="preview-image" src="" alt="File preview">
+                    <div id="preview-placeholder" class="file-preview-placeholder">No file selected for preview</div>
+                </div>
+
+                <div id="progress-container" class="progress" style="display: none;">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Upload File
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="resetForm()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </form>
+
+            <div class="terminal">
+                <div class="terminal-content" id="upload-status">
+                    <span class="terminal-line">Quantum upload system initialized and ready.</span>
+                    <span class="typed-cursor"></span>
+                </div>
+            </div>
+
+            <div class="upload-list">
+                <h3>Directory Contents</h3>
+                <div class="upload-path" id="current-path">Loading directory path...</div>
+                <ul id="files-list" class="file-list">
+                    <li>
+                        <div class="file-list-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                                <line x1="7" y1="2" x2="7" y2="22"></line>
+                                <line x1="17" y1="2" x2="17" y2="22"></line>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <line x1="2" y1="7" x2="7" y2="7"></line>
+                                <line x1="2" y1="17" x2="7" y2="17"></line>
+                                <line x1="17" y1="17" x2="22" y2="17"></line>
+                                <line x1="17" y1="7" x2="22" y2="7"></line>
+                            </svg>
+                        </div>
+                        <div class="file-list-name">Loading directory contents...</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">WEBSERV <span class="logo-mark">NEXUS</span></div>
+            <p class="footer-tagline">Advanced Web Server Technology</p>
+            <p class="footer-copyright">&copy; 2025 WEBSERV PROJECT • All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Fast typing effect for terminal messages
+        // Helper function to instantly show text in terminal
+        function fastTypeText(element, text) {
+            element.innerHTML = '';
+            element.innerHTML = `<span class="terminal-line">${text}</span><span class="typed-cursor"></span>`;
+        }
+
+        // Function to get the upload store path
+        function getUploadStore() {
+            // This would ideally be provided by the server in a real implementation
+            // For now, check if we have a CGI environment variable or fall back to default
+
+            // Try to get it from a server-side variable
+            // Since we can't directly access environment variables client-side,
+            // we'd need the server to provide this information
+
+            // Check if there's a data attribute on the body or another element
+            const uploadStoreData = document.body.getAttribute('data-upload-store');
+            if (uploadStoreData) {
+                return uploadStoreData;
+            }
+
+            // We can also check for a meta tag that might be injected by the server
+            const uploadStoreMeta = document.querySelector('meta[name="upload-store"]');
+            if (uploadStoreMeta && uploadStoreMeta.getAttribute('content')) {
+                return uploadStoreMeta.getAttribute('content');
+            }
+
+            // Default fallback
+            return "/uploads";
+        }
+
+        // Handle file selection
+        document.getElementById('file').addEventListener('change', function() {
+            const file = this.files[0];
+
+            if (file) {
+                // Update file info
+                document.getElementById('file-info').style.display = 'block';
+                document.getElementById('file-name').textContent = file.name;
+                document.getElementById('file-size').textContent = formatFileSize(file.size);
+
+                // Show preview for images
+                const previewImage = document.getElementById('preview-image');
+                const previewPlaceholder = document.getElementById('preview-placeholder');
+
+                if (file.type.startsWith('image/')) {
+                    previewImage.src = URL.createObjectURL(file);
+                    previewImage.style.display = 'block';
+                    previewPlaceholder.style.display = 'none';
+                } else {
+                    previewImage.style.display = 'none';
+                    previewPlaceholder.textContent = 'Preview not available for this file type';
+                    previewPlaceholder.style.display = 'block';
+                }
+
+                // Update terminal status
+                fastTypeText(document.getElementById('upload-status'), `File "${file.name}" selected and ready for upload.`);
+            }
+        });
+
+        // Form submission handler with proper upload_store handling
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('file');
+            if (!fileInput.files.length) {
+                fastTypeText(document.getElementById('upload-status'), 'Please select a file first.');
+                return;
+            }
+
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+
+            // Show progress bar
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+
+            // Update status
+            fastTypeText(document.getElementById('upload-status'), 'Initiating quantum data transfer...');
+
+            // Simulate progress while submitting form
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 95) progress = 95;
+                progressBar.style.width = `${progress}%`;
+            }, 300);
+
+            // Get upload_store from hidden input
+            const uploadStoreInput = document.querySelector('input[name="upload_store"]');
+            const uploadStorePath = uploadStoreInput ? uploadStoreInput.value : '/uploads';
+
+            // Submit form with formData
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: this.method,
+                body: formData
+            })
+            .then(response => {
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+                }
+            })
+            .then(data => {
+                setTimeout(() => {
+                    fastTypeText(document.getElementById('upload-status'), `File transferred successfully to ${uploadStorePath}`);
+                    fetchUploadedFiles(); // Refresh the file list
+                }, 500);
+            })
+            .catch(error => {
+                progressBar.style.width = '100%';
+                progressBar.style.backgroundColor = 'var(--danger)';
+                setTimeout(() => {
+                    fastTypeText(document.getElementById('upload-status'), `Error: ${error.message}`);
+                }, 500);
+            });
+        });
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('upload-form').reset();
+            document.getElementById('file-info').style.display = 'none';
+            document.getElementById('preview-image').style.display = 'none';
+            document.getElementById('preview-placeholder').style.display = 'block';
+            document.getElementById('progress-container').style.display = 'none';
+            document.getElementById('progress-bar').style.width = '0%';
+            fastTypeText(document.getElementById('upload-status'), 'Upload data cleared. Ready for new operation.');
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            else return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        // Fetch directory contents from the server
+        function fetchUploadedFiles() {
+            const filesList = document.getElementById('files-list');
+            const currentPath = document.getElementById('current-path');
+
+            filesList.innerHTML = '<li><div class="file-list-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></div><div class="file-list-name">Loading directory contents...</div></li>';
+
+            // Determine the current upload directory
+            let uploadDirectory = "/uploads";
+
+            // Try to retrieve it from a hidden input if available
+            const uploadStoreInput = document.querySelector('input[name="upload_store"]');
+            if (uploadStoreInput && uploadStoreInput.value) {
+                uploadDirectory = uploadStoreInput.value;
+            }
+
+            currentPath.textContent = `Directory: ${uploadDirectory}`;
+
+            // Fetch the actual directory listing from the server
+            fetch(uploadDirectory)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load directory: ${response.status} ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    // Parse the directory listing HTML
+                    try {
+                        filesList.innerHTML = '';
+
+                        // Create a temporary DOM element to parse the HTML
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+
+                        // Find the directory entries (this will depend on your server's directory listing format)
+                        // We're looking for links which are typically how directory listings are presented
+                        const links = doc.querySelectorAll('a');
+
+                        // Show parent directory if not at root and found in the links
+                        let hasParentDir = false;
+
+                        if (links.length === 0) {
+                            filesList.innerHTML = '<li><div class="file-list-name">Directory is empty or listing is disabled.</div></li>';
+                            return;
+                        }
+
+                        // Process each link (file or directory)
+                        links.forEach(link => {
+                            const href = link.getAttribute('href');
+                            const text = link.textContent.trim();
+
+                            // Skip if it's not a valid entry
+                            if (!href || text === '' || text === 'Name' || text === 'Last modified' || text === 'Size' || text === 'Description') {
+                                return;
+                            }
+
+                            // Check if it's a parent directory link
+                            if (href === '../' || text === '..' || text === '../' || text === 'Parent Directory') {
+                                hasParentDir = true;
+                                filesList.innerHTML += `
+                                <li>
+                                    <div class="file-list-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="file-list-name">Parent Directory</div>
+                                </li>
+                                `;
+                                return;
+                            }
+
+                            // Determine if it's a directory (ends with /)
+                            const isDirectory = href.endsWith('/') || text.endsWith('/');
+
+                            // Extract name and any available metadata
+                            let name = text;
+                            if (name.endsWith('/')) {
+                                name = name.slice(0, -1);
+                            }
+
+                            // Get size and date if available in the parent TR element
+                            let size = '';
+                            let date = '';
+
+                            // Check if the link has a parent TR with TD elements for size and date
+                            const row = link.closest('tr');
+                            if (row) {
+                                const cells = row.querySelectorAll('td');
+                                if (cells.length >= 3) {
+                                    date = cells[1] ? cells[1].textContent.trim() : '';
+                                    size = cells[2] ? cells[2].textContent.trim() : '';
+                                }
+                            }
+
+                            if (isDirectory) {
+                                // Add directory entry
+                                filesList.innerHTML += `
+                                <li>
+                                    <div class="file-list-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="file-list-name">${name}/ ${date ? `<span style="font-size: 0.8rem; color: var(--text-dim);">Directory • ${date}</span>` : ''}</div>
+                                </li>
+                                `;
+                            } else {
+                                // Add file entry
+                                filesList.innerHTML += `
+                                <li>
+                                    <div class="file-list-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="file-list-name">${name} ${(size || date) ? `<span style="font-size: 0.8rem; color: var(--text-dim);">${size} ${date ? `• ${date}` : ''}</span>` : ''}</div>
+                                    <div class="file-list-actions">
+										<a href="${uploadDirectory}/${encodeURIComponent(name)}" download>Download</a>
+                                        <a href="#" class="delete-file" data-filename="${name}">Delete</a>
+                                    </div>
+                                </li>
+                                `;
+                            }
+                        });
+
+                        // If no entries were added, show empty message
+                        if (filesList.innerHTML === '') {
+                            filesList.innerHTML = '<li><div class="file-list-name">Directory is empty or no entries could be parsed.</div></li>';
+                        }
+
+                        // Add event listeners to delete buttons
+                        document.querySelectorAll('.delete-file').forEach(button => {
+                            button.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                const filename = this.getAttribute('data-filename');
+                                if (confirm(`Are you sure you want to delete ${filename}?`)) {
+                                    this.closest('li').style.opacity = '0.5';
+                                    fastTypeText(document.getElementById('upload-status'), `Deleting ${filename}...`);
+
+                                    // Send DELETE request to the server
+                                    const encodedFilename = encodeURIComponent(filename);
+									console.log(`Deleting file: ${uploadDirectory}/${encodedFilename}`);
+									fetch(`${uploadDirectory}/${encodedFilename}`, {
+										method: 'DELETE'
+									})
+
+
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`Failed to delete file: ${response.status} ${response.statusText}`);
+                                        }
+                                        this.closest('li').remove();
+                                        fastTypeText(document.getElementById('upload-status'), `${filename} deleted successfully.`);
+                                    })
+                                    .catch(error => {
+                                        this.closest('li').style.opacity = '1';
+                                        fastTypeText(document.getElementById('upload-status'), `Error: ${error.message}`);
+                                    });
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        console.error('Error parsing directory listing:', error);
+                        filesList.innerHTML = '<li><div class="file-list-name">Error parsing directory listing. It may not be enabled on the server.</div></li>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching directory:', error);
+                    filesList.innerHTML = `<li><div class="file-list-name">Error: ${error.message}</div></li>`;
+                });
+        }
+
+        // File drag and drop handling
+        const dropArea = document.querySelector('.file-input-container');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropArea.style.borderColor = 'var(--accent-main)';
+            dropArea.style.background = 'rgba(12, 12, 28, 0.5)';
+        }
+
+        function unhighlight() {
+            dropArea.style.borderColor = 'rgba(188, 97, 243, 0.2)';
+            dropArea.style.background = 'rgba(12, 12, 28, 0.3)';
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            const fileInput = document.getElementById('file');
+            fileInput.files = files;
+
+            // Trigger change event
+            const event = new Event('change');
+            fileInput.dispatchEvent(event);
+        }
+
+        // Add script to fetch upload_store from server
+        async function checkUploadStore() {
+            try {
+                // Make a request to get the upload_store from the server
+                // This could be a dedicated endpoint or part of the environment info
+                const response = await fetch('/cgi-bin/env.py');
+                if (!response.ok) {
+                    return getUploadStore(); // Fall back to default
+                }
+
+                const html = await response.text();
+
+                // Parse the HTML to look for UPLOAD_STORE environment variable
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Look for a table row containing "UPLOAD_STORE"
+                const rows = doc.querySelectorAll('tr');
+                for (const row of rows) {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 2 && cells[0].textContent.trim() === 'UPLOAD_STORE') {
+                        const uploadStore = cells[1].textContent.trim();
+                        if (uploadStore) {
+                            // Store this value
+                            document.body.setAttribute('data-upload-store', uploadStore);
+                            return uploadStore;
+                        }
+                    }
+                }
+
+                return getUploadStore(); // Fall back to default
+            } catch (error) {
+                console.error('Error checking upload_store:', error);
+                return getUploadStore(); // Fall back to default
+            }
+        }
+
+        // Initialize
+        async function initialize() {
+            // Check for upload_store from server
+            const uploadStore = await checkUploadStore();
+
+            // Add hidden input with upload_store value
+            const form = document.getElementById('upload-form');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'upload_store';
+            input.value = uploadStore;
+            form.appendChild(input);
+
+            // Update status message with upload directory
+            fastTypeText(
+                document.getElementById('upload-status'),
+                `Quantum upload system initialized. Upload directory: ${uploadStore}`
+            );
+
+            // Show directory contents
+            fetchUploadedFiles();
+
+            // Animate blob effects
+            document.querySelectorAll('.blob-effect').forEach(blob => {
+                setInterval(() => {
+                    const xPos = Math.random() * 10 - 5;
+                    const yPos = Math.random() * 10 - 5;
+                    blob.style.transform = `translate(${xPos}px, ${yPos}px)`;
+                }, 2000);
+            });
+        }
+
+        // Run initialization when document is ready
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+</html>
