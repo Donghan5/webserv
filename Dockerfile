@@ -2,7 +2,15 @@ FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt install -y build-essential valgrind curl net-tools && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        valgrind \
+        curl \
+        net-tools \
+        python3 \
+        python3-requests && \
+		rm -rf /var/lib/apt/lists/*
 
 WORKDIR /mnt/project
 

@@ -233,7 +233,13 @@ Response::Response(const Response &obj) {
 }
 
 Response::~Response() {
+    // Make sure CGI handler is properly deleted
     if (_cgi_handler) {
+        Logger::cerrlog(Logger::DEBUG, "Response destructor: cleaning up CGI handler");
+        
+        // Call closeCgi to clean up all resources
+        _cgi_handler->closeCgi();
+        
         delete _cgi_handler;
         _cgi_handler = NULL;
     }
@@ -786,10 +792,10 @@ LocationConfig *Response::buildDirPath(ServerConfig *matchServer, STR &full_path
 		if (pos != STR::npos) {
 			STR new_path = relative_path;
 			new_path.replace(pos, relative_path.length(), matchLocation->_alias);
-
+			
 			relative_path = new_path;
-
-			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match +
+			
+			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match + 
 						"' with '" + matchLocation->_alias + "' => '" + relative_path + "'");
 		} else {
 			Logger::log(Logger::WARNING, "Could not apply alias: location path not found in request path");
@@ -798,10 +804,10 @@ LocationConfig *Response::buildDirPath(ServerConfig *matchServer, STR &full_path
 		if (pos_abs != STR::npos) {
 			STR new_path = absolute_path;
 			new_path.replace(pos_abs, absolute_path.length(), matchLocation->_alias);
-
+			
 			absolute_path = new_path;
-
-			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match +
+			
+			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match + 
 						"' with '" + matchLocation->_alias + "' => '" + absolute_path + "'");
 		} else {
 			Logger::log(Logger::WARNING, "Could not apply alias: location path not found in request path");
@@ -937,19 +943,6 @@ STR	Response::createErrorResponse(int statusCode, const STR& contentType, const 
 						std::stringstream content;
 						content << file.rdbuf();
 						return createResponse(statusCode, getMimeType(base->_error_pages[statusCode]), content.str(), "");
-					}
-				}
-				STR full_path = base->_error_pages[statusCode];
-				if (full_path[0] != '/')
-					full_path = base->_root + "/" + full_path;
-				else
-					full_path = base->_root + full_path;
-				if (access(full_path.c_str(), R_OK) == 0) {
-					std::ifstream file(full_path.c_str(), std::ios::binary);
-					if (file) {
-						std::stringstream content;
-						content << file.rdbuf();
-						return createResponse(statusCode, getMimeType(full_path), content.str(), "");
 					}
 				}
 			}
@@ -1150,162 +1143,185 @@ bool Response::processCgiOutput() {
     if (_state != PROCESSING_CGI || !_cgi_handler) {
         return true; // Nothing to process
     }
-
-    // Read available data from CGI
-    STR output = _cgi_handler->readFromCgi();
-    if (!output.empty()) {
-        _response_buffer += output;
-    }
-
-    // Check if CGI has completed
-    if (_cgi_handler->checkCgiStatus()) {
+    
+    try {
+        // Read available data from CGI
+        STR output = _cgi_handler->readFromCgi();
+        if (!output.empty()) {
+            Logger::cerrlog(Logger::DEBUG, "Read " + Utils::intToString(output.length()) + 
+                          " bytes from CGI output");
+            _response_buffer += output;
+        }
+        
+        // Check if CGI has completed
+        if (_cgi_handler->checkCgiStatus()) {
+            Logger::cerrlog(Logger::INFO, "CGI process has completed");
+            _state = COMPLETE;
+            return true;
+        }
+        
+        return false; // Still running
+    } catch (const std::exception& e) {
+        Logger::cerrlog(Logger::ERROR, "Error in processCgiOutput: " + STR(e.what()));
+        
+        // Create a fallback response on error
+        _response_buffer = "Status: 500 Internal Server Error\r\n"
+                          "Content-Type: text/html\r\n\r\n"
+                          "<html><body><h1>500 Internal Server Error</h1>"
+                          "<p>The server encountered an error while processing your request.</p>"
+                          "</body></html>";
+        
         _state = COMPLETE;
         return true;
     }
-
-    return false;
 }
 
 STR Response::getFinalResponse() {
     if (_state != COMPLETE || !_cgi_handler) {
-        return ""; // Not ready yet
+        // Not ready yet or no CGI handler
+        return createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
     }
-
-    // Check if the response begins with an HTTP header
-    if (_response_buffer.find("HTTP/") == 0) {
-        // The CGI script returned a complete HTTP response
-        STR response = _response_buffer;
-        _response_buffer.clear();
-        _state = READY;
-
-        if (_cgi_handler) {
-            delete _cgi_handler;
-            _cgi_handler = NULL;
+    
+    try {
+        // Process CGI output into a proper HTTP response
+        
+        // Check if the response begins with an HTTP header
+        if (_response_buffer.find("HTTP/") == 0) {
+            // The CGI script returned a complete HTTP response
+            STR response = _response_buffer;
+            _response_buffer.clear();
+            _state = READY;
+            
+            // Don't delete _cgi_handler here - it will be deleted in destructor
+            
+            return response;
         }
-
-        return response;
-    }
-
-    // Parse CGI output into headers and body
-    size_t header_end = _response_buffer.find("\r\n\r\n");
-    if (header_end != STR::npos) {
-        STR headers_section = _response_buffer.substr(0, header_end);
-        STR body = _response_buffer.substr(header_end + 4); // +4 to skip "\r\n\r\n"
-
-        // Use a vector to store headers since multiple headers can have the same name
-        VECTOR<std::pair<STR, STR> > headersList;
-        std::istringstream headerStream(headers_section);
-        STR headerLine;
-        int statusCode = 200; // Default status code
-
-        // Parse all headers
-        while (std::getline(headerStream, headerLine)) {
-            // Remove any trailing \r
-            if (!headerLine.empty() && headerLine[headerLine.length() - 1] == '\r') {
-                headerLine = headerLine.substr(0, headerLine.length() - 1);
-            }
-
-            // Skip empty lines
-            if (headerLine.empty()) {
-                continue;
-            }
-
-            // Check for special Status header
-            if (headerLine.find("Status:") == 0) {
-                STR status = headerLine.substr(7); // Skip "Status:"
-                status.erase(0, status.find_first_not_of(" \t"));
-                statusCode = atoi(status.c_str());
-                continue;
-            }
-
-            size_t colonPos = headerLine.find(':');
-            if (colonPos != STR::npos) {
-                STR name = headerLine.substr(0, colonPos);
-                STR value = headerLine.substr(colonPos + 1);
-                // Trim leading whitespace from value
-                value.erase(0, value.find_first_not_of(" \t"));
-
-                // Add to headers list (preserving multiple headers with same name)
-                headersList.push_back(std::make_pair(name, value));
-
-                // Debug logging for Set-Cookie headers
-                if (name == "Set-Cookie") {
-                    Logger::cerrlog(Logger::DEBUG, "Found Set-Cookie header: " + value);
+        
+        // Parse CGI output into headers and body
+        size_t header_end = _response_buffer.find("\r\n\r\n");
+        if (header_end != STR::npos) {
+            STR headers_section = _response_buffer.substr(0, header_end);
+            STR body = _response_buffer.substr(header_end + 4); // +4 to skip "\r\n\r\n"
+            
+            // Use a vector to store headers
+            VECTOR<std::pair<STR, STR> > headersList;
+            std::istringstream headerStream(headers_section);
+            STR headerLine;
+            int statusCode = 200; // Default status code
+            STR contentType = "text/html"; // Default content type
+            
+            // Parse all headers
+            while (std::getline(headerStream, headerLine)) {
+                // Remove any trailing \r
+                if (!headerLine.empty() && headerLine[headerLine.length() - 1] == '\r') {
+                    headerLine = headerLine.substr(0, headerLine.length() - 1);
+                }
+                
+                // Skip empty lines
+                if (headerLine.empty()) {
+                    continue;
+                }
+                
+                // Check for Status header
+                if (headerLine.find("Status:") == 0) {
+                    STR status = headerLine.substr(7); // Skip "Status:"
+                    status.erase(0, status.find_first_not_of(" \t"));
+                    statusCode = atoi(status.c_str());
+                    continue;
+                }
+                
+                // Process other headers
+                size_t colonPos = headerLine.find(':');
+                if (colonPos != STR::npos) {
+                    STR name = headerLine.substr(0, colonPos);
+                    STR value = headerLine.substr(colonPos + 1);
+                    
+                    // Trim leading whitespace from value
+                    value.erase(0, value.find_first_not_of(" \t"));
+                    
+                    // Add to headers list
+                    headersList.push_back(std::make_pair(name, value));
+                    
+                    // Track content type
+                    if (name == "Content-Type") {
+                        contentType = value;
+                    }
                 }
             }
-        }
-
-        // If we have valid headers, construct the full HTTP response
-        if (!headersList.empty()) {
+            
+            // Build the HTTP response
             std::stringstream response;
             response << "HTTP/1.1 " << statusCode << " ";
-
-            // Add status text based on code
+            
+            // Add status text
             if (_all_status_codes.find(statusCode) != _all_status_codes.end()) {
                 response << _all_status_codes[statusCode].substr(4); // Skip the code part
             } else {
                 response << "OK"; // Default
             }
             response << "\r\n";
-
-            // Track if we've seen certain common headers
+            
+            // Track common headers
             bool hasContentType = false;
             bool hasContentLength = false;
-
-            // Add all headers, preserving multiple headers with the same name
+            
+            // Add all headers
             for (size_t i = 0; i < headersList.size(); i++) {
                 const std::pair<STR, STR>& header = headersList[i];
                 response << header.first << ": " << header.second << "\r\n";
-
-                // Track presence of common headers
+                
                 if (header.first == "Content-Type") hasContentType = true;
                 if (header.first == "Content-Length") hasContentLength = true;
             }
-
-            // Add Content-Length if not present
+            
+            // Add missing headers
             if (!hasContentLength) {
                 response << "Content-Length: " << body.length() << "\r\n";
             }
-
-            // Add Content-Type if not present
+            
             if (!hasContentType) {
-                response << "Content-Type: text/html\r\n";
+                response << "Content-Type: " << contentType << "\r\n";
             }
-
+            
+            // Add the body
             response << "\r\n" << body;
-
+            
+            // Clean up
             _response_buffer.clear();
             _state = READY;
-
-
-            if (_cgi_handler) {
-                delete _cgi_handler;
-                _cgi_handler = NULL;
-            }
-
-            Logger::cerrlog(Logger::DEBUG, "Response::getFinalResponse: Parsed CGI headers");
+            
+            // Don't delete _cgi_handler here - it will be deleted in destructor
+            
+            Logger::cerrlog(Logger::DEBUG, "Generated HTTP response from CGI output");
             return response.str();
         }
+        
+        // No valid headers found, wrap with default headers
+        std::stringstream response;
+        response << "HTTP/1.1 200 OK\r\n"
+                 << "Content-Type: text/html\r\n"
+                 << "Content-Length: " << _response_buffer.length() << "\r\n"
+                 << "\r\n"
+                 << _response_buffer;
+        
+        // Clean up
+        _response_buffer.clear();
+        _state = READY;
+        
+        // Don't delete _cgi_handler here - it will be deleted in destructor
+        
+        Logger::cerrlog(Logger::DEBUG, "Generated default HTTP response for CGI output");
+        return response.str();
+    } catch (const std::exception& e) {
+        // Handle any unexpected errors
+        Logger::cerrlog(Logger::ERROR, "Error in getFinalResponse: " + STR(e.what()));
+        
+        // Clean up
+        _response_buffer.clear();
+        _state = READY;
+        
+        // Don't delete _cgi_handler here - it will be deleted in destructor
+        
+        return createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
     }
-
-    // No valid headers found, wrap the output with HTTP headers
-    std::stringstream response;
-    response << "HTTP/1.1 200 OK\r\n"
-             << "Content-Type: text/html\r\n"
-             << "Content-Length: " << _response_buffer.length() << "\r\n"
-             << "\r\n"
-             << _response_buffer;
-
-    _response_buffer.clear();
-    _state = READY;
-
-    if (_cgi_handler) {
-        delete _cgi_handler;
-        _cgi_handler = NULL;
-    }
-
-	Logger::cerrlog(Logger::DEBUG, "Response::getFinalResponse: final HTTP response is: " + response.str());
-
-    Logger::cerrlog(Logger::DEBUG, "Response::getFinalResponse: Added default headers to CGI output");
-    return response.str();
 }

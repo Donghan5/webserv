@@ -39,12 +39,12 @@ class CgiHandler {
 		char **convertArgsToCharArray(const std::string &interpreter);
 		std::string createErrorResponse(const std::string& status, const std::string& message);
 
+		time_t _start_time;
+    	int _timeout;
+
 	public:
 		CgiHandler(const std::string &scriptPath, const std::map<std::string, std::string> &env, const std::string &body);
 		~CgiHandler();
-
-		// Traditional synchronous execution (for backward compatibility)
-		std::string executeCgi();
         
 		// New asynchronous methods for use with epoll
 		bool startCgi(); // Returns true if successfully started

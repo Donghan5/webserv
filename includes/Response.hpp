@@ -70,6 +70,7 @@ class Response {
         // POST 처리 메소드 추가
         STR     handlePOST(STR full_path); // POST 처리 시작
         STR     handleDELETE(STR full_path); // DELETE 처리
+        CgiHandler* getCgiHandler() const { return _cgi_handler; }
 };
 
 #endif

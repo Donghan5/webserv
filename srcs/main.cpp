@@ -10,6 +10,21 @@
 #include "Parser.hpp"
 #include "Logger.hpp"
 
+// gobal variable to treat signal
+volatile sig_atomic_t g_signal_received = 0;
+
+// signal handler
+void signal_handler(int sig) {
+	g_signal_received = sig;
+	if (sig == SIGINT) {
+		Logger::log(Logger::INFO, "SIGINT received, shutting down...");
+
+	}
+	if (sig == SIGQUIT) {
+		Logger::log(Logger::INFO, "SIGQUIT received, shutting down...");
+	}
+}
+
 int	init_start_webserv(HttpConfig *config) {
 	PollServer		poll_server;
 
@@ -142,6 +157,9 @@ int main(int argc, char **argv) {
 		Logger::log(Logger::ERROR, "No config file");
 		exit (1);
 	}
+
+	signal(SIGINT, signal_handler);  // Ctrl+C
+	signal(SIGQUIT, signal_handler); // Ctrl with backslash
 
 	Parser parser(argv[1]);
 
