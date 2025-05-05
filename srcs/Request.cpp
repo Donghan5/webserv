@@ -2,15 +2,6 @@
 #include <sstream>
 #include "Logger.hpp"
 
-// static bool isToken(uint8_t ch) {
-// 	if (ch == '!' || ch == '#' || ch == '$' || ch == '%' || ch == '&' || ch == '\'' || ch == '*'
-// 		|| ch == '+' || ch == '-' || ch == '.' || ch == '^' || ch == '_' || ch == '`' || ch == '|'
-// 		|| ch == '~' || isalnum(ch)) {
-// 		return true;
-// 	}
-// 	return false;
-// }
-
 static void trimSpace(STR &str) {
 	static const char *whitespace = " \r";
 	str.erase(0, str.find_first_not_of(whitespace));

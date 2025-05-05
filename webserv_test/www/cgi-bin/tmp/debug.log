@@ -1,0 +1,19 @@
+
+--- CGI env ---
+CONTENT_LENGTH: 0
+CONTENT_TYPE: text/plain
+HTTP_COOKIE: session_id=KtKcSIFgTiQPnJWXYJLOljGh6Yc55mC1; visit_count=9
+HTTP_HOST: localhost
+QUERY_STRING: 
+REQUEST_METHOD: GET
+SCRIPT_NAME: ./webserv_test/cgi-bin/upload.py
+SERVER_PORT: 8080
+SERVER_PROTOCOL: HTTP/1.1
+UPLOAD_STORE: 
+LC_CTYPE: C.UTF-8
+
+--- DIRECT FORM PROCESSING ---
+Content-Type: text/plain
+Content-Length: 0
+No boundary detected in Content-Type
+Cannot process form data without boundary

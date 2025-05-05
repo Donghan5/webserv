@@ -15,9 +15,9 @@ print("""<!DOCTYPE html>
 <head>
     <title>Multiple CGI Test</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 20px; 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
             background-color: #f5f5f5;
             line-height: 1.6;
         }
@@ -29,21 +29,21 @@ print("""<!DOCTYPE html>
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        h1 { 
+        h1 {
             color: #333;
             border-bottom: 2px solid #eee;
             padding-bottom: 10px;
         }
-        .cgi-result { 
-            border: 1px solid #ddd; 
-            padding: 15px; 
-            margin: 15px 0; 
-            border-radius: 5px; 
+        .cgi-result {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
         }
-        .cgi-header { 
-            background-color: #f5f5f5; 
-            padding: 10px; 
-            margin-bottom: 10px; 
+        .cgi-header {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 10px;
             border-radius: 4px;
             font-weight: bold;
         }
@@ -88,51 +88,51 @@ cgi_scripts = [
 
 for script in cgi_scripts:
     script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), script)
-    
+
     print(f"<div class='cgi-result'>")
     print(f"<div class='cgi-header'>Executing: {script}</div>")
-    
+
     try:
         start_time = time.time()
-        
+
         # Prepare environment
         env = os.environ.copy()
         env["QUERY_STRING"] = "param1=value1&param2=value2"
-        
+
         # Execute the script
         process = subprocess.Popen([script_path], env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate(timeout=10)
-        
+
         elapsed_time = time.time() - start_time
-        
+
         # Handle output
         try:
             output = stdout.decode('utf-8')
-            
+
             # Extract body content (after headers)
             headers_end = output.find('\r\n\r\n')
             if headers_end != -1:
                 body = output[headers_end + 4:]
             else:
                 body = output
-            
+
             # Display execution status
             status_class = "success" if process.returncode == 0 else "error"
             status_text = "Success" if process.returncode == 0 else "Failed"
             print(f"<p><strong>Status:</strong> <span class='{status_class}'>{status_text}</span></p>")
             print(f"<p class='execution-time'><strong>Execution Time:</strong> {elapsed_time:.4f} seconds</p>")
-            
+
             # Display errors if any
             if stderr:
                 error_text = stderr.decode('utf-8')
                 print(f"<p><strong>Errors:</strong> <pre>{error_text}</pre></p>")
-            
+
             # Create a unique iframe ID for each script
             iframe_id = f"iframe_{os.path.basename(script).replace('.', '_')}"
-            
-            # Display the output in an iframe
-            print(f"<iframe id='{iframe_id}' srcdoc='{body.replace('\"', '&quot;')}'></iframe>")
-            
+
+            # Display the output in an iframe I CHANGED THIS FSTRING TO A FORMAT
+            print("<iframe id='{0}' srcdoc='{1}'></iframe>".format(iframe_id, body.replace('"', '&quot;')))
+
             # Add script to adjust iframe height
             print(f"""
             <script>
@@ -145,16 +145,16 @@ for script in cgi_scripts:
                 }};
             </script>
             """)
-            
+
         except Exception as e:
             print(f"<p><strong>Error processing output:</strong> {str(e)}</p>")
-    
+
     except subprocess.TimeoutExpired:
         print(f"<p><strong>Error:</strong> <span class='error'>Script execution timed out after 10 seconds</span></p>")
-    
+
     except Exception as e:
         print(f"<p><strong>Error executing {script}:</strong> <span class='error'>{str(e)}</span></p>")
-    
+
     print("</div>")
 
 print("""

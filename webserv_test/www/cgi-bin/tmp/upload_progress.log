@@ -1,0 +1,50 @@
+[2025-05-05 18:54:27] ========== NEW UPLOAD REQUEST ==========
+[2025-05-05 18:54:27] Project root: /home/donghank/webserv/webserv_test
+[2025-05-05 18:54:27] Reading raw POST data from stdin
+[2025-05-05 18:54:27] Read 26390 bytes from stdin
+[2025-05-05 18:54:27] Found file part in multipart data
+[2025-05-05 18:54:27] Extracted filename: PollServer.cpp
+[2025-05-05 18:54:27] Form field name: filename
+[2025-05-05 18:54:27] File content type: text/x-c++src
+[2025-05-05 18:54:27] Extracted file content: 26088 bytes
+[2025-05-05 18:54:27] Using upload directory: /home/donghank/webserv/webserv_test/www/uploads
+[2025-05-05 18:54:27] Upload directory exists: /home/donghank/webserv/webserv_test/www/uploads
+[2025-05-05 18:54:27] Successfully extracted file: PollServer.cpp
+[2025-05-05 18:54:27] Using basename: PollServer.cpp
+[2025-05-05 18:54:27] File content size: 26088 bytes
+[2025-05-05 18:54:27] File type detected: text/x-c++src
+[2025-05-05 18:54:27] Starting to write file to: /home/donghank/webserv/webserv_test/www/uploads/PollServer.cpp
+[2025-05-05 18:54:27] Writing progress: 100% (26088/26088 bytes)
+[2025-05-05 18:54:27] File successfully written to disk: /home/donghank/webserv/webserv_test/www/uploads/PollServer.cpp
+[2025-05-05 19:16:55] ========== NEW UPLOAD REQUEST ==========
+[2025-05-05 19:16:55] Project root: /home/donghank/webserv/webserv_test
+[2025-05-05 19:16:55] Reading raw POST data from stdin
+[2025-05-05 19:16:55] Read 1412904 bytes from stdin
+[2025-05-05 19:16:55] Found file part in multipart data
+[2025-05-05 19:16:55] Extracted filename: 6ac18ac1-e191-41e9-b365-2748cc283205.png
+[2025-05-05 19:16:55] Form field name: filename
+[2025-05-05 19:16:55] File content type: image/png
+[2025-05-05 19:16:55] Extracted file content: 1412580 bytes
+[2025-05-05 19:16:55] Using upload directory: /home/donghank/webserv/webserv_test/www/uploads
+[2025-05-05 19:16:55] Upload directory exists: /home/donghank/webserv/webserv_test/www/uploads
+[2025-05-05 19:16:55] Successfully extracted file: 6ac18ac1-e191-41e9-b365-2748cc283205.png
+[2025-05-05 19:16:55] Using basename: 6ac18ac1-e191-41e9-b365-2748cc283205.png
+[2025-05-05 19:16:55] File content size: 1412580 bytes
+[2025-05-05 19:16:55] File type detected: image/png
+[2025-05-05 19:16:55] Starting to write file to: /home/donghank/webserv/webserv_test/www/uploads/6ac18ac1-e191-41e9-b365-2748cc283205.png
+[2025-05-05 19:16:55] Writing progress: 10% (143360/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 20% (282624/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 30% (425984/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 40% (565248/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 50% (708608/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 60% (847872/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 70% (991232/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 80% (1130496/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 90% (1273856/1412580 bytes)
+[2025-05-05 19:16:55] Writing progress: 100% (1412580/1412580 bytes)
+[2025-05-05 19:16:55] File successfully written to disk: /home/donghank/webserv/webserv_test/www/uploads/6ac18ac1-e191-41e9-b365-2748cc283205.png
+[2025-05-05 19:37:50] ========== NEW UPLOAD REQUEST ==========
+[2025-05-05 19:37:50] Project root: /home/donghank/webserv/webserv_test
+[2025-05-05 19:37:50] Using upload directory: /home/donghank/webserv/webserv_test/www/uploads
+[2025-05-05 19:37:50] Upload directory exists: /home/donghank/webserv/webserv_test/www/uploads
+[2025-05-05 19:37:50] Error: No file was provided in the form
