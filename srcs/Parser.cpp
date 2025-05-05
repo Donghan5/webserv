@@ -22,8 +22,8 @@ Parser &Parser::operator=(const Parser &obj) {
 }
 
 Parser::~Parser() {
-	// if (_config)
-	// 	delete _config;
+	if (_config)
+		delete _config;
 }
 
 int Parser::verifyPort(STR port_str) {
@@ -319,7 +319,7 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 		} else if (tokens[0] == "error_page") {
 			// Handle multiple error codes for a single page
 			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
-			
+
 			// Process all error codes (all tokens except first and last)
 			for (size_t j = 1; j < tokens.size() - 1; j++) {
 				int code = atoi(tokens[j].c_str());
@@ -373,7 +373,7 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 		} else if (tokens[0] == "error_page") {
 			// Handle multiple error codes for a single page
 			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
-			
+
 			// Process all error codes (all tokens except first and last)
 			for (size_t j = 1; j < tokens.size() - 1; j++) {
 				int code = atoi(tokens[j].c_str());
@@ -471,7 +471,7 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 		} else if (tokens[0] == "error_page") {
 			// Handle multiple error codes for a single page
 			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
-			
+
 			// Process all error codes (all tokens except first and last)
 			for (size_t j = 1; j < tokens.size() - 1; j++) {
 				int code = atoi(tokens[j].c_str());

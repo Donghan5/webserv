@@ -519,7 +519,7 @@ bool PollServer::WaitAndService(RequestsManager &manager) {
     if (num_events < 0) {
         if (errno == EINTR) {
             // Just a signal interruption, not a real error
-            Logger::cerrlog(Logger::DEBUG, "Epoll wait was interrupted by a signal");
+            // Logger::cerrlog(Logger::DEBUG, "Epoll wait was interrupted by a signal");
             return true;
         } else {
             Logger::cerrlog(Logger::ERROR, "Epoll wait failed: " + STR(strerror(errno)));

@@ -236,10 +236,10 @@ Response::~Response() {
     // Make sure CGI handler is properly deleted
     if (_cgi_handler) {
         Logger::cerrlog(Logger::DEBUG, "Response destructor: cleaning up CGI handler");
-        
+
         // Call closeCgi to clean up all resources
         _cgi_handler->closeCgi();
-        
+
         delete _cgi_handler;
         _cgi_handler = NULL;
     }
@@ -792,10 +792,10 @@ LocationConfig *Response::buildDirPath(ServerConfig *matchServer, STR &full_path
 		if (pos != STR::npos) {
 			STR new_path = relative_path;
 			new_path.replace(pos, relative_path.length(), matchLocation->_alias);
-			
+
 			relative_path = new_path;
-			
-			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match + 
+
+			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match +
 						"' with '" + matchLocation->_alias + "' => '" + relative_path + "'");
 		} else {
 			Logger::log(Logger::WARNING, "Could not apply alias: location path not found in request path");
@@ -804,10 +804,10 @@ LocationConfig *Response::buildDirPath(ServerConfig *matchServer, STR &full_path
 		if (pos_abs != STR::npos) {
 			STR new_path = absolute_path;
 			new_path.replace(pos_abs, absolute_path.length(), matchLocation->_alias);
-			
+
 			absolute_path = new_path;
-			
-			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match + 
+
+			Logger::log(Logger::DEBUG, "Applied alias: replaced '" + path_to_match +
 						"' with '" + matchLocation->_alias + "' => '" + absolute_path + "'");
 		} else {
 			Logger::log(Logger::WARNING, "Could not apply alias: location path not found in request path");
@@ -816,16 +816,16 @@ LocationConfig *Response::buildDirPath(ServerConfig *matchServer, STR &full_path
 
 	// check which path exists - relative or absolute
 	if (checkFile(relative_path) != NotFound) {
-		std::cerr << "Response::buildDirPath: relative path is " << relative_path << std::endl;
+		Logger::cerrlog(Logger::DEBUG, "Response::buildDirPath: relative path is " + relative_path);
 		full_path = relative_path;
 	} else if (checkFile(absolute_path) != NotFound) {
-		std::cerr << "Response::buildDirPath: absolute path is " << absolute_path << std::endl;
+		Logger::cerrlog(Logger::DEBUG, "Response::buildDirPath: absolute path is " + absolute_path);
 		full_path = absolute_path;
 	} else if (!isDIR && checkFile(regress_path(relative_path)) != NotFound) {
-		std::cerr << "Response::buildDirPath: relative path is " << relative_path << std::endl;
+		Logger::cerrlog(Logger::DEBUG, "Response::buildDirPath: relative path is " + relative_path);
 		full_path = relative_path;
 	} else if (!isDIR && checkFile(regress_path(absolute_path)) != NotFound) {
-		std::cerr << "Response::buildDirPath: relative path is " << relative_path << std::endl;
+		Logger::cerrlog(Logger::DEBUG, "Response::buildDirPath: absolute path is " + absolute_path);
 		full_path = relative_path;
 	} else {
 		Logger::cerrlog(Logger::INFO, "Response::buildDirPath: no such file or directory \"" + full_path + "\" for " + _request._file_path + "!");
@@ -844,7 +844,7 @@ int Response::buildIndexPath(LocationConfig *matchLocation, STR &best_file_path,
 	try
 	{
 		best_file_path.append(selectIndexAll(matchLocation, dir_path));
-		std::cerr << "Response::buildFilePath: AFT best_file_path is " << best_file_path << std::endl;
+		Logger::cerrlog(Logger::DEBUG, "Response::buildFilePath: AFT best_file_path is " + best_file_path);
 	}
 	catch(const std::exception& e)
 	{
@@ -873,17 +873,17 @@ STR	Response::matchMethod(STR path, bool isDIR, LocationConfig *matchLocation) {
 	if (_request._method == "GET") {
 		if (!check_method_allowed("GET", matchLocation))
 			return createErrorResponse(405, "text/plain", "Method Not Allowed", matchLocation);
-			Logger::log(Logger::INFO, "Response::matchMethod GET path" + path + " isDIR " + Utils::floatToString(isDIR));
+		Logger::log(Logger::INFO, "Response::matchMethod GET path" + path + " isDIR " + Utils::floatToString(isDIR));
 		return (handleGET(path, isDIR));
 	} else if (_request._method == "POST") {
 		if (!check_method_allowed("POST", matchLocation))
 			return createErrorResponse(405, "text/plain", "Method Not Allowed", matchLocation);
-			Logger::log(Logger::INFO, "Response::matchMethod POST path" + path + " isDIR " + Utils::floatToString(isDIR));
+		Logger::log(Logger::INFO, "Response::matchMethod POST path" + path + " isDIR " + Utils::floatToString(isDIR));
 		return (handlePOST(path));
 	} else if (_request._method == "DELETE") {
 		if (!check_method_allowed("DELETE", matchLocation))
 			return createErrorResponse(405, "text/plain", "Method Not Allowed", matchLocation);
-			Logger::log(Logger::INFO, "Response::matchMethod DELETE path" + path + " isDIR " + Utils::floatToString(isDIR));
+		Logger::log(Logger::INFO, "Response::matchMethod DELETE path" + path + " isDIR " + Utils::floatToString(isDIR));
 		return (handleDELETE(path));
 	} else {
 		Logger::cerrlog(Logger::ERROR, "Response::matchMethod: UNUSUAL METHOD ERROR: " + _request._method);
@@ -1045,13 +1045,9 @@ STR Response::getResponse() {
 
 		if (!matchLocation->_upload_store.empty()) {
 			env["UPLOAD_STORE"] = matchLocation->_upload_store;
-			std::cerr << "UPLOAD_STORE: " << matchLocation->_upload_store << "\n";
 		} else {
 			env["UPLOAD_STORE"] = "";
-			std::cerr << "UPLOAD_STORE: empty\n";
 		}
-
-		std::cerr << "Body (limited) and length: " << _request._body.substr(0, 250) << " " << _request._body.length() << "\n";
 
         // Create a new CGI handler and start it asynchronously
         if (_cgi_handler) {
@@ -1091,10 +1087,6 @@ STR Response::getResponse() {
 	}
 	file_path = dir_path;
 
-	std::cout << "DEBUG GETRESPONSE: file_path is " << file_path << "\n";
-	std::cout << "DEBUG GETRESPONSE: dir_path is " << dir_path << "\n";
-
-	std::cout << "Passing first checkFile\n";
 	//serve file if path is a file
 	if (checkFile(file_path) == NormalFile) {
 		return (matchMethod(file_path, false, matchLocation));
@@ -1143,34 +1135,34 @@ bool Response::processCgiOutput() {
     if (_state != PROCESSING_CGI || !_cgi_handler) {
         return true; // Nothing to process
     }
-    
+
     try {
         // Read available data from CGI
         STR output = _cgi_handler->readFromCgi();
         if (!output.empty()) {
-            Logger::cerrlog(Logger::DEBUG, "Read " + Utils::intToString(output.length()) + 
+            Logger::cerrlog(Logger::DEBUG, "Read " + Utils::intToString(output.length()) +
                           " bytes from CGI output");
             _response_buffer += output;
         }
-        
+
         // Check if CGI has completed
         if (_cgi_handler->checkCgiStatus()) {
             Logger::cerrlog(Logger::INFO, "CGI process has completed");
             _state = COMPLETE;
             return true;
         }
-        
+
         return false; // Still running
     } catch (const std::exception& e) {
         Logger::cerrlog(Logger::ERROR, "Error in processCgiOutput: " + STR(e.what()));
-        
+
         // Create a fallback response on error
         _response_buffer = "Status: 500 Internal Server Error\r\n"
                           "Content-Type: text/html\r\n\r\n"
                           "<html><body><h1>500 Internal Server Error</h1>"
                           "<p>The server encountered an error while processing your request.</p>"
                           "</body></html>";
-        
+
         _state = COMPLETE;
         return true;
     }
@@ -1181,47 +1173,47 @@ STR Response::getFinalResponse() {
         // Not ready yet or no CGI handler
         return createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
     }
-    
+
     try {
         // Process CGI output into a proper HTTP response
-        
+
         // Check if the response begins with an HTTP header
         if (_response_buffer.find("HTTP/") == 0) {
             // The CGI script returned a complete HTTP response
             STR response = _response_buffer;
             _response_buffer.clear();
             _state = READY;
-            
+
             // Don't delete _cgi_handler here - it will be deleted in destructor
-            
+
             return response;
         }
-        
+
         // Parse CGI output into headers and body
         size_t header_end = _response_buffer.find("\r\n\r\n");
         if (header_end != STR::npos) {
             STR headers_section = _response_buffer.substr(0, header_end);
             STR body = _response_buffer.substr(header_end + 4); // +4 to skip "\r\n\r\n"
-            
+
             // Use a vector to store headers
             VECTOR<std::pair<STR, STR> > headersList;
             std::istringstream headerStream(headers_section);
             STR headerLine;
             int statusCode = 200; // Default status code
             STR contentType = "text/html"; // Default content type
-            
+
             // Parse all headers
             while (std::getline(headerStream, headerLine)) {
                 // Remove any trailing \r
                 if (!headerLine.empty() && headerLine[headerLine.length() - 1] == '\r') {
                     headerLine = headerLine.substr(0, headerLine.length() - 1);
                 }
-                
+
                 // Skip empty lines
                 if (headerLine.empty()) {
                     continue;
                 }
-                
+
                 // Check for Status header
                 if (headerLine.find("Status:") == 0) {
                     STR status = headerLine.substr(7); // Skip "Status:"
@@ -1229,30 +1221,30 @@ STR Response::getFinalResponse() {
                     statusCode = atoi(status.c_str());
                     continue;
                 }
-                
+
                 // Process other headers
                 size_t colonPos = headerLine.find(':');
                 if (colonPos != STR::npos) {
                     STR name = headerLine.substr(0, colonPos);
                     STR value = headerLine.substr(colonPos + 1);
-                    
+
                     // Trim leading whitespace from value
                     value.erase(0, value.find_first_not_of(" \t"));
-                    
+
                     // Add to headers list
                     headersList.push_back(std::make_pair(name, value));
-                    
+
                     // Track content type
                     if (name == "Content-Type") {
                         contentType = value;
                     }
                 }
             }
-            
+
             // Build the HTTP response
             std::stringstream response;
             response << "HTTP/1.1 " << statusCode << " ";
-            
+
             // Add status text
             if (_all_status_codes.find(statusCode) != _all_status_codes.end()) {
                 response << _all_status_codes[statusCode].substr(4); // Skip the code part
@@ -1260,42 +1252,42 @@ STR Response::getFinalResponse() {
                 response << "OK"; // Default
             }
             response << "\r\n";
-            
+
             // Track common headers
             bool hasContentType = false;
             bool hasContentLength = false;
-            
+
             // Add all headers
             for (size_t i = 0; i < headersList.size(); i++) {
                 const std::pair<STR, STR>& header = headersList[i];
                 response << header.first << ": " << header.second << "\r\n";
-                
+
                 if (header.first == "Content-Type") hasContentType = true;
                 if (header.first == "Content-Length") hasContentLength = true;
             }
-            
+
             // Add missing headers
             if (!hasContentLength) {
                 response << "Content-Length: " << body.length() << "\r\n";
             }
-            
+
             if (!hasContentType) {
                 response << "Content-Type: " << contentType << "\r\n";
             }
-            
+
             // Add the body
             response << "\r\n" << body;
-            
+
             // Clean up
             _response_buffer.clear();
             _state = READY;
-            
+
             // Don't delete _cgi_handler here - it will be deleted in destructor
-            
+
             Logger::cerrlog(Logger::DEBUG, "Generated HTTP response from CGI output");
             return response.str();
         }
-        
+
         // No valid headers found, wrap with default headers
         std::stringstream response;
         response << "HTTP/1.1 200 OK\r\n"
@@ -1303,25 +1295,25 @@ STR Response::getFinalResponse() {
                  << "Content-Length: " << _response_buffer.length() << "\r\n"
                  << "\r\n"
                  << _response_buffer;
-        
+
         // Clean up
         _response_buffer.clear();
         _state = READY;
-        
+
         // Don't delete _cgi_handler here - it will be deleted in destructor
-        
+
         Logger::cerrlog(Logger::DEBUG, "Generated default HTTP response for CGI output");
         return response.str();
     } catch (const std::exception& e) {
         // Handle any unexpected errors
         Logger::cerrlog(Logger::ERROR, "Error in getFinalResponse: " + STR(e.what()));
-        
+
         // Clean up
         _response_buffer.clear();
         _state = READY;
-        
+
         // Don't delete _cgi_handler here - it will be deleted in destructor
-        
+
         return createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
     }
 }

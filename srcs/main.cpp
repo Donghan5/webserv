@@ -18,7 +18,6 @@ void signal_handler(int sig) {
 	g_signal_received = sig;
 	if (sig == SIGINT) {
 		Logger::log(Logger::INFO, "SIGINT received, shutting down...");
-
 	}
 	if (sig == SIGQUIT) {
 		Logger::log(Logger::INFO, "SIGQUIT received, shutting down...");

@@ -15,7 +15,7 @@ class RequestThread(threading.Thread):
         self.delay = delay
         self.success_count = 0
         self.failure_count = 0
-        
+
     def run(self):
         paths = [
             "/",
@@ -26,22 +26,27 @@ class RequestThread(threading.Thread):
             "/cgi-bin/env.py",
             "/nonexistent"
         ]
-        
+
         for i in range(self.requests_per_thread):
             try:
                 path = random.choice(paths)
                 start_time = time.time()
                 r = requests.get(f"{self.url}{path}")
                 elapsed = time.time() - start_time
-                
-                if r.status_code < 400:
+
+                if path == "/nonexistent":
+                    if r.status_code == 404:
+                        self.success_count += 1
+                    else:
+                        self.failure_count += 1
+                elif r.status_code < 400:
                     self.success_count += 1
                 else:
                     self.failure_count += 1
-                    
+
                 if self.delay > 0:
                     time.sleep(self.delay)
-                    
+
             except Exception:
                 self.failure_count += 1
 
@@ -52,43 +57,43 @@ def main():
     parser.add_argument("--requests", type=int, default=100, help="Requests per thread")
     parser.add_argument("--delay", type=float, default=0.01, help="Delay between requests per thread (seconds)")
     args = parser.parse_args()
-    
+
     try:
         print(f"Starting stress test against {args.url}")
         print(f"Using {args.threads} threads with {args.requests} requests per thread")
         print(f"Total requests that will be sent: {args.threads * args.requests}")
-        
+
         # Check if server is running
         try:
             requests.get(args.url, timeout=2)
         except requests.exceptions.ConnectionError:
             print(f"ERROR: Could not connect to {args.url}")
             sys.exit(1)
-        
+
         threads = []
         start_time = time.time()
-        
+
         # Create and start threads
         for i in range(args.threads):
             thread = RequestThread(args.url, i, args.requests, args.delay)
             threads.append(thread)
             thread.start()
-        
+
         # Wait for all threads to complete
         for thread in threads:
             thread.join()
-        
+
         total_time = time.time() - start_time
         total_requests = args.threads * args.requests
         success_count = sum(t.success_count for t in threads)
         failure_count = sum(t.failure_count for t in threads)
-        
+
         print("\nStress Test Results:")
         print(f"Total time: {total_time:.2f} seconds")
         print(f"Requests per second: {total_requests / total_time:.2f}")
         print(f"Successful requests: {success_count} ({success_count / total_requests * 100:.2f}%)")
         print(f"Failed requests: {failure_count} ({failure_count / total_requests * 100:.2f}%)")
-        
+
     except KeyboardInterrupt:
         print("\nStress test interrupted!")
         sys.exit(0)
