@@ -1103,8 +1103,6 @@ STR Response::getResponse() {
 	//add index file name to file_path
 	buildIndexPath(matchLocation, file_path, dir_path);
 
-	std::cout << "After buildIndexPath: file_path is " << file_path << "\n";
-
 	//index file exists - serve it
 	if (checkFile(file_path) == NormalFile) {
 		return (matchMethod(file_path, false, matchLocation));

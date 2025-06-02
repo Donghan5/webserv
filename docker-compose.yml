@@ -3,14 +3,9 @@ version: '3.8'
 services:
    webserv:
      build: .
-     container_name: webserv
+     container_name: webserv_exp
      volumes:
-       - "/Users/donghank/webserv:/mnt/project"  # mount the host directory to the container (you can replace with your path)
-     ports: # the ports to expose
-      - "80:80"
-      - "8080:8080"
-      - "8081:8081"
-      - "8082:8082"
-      - "8083:8083"
-      - "8084:8084"
+       - "path/to/your/project:/mnt/project"  # replace this with the path to your project (mount directly)
+     ports:
+      - "80:80"  # open the port that you want to use (here I use port 80)
      tty: true

@@ -14,3 +14,11 @@ STR  Utils::floatToString(float num) {
 
 	return oss.str();
 }
+
+void Utils::cleanUpDoublePointer(char **dptr) {
+	for (size_t i = 0; dptr[i] != NULL; i++) {
+		free(dptr[i]);
+	}
+	delete[] dptr;
+}
+

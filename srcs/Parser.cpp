@@ -283,6 +283,215 @@ bool	Parser::ValidateConfig(STR full_config) {
 	return true;
 }
 
+// Fill HTTP block
+bool FillHttp(HttpConfig* httpConf, VECTOR<STR> tokens){
+	if (tokens[0] == "user") {
+		httpConf->_global_user = tokens[1];
+	} else if (tokens[0] == "worker_process") {
+		httpConf->_global_worker_process = tokens[1];
+	} else if (tokens[0] == "DEBUG_log") {
+		httpConf->_global_error_log = tokens[1];
+	} else if (tokens[0] == "pid") {
+		httpConf->_global_pid = tokens[1];
+	} else if (tokens[0] == "keepalive_timeout") {
+		httpConf->_keepalive_timeout = tokens[1];
+	} else if (tokens[0] == "add_header") {
+		httpConf->_add_header = tokens[1];
+	} else if (tokens[0] == "client_max_body_size") {
+		httpConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);  // C++98 long long
+		if (httpConf->_client_max_body_size == -1) {
+			std::cerr << "Invalid client_max_body_size value" << std::endl;
+			return false;
+		}
+	} else if (tokens[0] == "root") {
+		httpConf->_root = tokens[1];
+	} else if (tokens[0] == "index") {
+		for (size_t j = 1; j < tokens.size(); j++) {
+			httpConf->_index.push_back(tokens[j]);
+		}
+	} else if (tokens[0] == "error_page") {
+		// Handle multiple error codes for a single page
+		STR page_path = tokens[tokens.size() - 1]; // Last token is the path
+
+		// Process all error codes (all tokens except first and last)
+		for (size_t j = 1; j < tokens.size() - 1; j++) {
+			int code = atoi(tokens[j].c_str());
+			if (code > 0) { // Only process valid numeric codes
+				httpConf->_error_pages[code] = page_path;
+			} else {
+				Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
+			}
+		}
+	} else {
+		Logger::cerrlog(Logger::ERROR, "CHECKFillDirective HttpConfig extra type " + tokens[0]);
+		return false;
+	}
+	return true;
+}
+
+bool FillServer(ServerConfig* serverConf, VECTOR<STR> tokens){
+	if (tokens[0] == "add_header") {
+		serverConf->_add_header = tokens[1];
+	} else if (tokens[0] == "listen") {  // change listen server and port
+		// parse server address and port
+		size_t position = tokens[1].find(':');
+		if (position == STR::npos) {
+			serverConf->_listen_port = Parser::verifyPort(tokens[1]);
+			if (serverConf->_listen_port == -1) {
+				Logger::cerrlog(Logger::ERROR, "Invalid port value");
+				return false;
+			}
+		} else {
+			serverConf->_listen_server = tokens[1].substr(0, position);
+			if (serverConf->_listen_server == "") {
+				Logger::cerrlog(Logger::ERROR, "Invalid server address");
+				return false;
+			}
+			serverConf->_listen_port = Parser::verifyPort(tokens[1].substr(position + 1));
+			if (serverConf->_listen_port == -1) {
+				Logger::cerrlog(Logger::ERROR, "Invalid port value");
+				return false;
+			}
+		}
+
+	} else if (tokens[0] == "server_name") {
+		for (size_t j = 1; j < tokens.size(); j++) {
+			serverConf->_server_name.push_back(tokens[j]);
+		}
+	} else if (tokens[0] == "root") {
+		serverConf->_root = tokens[1];
+	} else if (tokens[0] == "index") {
+		for (size_t j = 1; j < tokens.size(); j++) {
+			serverConf->_index.push_back(tokens[j]);
+		}
+	} else if (tokens[0] == "error_page") {
+		// Handle multiple error codes for a single page
+		STR page_path = tokens[tokens.size() - 1]; // Last token is the path
+
+		// Process all error codes (all tokens except first and last)
+		for (size_t j = 1; j < tokens.size() - 1; j++) {
+			int code = atoi(tokens[j].c_str());
+			if (code > 0) { // Only process valid numeric codes
+				serverConf->_error_pages[code] = page_path;
+			} else {
+				Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
+			}
+		}
+	} else if (tokens[0] == "client_max_body_size") {
+		serverConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);
+		if (serverConf->_client_max_body_size == -1) {
+			Logger::cerrlog(Logger::ERROR, "Invalid client_max_body_size value");
+			return false;
+		}
+	} else if (tokens[0] == "return") {  // indicate that it's a return directive
+		if (tokens.size() < 2) {
+			Logger::cerrlog(Logger::ERROR, "Invalid return directive");
+			return false;
+		}
+		else if (tokens.size() == 3) {
+			serverConf->_return_code = atoi(tokens[1].c_str());
+			if (serverConf->_return_code < 300 || serverConf->_return_code > 400) {
+				Logger::cerrlog(Logger::ERROR, "Invalid return code");
+				return false;
+			}
+			serverConf->_return_url = tokens[2];
+		}
+		else // tokens.size() == 2
+			serverConf->_return_url = tokens[1];
+	} else {
+		Logger::cerrlog(Logger::ERROR, "CHECKFillDirective ServerConfig extra type " + tokens[0]);
+		return false;
+	}
+	return true;
+}
+
+//  -- to fill location config --
+bool FillLocation(LocationConfig* locConf, VECTOR<STR> tokens){
+	if (tokens[0] == "proxy_pass") {
+		int	host_start;
+		int	host_end;
+		int	delim_position;
+		int	port_end;
+
+		//extracting host and port from 		Host: localhost:8080
+		host_start = tokens[1].find_first_of(':') + 3;
+		delim_position = tokens[1].find(':', tokens[1].find_first_of(':') + 1);
+
+		if (delim_position == (int)STR::npos) {
+		//host without port
+			host_end = tokens[1].find_last_not_of(' ');
+			locConf->_proxy_pass_host = tokens[1].substr(host_start, host_end - host_start);
+		} else {
+		//host with port
+			host_end = delim_position;
+			port_end = tokens[1].find_last_not_of(' ');
+			locConf->_proxy_pass_host = tokens[1].substr(host_start, host_end - host_start);
+			locConf->_proxy_pass_port = atoi(tokens[1].substr(delim_position + 1, delim_position + 1 - port_end).c_str());
+		}
+	} else if (tokens[0] == "path") {
+		locConf->_path = tokens[1];
+	} else if (tokens[0] == "add_header") {
+		locConf->_add_header = tokens[1];
+	} else if (tokens[0] == "return") {
+		if (tokens.size() < 2) {
+			Logger::cerrlog(Logger::ERROR, "Invalid return directive");
+			return false;
+		}
+		else if (tokens.size() == 3) {
+			locConf->_return_code = atoi(tokens[1].c_str());
+			if (locConf->_return_code < 300 || locConf->_return_code > 400) {
+				Logger::cerrlog(Logger::ERROR, "Invalid return code");
+				return false;
+			}
+			locConf->_return_url = tokens[2];
+		}
+		else // tokens.size() == 2
+		locConf->_return_url = tokens[1];
+	} else if (tokens[0] == "root") {
+		locConf->_root = tokens[1];
+	} else if (tokens[0] == "client_max_body_size") {
+		locConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);
+		if (locConf->_client_max_body_size == -1) {
+			std::cerr << "Invalid client_max_body_size value" << std::endl;
+			return false;
+		}
+	} else if (tokens[0] == "autoindex") {
+		// locConf->_autoindex = (tokens[1] == "on");  // Simple bool conversion
+		locConf->_autoindex = Parser::verifyAutoIndex(tokens[1]);
+	} else if (tokens[0] == "index") {
+		for (size_t j = 1; j < tokens.size(); j++) {
+			locConf->_index.push_back(tokens[j]);
+		}
+	} else if (tokens[0] == "error_page") {
+		// Handle multiple error codes for a single page
+		STR page_path = tokens[tokens.size() - 1]; // Last token is the path
+
+		// Process all error codes (all tokens except first and last)
+		for (size_t j = 1; j < tokens.size() - 1; j++) {
+			int code = atoi(tokens[j].c_str());
+			if (code > 0) { // Only process valid numeric codes
+				locConf->_error_pages[code] = page_path;
+			} else {
+				Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
+			}
+		}
+	} else if (tokens[0] == "allowed_methods") {
+		for (size_t j = 1; j < tokens.size(); j++) {
+			if (tokens[j] != "GET" && tokens[j] != "POST" && tokens[j] != "DELETE")
+				return false;
+			locConf->_allowed_methods[tokens[j]] = true;
+		}
+	} else if (tokens[0] == "upload_store") {
+		locConf->_upload_store = tokens[1];
+	} else if (tokens[0] == "alias") {
+		locConf->_alias = tokens[1];
+	} else {
+		Logger::cerrlog(Logger::ERROR, "CHECKFillDirective LocationConfig extra type " + tokens[0]);
+		return false;
+	}
+	return true;
+}
+
 bool FillDirective(AConfigBase* block, STR line, int position) {
 	VECTOR<STR> tokens;
 	STR 		trimmed_line;
@@ -292,210 +501,13 @@ bool FillDirective(AConfigBase* block, STR line, int position) {
 	tokens = split(trimmed_line, ' ', 1);
 
 	if (HttpConfig* httpConf = dynamic_cast<HttpConfig*>(block)) {
-		if (tokens[0] == "user") {
-			httpConf->_global_user = tokens[1];
-		} else if (tokens[0] == "worker_process") {
-			httpConf->_global_worker_process = tokens[1];
-		} else if (tokens[0] == "DEBUG_log") {
-			httpConf->_global_error_log = tokens[1];
-		} else if (tokens[0] == "pid") {
-			httpConf->_global_pid = tokens[1];
-		} else if (tokens[0] == "keepalive_timeout") {
-			httpConf->_keepalive_timeout = tokens[1];
-		} else if (tokens[0] == "add_header") {
-			httpConf->_add_header = tokens[1];
-		} else if (tokens[0] == "client_max_body_size") {
-			httpConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);  // C++98 long long
-			if (httpConf->_client_max_body_size == -1) {
-				std::cerr << "Invalid client_max_body_size value" << std::endl;
-				return false;
-			}
-		} else if (tokens[0] == "root") {
-			httpConf->_root = tokens[1];
-		} else if (tokens[0] == "index") {
-			for (size_t j = 1; j < tokens.size(); j++) {
-				httpConf->_index.push_back(tokens[j]);
-			}
-		} else if (tokens[0] == "error_page") {
-			// Handle multiple error codes for a single page
-			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
-
-			// Process all error codes (all tokens except first and last)
-			for (size_t j = 1; j < tokens.size() - 1; j++) {
-				int code = atoi(tokens[j].c_str());
-				if (code > 0) { // Only process valid numeric codes
-					httpConf->_error_pages[code] = page_path;
-				} else {
-					Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
-				}
-			}
-		} else {
-			Logger::cerrlog(Logger::ERROR, "CHECKFillDirective HttpConfig extra type " + tokens[0]);
-			return false;
-		}
-        return true;
+		return FillHttp(httpConf, tokens);
     }
 	else if (ServerConfig* serverConf = dynamic_cast<ServerConfig*>(block)) {
-		if (tokens[0] == "add_header") {
-			serverConf->_add_header = tokens[1];
-		} else if (tokens[0] == "listen") {  // change listen server and port
-			// parse server address and port
-			size_t position = tokens[1].find(':');
-			if (position == STR::npos) {
-				serverConf->_listen_port = Parser::verifyPort(tokens[1]);
-				if (serverConf->_listen_port == -1) {
-					Logger::cerrlog(Logger::ERROR, "Invalid port value");
-					return false;
-				}
-			} else {
-				serverConf->_listen_server = tokens[1].substr(0, position);
-				if (serverConf->_listen_server == "") {
-					Logger::cerrlog(Logger::ERROR, "Invalid server address");
-					return false;
-				}
-				serverConf->_listen_port = Parser::verifyPort(tokens[1].substr(position + 1));
-				if (serverConf->_listen_port == -1) {
-					Logger::cerrlog(Logger::ERROR, "Invalid port value");
-					return false;
-				}
-			}
-
-		} else if (tokens[0] == "server_name") {
-			for (size_t j = 1; j < tokens.size(); j++) {
-				serverConf->_server_name.push_back(tokens[j]);
-			}
-		} else if (tokens[0] == "root") {
-			serverConf->_root = tokens[1];
-		} else if (tokens[0] == "index") {
-			for (size_t j = 1; j < tokens.size(); j++) {
-				serverConf->_index.push_back(tokens[j]);
-			}
-		} else if (tokens[0] == "error_page") {
-			// Handle multiple error codes for a single page
-			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
-
-			// Process all error codes (all tokens except first and last)
-			for (size_t j = 1; j < tokens.size() - 1; j++) {
-				int code = atoi(tokens[j].c_str());
-				if (code > 0) { // Only process valid numeric codes
-					serverConf->_error_pages[code] = page_path;
-				} else {
-					Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
-				}
-			}
-		} else if (tokens[0] == "client_max_body_size") {
-			serverConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);
-			if (serverConf->_client_max_body_size == -1) {
-				Logger::cerrlog(Logger::ERROR, "Invalid client_max_body_size value");
-				return false;
-			}
-		} else if (tokens[0] == "return") {  // indicate that it's a return directive
-			if (tokens.size() < 2) {
-				Logger::cerrlog(Logger::ERROR, "Invalid return directive");
-				return false;
-			}
-			else if (tokens.size() == 3) {
-				serverConf->_return_code = atoi(tokens[1].c_str());
-				if (serverConf->_return_code < 300 || serverConf->_return_code > 400) {
-					Logger::cerrlog(Logger::ERROR, "Invalid return code");
-					return false;
-				}
-				serverConf->_return_url = tokens[2];
-			}
-			else // tokens.size() == 2
-				serverConf->_return_url = tokens[1];
-		} else {
-			Logger::cerrlog(Logger::ERROR, "CHECKFillDirective ServerConfig extra type " + tokens[0]);
-			return false;
-		}
-        return true;
+		return FillServer(serverConf, tokens);
     }
     else if (LocationConfig* locConf = dynamic_cast<LocationConfig*>(block)) {
-		if (tokens[0] == "proxy_pass") {
-			int	host_start;
-			int	host_end;
-			int	delim_position;
-			int	port_end;
-
-			//extracting host and port from 		Host: localhost:8080
-			host_start = tokens[1].find_first_of(':') + 3;
-			delim_position = tokens[1].find(':', tokens[1].find_first_of(':') + 1);
-
-			if (delim_position == (int)STR::npos) {
-			//host without port
-				host_end = tokens[1].find_last_not_of(' ');
-				locConf->_proxy_pass_host = tokens[1].substr(host_start, host_end - host_start);
-			} else {
-			//host with port
-				host_end = delim_position;
-				port_end = tokens[1].find_last_not_of(' ');
-				locConf->_proxy_pass_host = tokens[1].substr(host_start, host_end - host_start);
-				locConf->_proxy_pass_port = atoi(tokens[1].substr(delim_position + 1, delim_position + 1 - port_end).c_str());
-			}
-			// std::cerr << "DEBUG CHECKFillDirective LocationConfig proxy_pass_host " << locConf->_proxy_pass_host << "\n";
-			// std::cerr << "DEBUG CHECKFillDirective LocationConfig proxy_pass_port " << locConf->_proxy_pass_port << "\n";
-		} else if (tokens[0] == "path") {
-			locConf->_path = tokens[1];
-		} else if (tokens[0] == "add_header") {
-			locConf->_add_header = tokens[1];
-		} else if (tokens[0] == "return") {
-			if (tokens.size() < 2) {
-				Logger::cerrlog(Logger::ERROR, "Invalid return directive");
-				return false;
-			}
-			else if (tokens.size() == 3) {
-				locConf->_return_code = atoi(tokens[1].c_str());
-				if (locConf->_return_code < 300 || locConf->_return_code > 400) {
-					Logger::cerrlog(Logger::ERROR, "Invalid return code");
-					return false;
-				}
-				locConf->_return_url = tokens[2];
-			}
-			else // tokens.size() == 2
-			locConf->_return_url = tokens[1];
-		} else if (tokens[0] == "root") {
-			locConf->_root = tokens[1];
-		} else if (tokens[0] == "client_max_body_size") {
-			locConf->_client_max_body_size = Parser::verifyClientMaxBodySize(tokens[1]);
-			if (locConf->_client_max_body_size == -1) {
-				std::cerr << "Invalid client_max_body_size value" << std::endl;
-				return false;
-			}
-		} else if (tokens[0] == "autoindex") {
-			// locConf->_autoindex = (tokens[1] == "on");  // Simple bool conversion
-			locConf->_autoindex = Parser::verifyAutoIndex(tokens[1]);
-		} else if (tokens[0] == "index") {
-			for (size_t j = 1; j < tokens.size(); j++) {
-				locConf->_index.push_back(tokens[j]);
-			}
-		} else if (tokens[0] == "error_page") {
-			// Handle multiple error codes for a single page
-			STR page_path = tokens[tokens.size() - 1]; // Last token is the path
-
-			// Process all error codes (all tokens except first and last)
-			for (size_t j = 1; j < tokens.size() - 1; j++) {
-				int code = atoi(tokens[j].c_str());
-				if (code > 0) { // Only process valid numeric codes
-					locConf->_error_pages[code] = page_path;
-				} else {
-					Logger::cerrlog(Logger::ERROR, "Invalid error code: " + tokens[j]);
-				}
-			}
-        } else if (tokens[0] == "allowed_methods") {
-			for (size_t j = 1; j < tokens.size(); j++) {
-				if (tokens[j] != "GET" && tokens[j] != "POST" && tokens[j] != "DELETE")
-					return false;
-				locConf->_allowed_methods[tokens[j]] = true;
-			}
-        } else if (tokens[0] == "upload_store") {
-			locConf->_upload_store = tokens[1];
-		} else if (tokens[0] == "alias") {
-			locConf->_alias = tokens[1];
-		} else {
-			Logger::cerrlog(Logger::ERROR, "CHECKFillDirective LocationConfig extra type " + tokens[0]);
-			return false;
-		}
-        return true;
+		return FillLocation(locConf, tokens);
     }
 	Logger::cerrlog(Logger::ERROR, "CHECKFillDirective Unknown block type " + tokens[0]);
 
@@ -511,16 +523,10 @@ AConfigBase	*CreateBlock(STR line, int start) {
 	int	close_brace = line.find('}', start);
 
 	trimmed_line = line.substr(start, close_brace - start);
-	// std::cerr << "DEBUG AConfigBase	*CreateBlock TRIMMED |" << trimmed_line << "|\n";
-	// std::cerr << "DEBUG AConfigBase	*CreateBlock start |" << start << "|\n";
-	// std::cerr << "DEBUG AConfigBase	*CreateBlock close_brace |" << close_brace << "|\n";
-	// std::cerr << "DEBUG AConfigBase	*CreateBlock line |" << line << "|\n";
-
 	block_name = trimmed_line.substr(0, trimmed_line.find('{'));
 	tokens = split(block_name, ' ', 1);
 
 	block = NULL;
-	// std::cerr << "DEBUG AConfigBase	*CreateBlock\n";
 	if (tokens[0] == "events" || tokens[0] == "http") {
 		HttpConfig *conf = new HttpConfig();
 		block = conf;
@@ -542,27 +548,18 @@ AConfigBase	*CreateBlock(STR line, int start) {
 }
 
 bool	check_location_path_duplicate(STR new_path, MAP<STR, LocationConfig*> locs) {
-	//if path is new trying to access it may throw exception
-
-	// still test more, check loc_loc (check location recursively)
 	try
 	{
 		MAP<STR, LocationConfig*> loc_loc = locs;
 		while (loc_loc.size() > 0) {
-			// std::cerr << "DEBUG AConfigBase	*check_location_path_duplicate loc_loc.size() " << loc_loc.size() << "\n";
-			// std::cerr << "DEBUG AConfigBase	*check_location_path_duplicate loc_loc.begin()->first " << loc_loc.begin()->first << "\n";
 			MAP<STR, LocationConfig*>::iterator it = loc_loc.begin();
 			if (it->first == new_path)
 				return false;
 			if (it->second->_locations.size() > 0) {
-				// std::cerr << "DEBUG AConfigBase	*check_location_path_duplicate loc_loc.begin()->second->_locations.size() " << it->second->_locations.size() << "\n";
 				loc_loc.insert(it->second->_locations.begin(), it->second->_locations.end());
 			}
 			loc_loc.erase(it);
 		}
-		// LocationConfig *test = locs[new_path];
-		// if (!test)
-		// 	return true;
 	}
 	catch(const std::exception& e)
 	{
@@ -575,12 +572,6 @@ AConfigBase	*AddBlock(AConfigBase *prev_block, STR line, int start) {
 	AConfigBase	*child = NULL;
 	ConfigBlock parent_type = ERROR;
 
-	// std::cerr << "DEBUG AConfigBase	*AddBlock entry\n";
-	// std::cerr << "DEBUG AConfigBase	*AddBlock start " << start << "\n";
-	// std::cerr << "DEBUG AConfigBase	*AddBlock line " << line.c_str() + start << "\n";
-	// std::cerr << "DEBUG AConfigBase	*AddBlock entry\n";
-	// std::cerr << "DEBUG AConfigBase	*AddBlock entry\n";
-
 	parent_type = prev_block->_identify(prev_block);
 	if (parent_type == HTTP) {
 		HttpConfig* httpConf = dynamic_cast<HttpConfig*>(prev_block);
@@ -590,16 +581,10 @@ AConfigBase	*AddBlock(AConfigBase *prev_block, STR line, int start) {
 		if (!child || !httpConf || httpConf->_identify(child) != SERVER) {
 			if (child)
 				child->_self_destruct();
-			// std::cerr << "DEBUG AConfigBase	*AddBlock HTTP\n";
-			// std::cerr << "DEBUG AConfigBase	*AddBlock !httpConf " << !httpConf << "\n";
-			// std::cerr << "DEBUG AConfigBase	*AddBlock !child " << !child << "\n";
-
-			// std::cerr << "DEBUG AConfigBase	*AddBlock != SERVER : " << (httpConf->_identify(child) != SERVER) << "\n";
 			return NULL;
 		}
 		serverConf = dynamic_cast<ServerConfig*>(child);
 		httpConf->_servers.push_back(serverConf);
-		// serverConf->back_ref = httpConf;
 		child->back_ref = prev_block;
 	} else if (parent_type == SERVER) {
 		ServerConfig* serverConf = dynamic_cast<ServerConfig*>(prev_block);
@@ -609,11 +594,6 @@ AConfigBase	*AddBlock(AConfigBase *prev_block, STR line, int start) {
 		if (!child || !serverConf || serverConf->_identify(child) != LOCATION) {
 			if (child)
 				child->_self_destruct();
-			// std::cerr << "DEBUG AConfigBase	*AddBlock SERVER\n";
-			// std::cerr << "DEBUG AConfigBase	*AddBlock !serverConf" << !serverConf << "\n";
-			// std::cerr << "DEBUG AConfigBase	*AddBlock !child" << !child << "\n";
-			// std::cerr << "DEBUG AConfigBase	*AddBlock != LOCATION" << (serverConf->_identify(child) != LOCATION) << "\n";
-
 			return NULL;
 		}
 		location = dynamic_cast<LocationConfig*>(child);
@@ -640,8 +620,6 @@ AConfigBase	*AddBlock(AConfigBase *prev_block, STR line, int start) {
 		if (!child || !locParent || locParent->_identify(child) != LOCATION) {
 			if (child)
 				child->_self_destruct();
-			// std::cerr << "DEBUG AConfigBase	*AddBlock LOCATION\n";
-			// std::cerr << "DEBUG AConfigBase	*AddBlock !child" << !child << "\n";
 			return NULL;
 		}
 		locChild = dynamic_cast<LocationConfig*>(child);

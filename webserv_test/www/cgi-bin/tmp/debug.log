@@ -1,11 +1,11 @@
 
 --- CGI env ---
-CONTENT_LENGTH: 0
-CONTENT_TYPE: text/plain
-HTTP_COOKIE: session_id=KtKcSIFgTiQPnJWXYJLOljGh6Yc55mC1; visit_count=9
+CONTENT_LENGTH: 978
+CONTENT_TYPE: multipart/form-data; boundary=----WebKitFormBoundarym8CqkYIezqLfs2Jo
+HTTP_COOKIE: 
 HTTP_HOST: localhost
 QUERY_STRING: 
-REQUEST_METHOD: GET
+REQUEST_METHOD: POST
 SCRIPT_NAME: ./webserv_test/cgi-bin/upload.py
 SERVER_PORT: 8080
 SERVER_PROTOCOL: HTTP/1.1
@@ -13,7 +13,10 @@ UPLOAD_STORE:
 LC_CTYPE: C.UTF-8
 
 --- DIRECT FORM PROCESSING ---
-Content-Type: text/plain
-Content-Length: 0
-No boundary detected in Content-Type
-Cannot process form data without boundary
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundarym8CqkYIezqLfs2Jo
+Content-Length: 978
+Detected boundary: ------WebKitFormBoundarym8CqkYIezqLfs2Jo
+Raw data size: 978 bytes
+Split into 4 parts
+File field: filename, Filename: basic (2).conf, Content-Type: application/octet-stream, Size: 665
+File content first 100 bytes (hex): 68747470207b0a20202020726f6f74202e2f776562736572765f746573742f7777773b0a0a20202020736572766572207b0a20202020202020206c697374656e20383038303b0a20202020202020207365727665725f6e616d65206c6f63616c686f7374

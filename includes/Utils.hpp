@@ -12,6 +12,7 @@ class Utils {
 	public:
 		static std::string intToString(int num);
 		static std::string floatToString(float num);
+		static void cleanUpDoublePointer(char **dptr);
 };
 
 #endif

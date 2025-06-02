@@ -16,3 +16,30 @@ file_size: 1412580
 file_type: image/png
 upload_dir_exists: True
 upload_dir_writable: True
+
+--- New Upload Attempt ---
+time: 2025-05-06 13:59:18
+filename: DALL·E 2025-03-25 23.47.35 - A cute anime-style illustration of a young male backend and ML engineer in his mid-20s, with a slightly nerdy and adorable vibe. He is wearing round g.webp
+filepath: /mnt/project/webserv_test/www/uploads/DALL·E 2025-03-25 23.47.35 - A cute anime-style illustration of a young male backend and ML engineer in his mid-20s, with a slightly nerdy and adorable vibe. He is wearing round g.webp
+file_size: 334298
+file_type: image/webp
+upload_dir_exists: True
+upload_dir_writable: True
+
+--- New Upload Attempt ---
+time: 2025-05-06 19:50:04
+filename: Response.hpp
+filepath: /home/donghank/webserv_exp/webserv_test/www/uploads/Response.hpp
+file_size: 3137
+file_type: text/x-c++hdr
+upload_dir_exists: True
+upload_dir_writable: True
+
+--- New Upload Attempt ---
+time: 2025-05-06 21:07:59
+filename: basic (2).conf
+filepath: /home/donghank/webserv_exp/webserv_test/www/uploads/basic (2).conf
+file_size: 665
+file_type: application/octet-stream
+upload_dir_exists: True
+upload_dir_writable: True

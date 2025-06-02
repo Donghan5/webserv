@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = c++
-CFLAGS = -std=c++98 -Iincludes -Wall -Wextra -Werror
+CFLAGS = -std=c++98 -Iincludes #-Wall -Wextra -Werror
 
 # Target executable name
 NAME = webserv

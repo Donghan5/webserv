@@ -27,7 +27,7 @@ class CgiHandler {
 		std::map<std::string, std::string> _env;
 		std::string _body;
 		std::map<std::string, std::string> _interpreters;
-        
+
 		// For non-blocking operation
 		pid_t _cgi_pid;
 		int _input_pipe[2];
@@ -35,9 +35,12 @@ class CgiHandler {
 		bool _process_running;
 		std::string _output_buffer;
 
+		bool setUpPipes(void);
+		bool isTimedOut(void) const;
 		char **convertEnvToCharArray(void);
 		char **convertArgsToCharArray(const std::string &interpreter);
 		std::string createErrorResponse(const std::string& status, const std::string& message);
+
 
 		time_t _start_time;
     	int _timeout;
@@ -45,15 +48,18 @@ class CgiHandler {
 	public:
 		CgiHandler(const std::string &scriptPath, const std::map<std::string, std::string> &env, const std::string &body);
 		~CgiHandler();
-        
+
 		// New asynchronous methods for use with epoll
 		bool startCgi(); // Returns true if successfully started
 		bool isCgiRunning() const { return _process_running; }
 		int getOutputFd() const { return _output_pipe[0]; }
+		void closeAndExitUnusedPipes(int input_pipe0, int input_pipe1, int output_pipe0, int output_pipe1);
 		bool writeToCgi(const char* data, size_t len); // Write data to CGI input
 		std::string readFromCgi(); // Read data from CGI output
 		void closeCgi(); // Clean up resources
 		bool checkCgiStatus(); // Check if CGI has completed, returns true if done
+		void closePipes(int input_pipe0, int input_pipe1, int output_pipe0, int output_pipe1);
+
 };
 
 #endif

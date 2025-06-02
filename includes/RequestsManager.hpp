@@ -9,7 +9,7 @@ struct ClientState {
     Request request;
     long long body_read;
     bool processing_cgi;
-    
+
     ClientState() : body_read(-1), processing_cgi(false) {}
 };
 
@@ -46,6 +46,8 @@ class RequestsManager {
         int getCurrentCgiFd() const; // Get current CGI fd for the client
         int HandleCgiOutput(int fd);    // Handle CGI output ready event - moved to public
         Response* getCgiResponse(int client_fd);  // Get CGI response for client
+		int PerformSocketRead(void);
+		int ProcessBufferedData(void);
 };
 
 #endif

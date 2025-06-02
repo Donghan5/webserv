@@ -88,154 +88,181 @@ Response* RequestsManager::getCgiResponse(int client_fd) {
     return NULL;
 }
 
-int RequestsManager::HandleRead() {
-    ClientState &client_state = _client_states[_client_fd];
-    long long &body_read = client_state.body_read;
-    Request &request = client_state.request;
-    bool done = false;
-
+int RequestsManager::PerformSocketRead() {
     if (_client_fd < 0) {
-        Logger::cerrlog(Logger::ERROR, "HandleRead: Invalid client fd");
+        Logger::cerrlog(Logger::ERROR, "PerformSocketRead: Invalid client fd");
+        return -1;
+    }
+
+    char buffer[4096];
+    ssize_t nbytes = read(_client_fd, buffer, sizeof(buffer));
+
+    if (nbytes <= 0) {
+        if (nbytes == 0) {
+            Logger::cerrlog(Logger::INFO, "Client disconnected (read returned 0)");
+        } else {
+            Logger::cerrlog(Logger::ERROR, "Error reading from client: " + STR(strerror(errno)));
+        }
         return 0;
     }
 
+    _partial_requests[_client_fd].append(buffer, nbytes);
+
+    // update the body_read
+    ClientState &client_state = _client_states[_client_fd];
+    if (client_state.body_read != -1) {
+        client_state.body_read += nbytes;
+    }
+    return static_cast<int>(nbytes); // return the number of bytes read
+}
+
+// Helper function 2: Process the buffered request data
+int RequestsManager::ProcessBufferedData() {
+    ClientState &client_state = _client_states[_client_fd];
+    long long &body_read = client_state.body_read; // init value is -1
+    Request &request = client_state.request;
+    bool done = false;
+
     try {
-        char buffer[4096];
-        int nbytes = read(_client_fd, buffer, sizeof(buffer));
+        // if the header is not parsed and the current body is not being read, try to parse the header
+        if (body_read == -1) {
+            size_t header_end_pos = _partial_requests[_client_fd].find("\r\n\r\n");
+            if (header_end_pos != STR::npos) { // find the header delimiter
+                Logger::log(Logger::INFO, "Complete headers received in buffer");
 
-        if (nbytes <= 0) {
-            if (nbytes == 0) {
-                Logger::cerrlog(Logger::INFO, "Client disconnected (read returned 0)");
-            } else {
-                Logger::cerrlog(Logger::ERROR, "Error reading from client: " + STR(strerror(errno)));
-            }
-            return 0; // Close the connection
-        }
+                request.clear(); // clear the previous request information
+                // note: setRequest is the original code's way.
+                // it might be more efficient to modify the Request class to parse only the header.
+                if (!request.setRequest(_partial_requests[_client_fd])) {
+                    Logger::cerrlog(Logger::ERROR, "Failed to parse request headers");
+                    _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                    return 2; // change to write mode (error response)
+                }
 
-        // Track body read progress if needed
-        if (body_read != -1) {
-            body_read += nbytes;
-        }
+                if (request._body_size > 0) { // if the request has a body
+                    Logger::cerrlog(Logger::DEBUG, "Request has body of size " + Utils::intToString(request._body_size));
+                    // the remaining part of the current buffer is the body data
+                    body_read = static_cast<long long>(_partial_requests[_client_fd].size()) - (header_end_pos + 4);
+                    if (body_read < 0) body_read = 0; // prevent any errors
 
-        // Append to the partial request
-        _partial_requests[_client_fd].append(buffer, nbytes);
-
-        // Check if we have a complete header
-        int header_end = _partial_requests[_client_fd].find("\r\n\r\n");
-        if (body_read == -1 && header_end != CHAR_NOT_FOUND) {
-            Logger::log(Logger::INFO, "Complete headers received");
-
-            // Parse the request headers
-            request.clear();
-            if (!request.setRequest(_partial_requests[_client_fd])) {
-                Logger::cerrlog(Logger::ERROR, "Failed to parse request headers");
-                _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
-                return 2; // Switch to write mode
-            }
-
-            // Check if body is needed
-            if (request._body_size > 0) {
-                Logger::cerrlog(Logger::DEBUG, "Request has body of size " + Utils::intToString(request._body_size));
-
-                // Calculate how much of the body we've already received
-                body_read = _partial_requests[_client_fd].size() - header_end - 4;
-
-                if (body_read < (long long)request._body_size) {
-                    Logger::log(Logger::INFO, "Body partially received: " +
-                              Utils::intToString(body_read) + "/" + Utils::intToString(request._body_size));
-                    return 1; // Keep in read mode until we get the full body
-                } else {
-                    // Full body received
+                    if (body_read >= (long long)request._body_size) {
+                        done = true; // the body is already in the buffer
+                    } else {
+                        Logger::log(Logger::INFO, "Body partially received with headers: " +
+                                  Utils::intToString(body_read) + "/" + Utils::intToString(request._body_size));
+                        return 1; // more body data needed (read mode)
+                    }
+                } else { // if the request has no body
                     done = true;
                 }
+            } else { // if the header delimiter is not found
+                return 1; // more header data needed (read mode)
+            }
+        } else { // body_read != -1, receving body (header already parsed)
+            if (body_read >= (long long)request._body_size) {
+                done = true; // the body is already in the buffer
             } else {
-                // No need for body
-                done = true;
+                 Logger::log(Logger::INFO, "Body still partially received: " +
+                              Utils::intToString(body_read) + "/" + Utils::intToString(request._body_size));
+                return 1; // more body data needed (read mode)
             }
         }
 
-        // Check if we've received the full body
-        if (done || (body_read != -1 && body_read >= (long long)request._body_size)) {
-            Logger::cerrlog(Logger::INFO, "Complete request received");
+        // if 'done' is true, the request is fully received (header and body if needed)
+        if (done) {
+            Logger::cerrlog(Logger::INFO, "Complete request received, processing...");
 
-            // Parse the request with body
+            // in the original code, it parses the request again here.
+            // this assumes that Request::setRequest can handle the entire request string.
             request.clear();
             if (!request.setRequest(_partial_requests[_client_fd])) {
-                Logger::cerrlog(Logger::ERROR, "Failed to parse complete request");
+                Logger::cerrlog(Logger::ERROR, "Failed to parse complete request (second pass)");
                 _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
-                return 2; // Switch to write mode
+                return 2; // change to write mode
             }
 
-            if (!request.parseBody()) {
-                Logger::cerrlog(Logger::ERROR, "Failed to parse request body");
-                _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
-                return 2; // Switch to write mode
+            if (request._body_size > 0) { // if the request has a body
+                if (!request.parseBody()) {
+                    Logger::cerrlog(Logger::ERROR, "Failed to parse request body");
+                    _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                    return 2; // change to write mode
+                }
             }
 
-            // Process the request
+            // --- actual request processing logic (CGI or normal response) ---
+            // (this part is almost the same as the try-catch block in the original HandleRead function)
             try {
-                // Create a new Response object for this request
-                Response* response = new Response();
-                response->setConfig(_config);
-                response->setRequest(request);
+                Response* res_obj = new Response(); // change variable name (response -> res_obj)
+                res_obj->setConfig(_config);
+                res_obj->setRequest(request); // request object should be fully filled
 
-                // Get the response
-                STR response_text = response->getResponse();
+                STR response_text = res_obj->getResponse();
 
-                // Check if we need to handle CGI
-                if (response_text.empty() && !response->isResponseReady()) {
-                    // This is a CGI request
+                if (response_text.empty() && !res_obj->isResponseReady()) {
+                    // CGI request processing
                     client_state.processing_cgi = true;
-                    _active_responses[_client_fd] = response;
-
-                    // Get the CGI output fd
-                    int cgi_fd = response->getCgiOutputFd();
+                    _active_responses[_client_fd] = res_obj;
+                    int cgi_fd = res_obj->getCgiOutputFd();
                     if (cgi_fd != -1) {
                         Logger::cerrlog(Logger::INFO, "Starting CGI processing for client " + Utils::intToString(_client_fd));
-                        return RegisterCgiFd(cgi_fd, _client_fd);
+                        return RegisterCgiFd(cgi_fd, _client_fd); // return 4 (register CGI fd)
                     } else {
                         Logger::cerrlog(Logger::ERROR, "Invalid CGI output fd");
-                        delete response;
+                        delete res_obj;
                         _active_responses.erase(_client_fd);
                         client_state.processing_cgi = false;
                         _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
-                        return 2; // Switch to write mode
+                        return 2;
                     }
                 } else {
-                    // Normal response (not CGI)
+                    // normal response processing
                     _partial_responses[_client_fd] = response_text;
-                    delete response;
+                    delete res_obj;
 
-                    // Reset client state for next request
-                    body_read = -1;
+                    // initialize the client state for the next request
+                    client_state.body_read = -1;
                     client_state.processing_cgi = false;
+                    // request.clear(); // will be cleared when starting to process the next request
+                    _partial_requests.erase(_client_fd); // request processing complete, clear the buffer
 
-                    // Clear the request buffer
-                    _partial_requests.erase(_client_fd);
-
-                    return 2; // Switch to write mode
+                    return 2; // change to write mode
                 }
             } catch (const std::exception& e) {
                 Logger::cerrlog(Logger::ERROR, "Error processing request: " + STR(e.what()));
                 _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
-
-                // Reset client state
-                body_read = -1;
+                client_state.body_read = -1;
                 client_state.processing_cgi = false;
-
-                return 2; // Switch to write mode
+                _partial_requests.erase(_client_fd); // even if there is an error, clear the buffer
+                return 2; // change to write mode
             }
         }
-
-        // Need more data
+        // if we get here, done is false and the above return 1 (more data needed) should have been called.
+        // as a safety net, if the logic reaches here, continue to read.
         return 1;
+
     } catch (const std::exception& e) {
-        body_read = -1;
-        client_state.processing_cgi = false;
-        Logger::cerrlog(Logger::ERROR, "Exception in HandleRead: " + STR(e.what()));
+        Logger::cerrlog(Logger::ERROR, "Exception in ProcessBufferedData: " + STR(e.what()));
         _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
-        return 0; // Close the connection
+        client_state.body_read = -1;
+        client_state.processing_cgi = false;
+        _partial_requests.erase(_client_fd);
+        return 2; // change to write mode to send the error response
     }
+}
+
+// the original HandleRead function is now more concise
+int RequestsManager::HandleRead() {
+    if (_client_fd < 0) {
+        Logger::cerrlog(Logger::ERROR, "HandleRead: Invalid client fd");
+        return 0; // connection closed or error
+    }
+
+    int read_status = PerformSocketRead();
+    if (read_status <= 0) {
+        return 0; // connection closed
+    }
+
+    return ProcessBufferedData();
 }
 
 int RequestsManager::HandleWrite() {
