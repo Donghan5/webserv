@@ -4,21 +4,20 @@
 # include "LocationConfig.hpp"
 # include "ServerConfig.hpp"
 # include <iostream>
-
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <sys/stat.h>
-#include <cstdlib>
-#include <cstring>
-#include <poll.h>
-#include <fcntl.h>
-#include <map>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <unistd.h>
+# include <string>
+# include <sstream>
+# include <fstream>
+# include <vector>
+# include <sys/stat.h>
+# include <cstdlib>
+# include <cstring>
+# include <poll.h>
+# include <fcntl.h>
+# include <map>
 
 enum ChunkedState {
 	CHUNK_SIZE,  // chunk size
@@ -35,7 +34,7 @@ class Request {
 	private:
 		void								parseQueryString();
 		void								parseTransferEncoding(const std::string &header);
-		bool								processTransferEncoding(const char *data, size_t size);
+		bool								processTransferEncoding(const char *data);
 
 	public:
 		STR									_cookies;

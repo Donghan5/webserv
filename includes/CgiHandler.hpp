@@ -21,6 +21,15 @@
 
 #include <sstream>
 
+enum CgiStatus {
+	CGI_RUNNING = 0,
+	CGI_COMPLETED = 1,
+	CGI_TIMED_OUT = -1,
+	CGI_CODE_500 = 500, // Internal Server Error
+	CGI_CODE_502 = 502, // Bad Gateway
+	CGI_CODE_504 = 504 // Gateway Timeout
+};
+
 class CgiHandler {
 	private:
 		std::string _scriptPath;
@@ -41,7 +50,6 @@ class CgiHandler {
 		char **convertArgsToCharArray(const std::string &interpreter);
 		std::string createErrorResponse(const std::string& status, const std::string& message);
 
-
 		time_t _start_time;
     	int _timeout;
 
@@ -49,17 +57,15 @@ class CgiHandler {
 		CgiHandler(const std::string &scriptPath, const std::map<std::string, std::string> &env, const std::string &body);
 		~CgiHandler();
 
-		// New asynchronous methods for use with epoll
-		bool startCgi(); // Returns true if successfully started
+		bool startCgi();
 		bool isCgiRunning() const { return _process_running; }
 		int getOutputFd() const { return _output_pipe[0]; }
-		void closeAndExitUnusedPipes(int input_pipe0, int input_pipe1, int output_pipe0, int output_pipe1);
-		bool writeToCgi(const char* data, size_t len); // Write data to CGI input
-		std::string readFromCgi(); // Read data from CGI output
-		void closeCgi(); // Clean up resources
-		bool checkCgiStatus(); // Check if CGI has completed, returns true if done
+		bool closeAndExitUnusedPipes(int input_pipe0, int input_pipe1, int output_pipe0, int output_pipe1);
+		bool writeToCgi(const char* data, size_t len);
+		std::string readFromCgi();
+		void closeCgi();
+		CgiStatus checkCgiStatus();
 		void closePipes(int input_pipe0, int input_pipe1, int output_pipe0, int output_pipe1);
-
 };
 
 #endif

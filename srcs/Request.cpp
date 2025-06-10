@@ -21,7 +21,7 @@ void remove_trailing_r(STR &str) {
 }
 
 void	process_path(STR &full_path, STR &file_name) {
-	Logger::cerrlog(Logger::DEBUG, "Request::process_path: full path is " + full_path);
+	Logger::log(Logger::DEBUG, "Request::process_path: full path is " + full_path);
 
 	if (full_path.find('.') != STR::npos) {
 		file_name = full_path.substr(full_path.find_last_of('/') + 1, full_path.size());
@@ -29,9 +29,6 @@ void	process_path(STR &full_path, STR &file_name) {
 	} else {
 		file_name = "";
 	}
-
-	std::cerr << "Full path after: " << full_path << "\n";
-	std::cerr << "File name after: " << file_name << "\n";
 }
 
 bool Request::parseHeader() {
@@ -93,7 +90,6 @@ bool Request::parseHeader() {
 				_accepted_types[type_name.c_str()] = type_quality;
 			}
 		} else if (temp_token == "Cookie:" && _cookies == "") {
-			//to do cookies
 			_cookies = temp_line.substr(temp_line.find_first_of(':') + 2);
 		} else if (temp_token == "Host:" && _host == "localhost") {
 			int	host_start;
@@ -152,13 +148,13 @@ bool Request::parseHeader() {
 bool Request::parseBody() {
 	int	body_beginning = -1;
 	if (_full_request == "") {
-		Logger::cerrlog(Logger::ERROR, "Request::parseBody: Empty request");
+		Logger::log(Logger::DEBUG, "Request::parseBody: Empty request");
 		return false;
 	}
 
 	body_beginning = _full_request.find("\r\n\r\n");
 	if (body_beginning == CHAR_NOT_FOUND) {
-		Logger::cerrlog(Logger::ERROR, "Request::parseBody: No body beginning found");
+		Logger::log(Logger::DEBUG, "Request::parseBody: No body beginning found");
 		return false;
 	}
 
@@ -168,11 +164,14 @@ bool Request::parseBody() {
 		return true;
 	}
 	if (_chunked_flag) {
-		const char *data = _full_request.c_str() + body_beginning + 4;  // skip \r\n\r\n (4 bytes)
-		size_t size = _full_request.length() - (body_beginning + 4);  // skip \r\n\r\n (4 bytes)
-		// std::cerr << "_chunked_flag\n";
-
-		return processTransferEncoding(data, size);
+		const char *data = _full_request.c_str() + body_beginning + 4;
+		int size_ending = STR(data).find("\r\n");
+		const char *data_end = data + size_ending + 2; // +2 for \r\n
+		if (!processTransferEncoding(data_end)) {
+			Logger::log(Logger::ERROR, "Transfer-Encoding format is incorrect");
+			return false;
+		}
+		return true;
 	}
 
 	// std::cerr << "DEBUG Request::parseBody _full_request = |" << _full_request << "|\n";
@@ -180,7 +179,7 @@ bool Request::parseBody() {
 	try {
 		_body = _full_request.substr(body_beginning + 4, _full_request.length() - (body_beginning + 4));
 	} catch (std::exception &e) {
-		std::cerr << "Error parsing body: " << e.what() << "\n";
+		Logger::log(Logger::ERROR, "Error parsing body: " + STR(e.what()));
 		return false;
 	}
 
@@ -229,8 +228,8 @@ void Request::parseTransferEncoding(const STR &header) {
 	}
 }
 
-bool Request::processTransferEncoding(const char *data, size_t size) {
-	for (size_t i = 0; i < size; i++) {
+bool Request::processTransferEncoding(const char *data) {
+	for (size_t i = 0; ; i++) {
 		char ch = data[i];
 
 		switch (_chunked_state) {
@@ -266,8 +265,11 @@ bool Request::processTransferEncoding(const char *data, size_t size) {
 				break;
 			case CHUNK_LF:
 				if (ch == '\n') {
-					_chunk_data_read = 0;
-					if (_chunk_size == 0) {
+					if (_chunk_data_read > 0) {
+						_chunk_data_read = 0;
+						_chunked_state = CHUNK_SIZE;
+					}
+					else if (_chunk_size == 0) {
 						_chunked_state = CHUNK_TRAILER;
 					}
 					else {
@@ -301,6 +303,7 @@ bool Request::processTransferEncoding(const char *data, size_t size) {
 			case TRAILER_FINAL_LF:
 				if (ch == '\n') {
 					_chunked_state = CHUNK_COMPLETE;
+					return true;
 				}
 				else {
 					_chunked_state = CHUNK_TRAILER;
@@ -386,6 +389,10 @@ void Request::clear() {
 	_content_type = "";
 	_body = "";
 	_body_size = 0;
+	_chunked_flag = false;
+	_chunked_state = CHUNK_SIZE;
+	_chunk_size = 0;
+	_chunk_data_read = 0;
 }
 
 bool Request::setRequest(STR request) {
@@ -393,7 +400,7 @@ bool Request::setRequest(STR request) {
 	_body = "";
 
 	if (!parseHeader()) {
-		Logger::cerrlog(Logger::ERROR, "Request::setRequest: Header Parsing error!");
+		Logger::log(Logger::DEBUG, "Request::setRequest: Header Parsing error!");
 		return false;
 	}
 	return true;

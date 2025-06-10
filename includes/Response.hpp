@@ -5,9 +5,9 @@
 # include "CgiHandler.hpp"
 # include "Logger.hpp"
 # include "Utils.hpp"
-
-#include <cerrno>
-#include <cstring> // For strerror
+# include <dirent.h>
+# include <cerrno>
+# include <cstring> // For strerror
 
 enum FileType {
     NotFound,
@@ -33,15 +33,20 @@ class Response {
         std::map<int, STR>          _all_status_codes;
         STR                         handleGET(STR best_path, bool isDIR);
         STR                         getMime(STR path);
-        STR                         handleDIR(STR path);
-        void                        selectIndexIndexes(VECTOR<STR> indexes, STR &best_match, float &match_quality, STR dir_path);
-        STR                         selectIndexAll(LocationConfig* location, STR dir_path);
+        STR                         GenerateListing(STR path);
+        void                        searchIndex(VECTOR<STR> indexes, STR &best_match, float &match_quality, STR dir_path);
+        STR                         buildIndex(LocationConfig* location, STR dir_path);
         FileType                    checkFile(const STR& path);
         LocationConfig              *buildDirPath(ServerConfig *matchServer, STR &full_path, bool &isDIR);
         int                         buildIndexPath(LocationConfig *matchLocation, STR &best_file_path, STR dir_path);
         STR                         matchMethod(STR path, bool isDIR, LocationConfig *matchLocation);
         STR                         checkRedirect(LocationConfig *matchLocation);
         bool                        checkBodySize(LocationConfig *matchLocation);
+        bool                        ends_with(const STR &str, const STR &suffix);
+        STR                         urlDecode(const STR& input);
+        STR                         getMimeType(const STR& path);
+        void	                    init_mimetypes(MAP<STR, STR>	&mime_types);
+        void	                    init_status_codes(MAP<int, STR>	&status_codes);
 
         // CGI 처리
         CgiHandler*                 _cgi_handler;

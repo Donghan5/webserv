@@ -22,3 +22,24 @@ void Utils::cleanUpDoublePointer(char **dptr) {
 	delete[] dptr;
 }
 
+std::vector<std::string>	Utils::split(STR string, char delim, bool use_whitespaces_delim) {
+	std::vector<std::string>	result;
+	std::string					temp_line;
+	std::istringstream	string_stream (string);
+
+	// Split by any whitespace (>> skips at the beginning and then stops at any whitespace by default)
+	if (use_whitespaces_delim) {
+        std::string token;
+
+        while (string_stream >> token) {
+            result.push_back(token);
+        }
+		return result;
+	}
+
+	while (getline(string_stream >> std::ws, temp_line, delim)) {
+		result.push_back(temp_line);
+	}
+
+	return result;
+}

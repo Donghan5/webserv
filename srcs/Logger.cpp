@@ -24,17 +24,14 @@ STR Logger::logLevelToString(LogLevel level) {
 	}
 }
 
-// Just print the log cout
 void Logger::log(LogLevel level, const STR &message) {
-
+	if (level == DEBUG) {
+		return ;
+	}
 	STR logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
 
-	std::cout << logEntry << std::endl;
-}
-
-// separate error log using cerr
-void Logger::cerrlog(LogLevel level, const STR &message) {
-	STR logEntry = "[" + Logger::getCurrentTime() + "] " + "[" + Logger::logLevelToString(level) + "] " + ": " + message;
-
-	std::cerr << logEntry << std::endl;
+	if (level == ERROR)
+		std::cerr << logEntry << std::endl;
+	else
+		std::cout << logEntry << std::endl;
 }

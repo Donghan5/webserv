@@ -3,22 +3,20 @@
 # include "HttpConfig.hpp"
 # include "RequestsManager.hpp"
 # include <iostream>
-
-//to clean
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <sys/stat.h>
-#include <cstdlib>
-#include <cstring>
-#include <fcntl.h>
-#include <map>
-#include <sys/epoll.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <unistd.h>
+# include <string>
+# include <sstream>
+# include <fstream>
+# include <vector>
+# include <sys/stat.h>
+# include <cstdlib>
+# include <cstring>
+# include <fcntl.h>
+# include <map>
+# include <sys/epoll.h>
 
 enum FdType {
     SERVER_FD,

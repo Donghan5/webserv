@@ -15,12 +15,10 @@
 #define BLUE "\033[34m"
 #define END "\033[0m"
 
-
 class Logger {
 	public:
 		enum LogLevel { INFO, WARNING, ERROR, DEBUG };
 		static void log(LogLevel level, const std::string &message);
-		static void cerrlog(LogLevel level, const std::string &message);
 
 	private:
 		static std::string getCurrentTime();

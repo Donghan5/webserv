@@ -43,14 +43,14 @@
             gap: 10px;
         }
 
-        .upload-area {
+        .upload-area, .path-area {
             display: flex;
             gap: 10px;
             align-items: center;
             margin: 15px 0;
         }
 
-        input[type="file"] {
+        input[type="file"], input[type="text"] {
             flex: 1;
             padding: 8px;
             border: 2px dashed var(--primary-color);
@@ -165,8 +165,11 @@
     </div>
 
     <div class="container">
-        <h2>📁 Uploaded Files</h2>
-        <button class="btn btn-secondary" onclick="listFiles()">Refresh List</button>
+        <h2>📁 Folder Contents</h2>
+        <div class="path-area">
+            <input type="text" id="pathInput" placeholder="Enter folder path (e.g., /uploads/subfolder)" value="/uploads/">
+            <button class="btn btn-secondary" onclick="listFiles()">Show Files</button>
+        </div>
         <div id="file-list" class="loading">Loading files...</div>
     </div>
 
@@ -185,74 +188,65 @@
         }
 
         function uploadFile() {
-			const fileInput = document.getElementById("fileInput");
-			const status = document.getElementById("upload-status");
-			const file = fileInput.files[0];
+            const fileInput = document.getElementById("fileInput");
+            const status = document.getElementById("upload-status");
+            const file = fileInput.files[0];
 
-			if (!file) {
-				status.className = 'error';
-				status.textContent = "Please select a file to upload.";
-				return;
-			}
+            if (!file) {
+                status.className = 'error';
+                status.textContent = "Please select a file to upload.";
+                return;
+            }
 
-			// Check if the selected item is a folder (directories typically have size=0 and/or no type)
-			// if (file.size === 0 && file.type === "") {
-			// 	status.className = 'error';
-			// 	status.textContent = "Folders cannot be uploaded. Please select a file.";
-			// 	fileInput.value = ''; // Clear the input to prevent repeated attempts
-			// 	return;
-			// }
+            status.textContent = "Uploading...";
+            status.className = '';
 
-			status.textContent = "Uploading...";
-			status.className = '';
+            try {
+                const reader = new FileReader();
 
-			try {
-				const reader = new FileReader();
+                reader.onerror = function() {
+                    status.className = 'error';
+                    status.textContent = "❌ Error reading file. Make sure it's not a folder.";
+                    fileInput.value = '';
+                };
 
-				reader.onerror = function() {
-					status.className = 'error';
-					status.textContent = "❌ Error reading file. Make sure it's not a folder.";
-					fileInput.value = ''; // Clear the input
-				};
+                reader.onload = function(e) {
+                    const blob = new Blob([e.target.result], { type: file.type });
+                    fetch("/uploads/" + file.name, {
+                        method: "POST",
+                        body: blob
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.text();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        status.className = 'success';
+                        status.textContent = "✅ File uploaded successfully!";
+                        fileInput.value = '';
+                        listFiles();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        status.className = 'error';
+                        status.textContent = "❌ Upload failed: " + error.message;
+                        fileInput.value = '';
+                    });
+                };
 
-				reader.onload = function(e) {
-					const blob = new Blob([e.target.result], { type: file.type });
-					fetch("/uploads/" + file.name, {
-						method: "POST",
-						body: blob
-					})
-					.then(response => {
-						if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-						return response.text();
-					})
-					.then(data => {
-						console.log('Success:', data);
-						status.className = 'success';
-						status.textContent = "✅ File uploaded successfully!";
-						fileInput.value = ''; // Clear the input
-						listFiles(); // Refresh the file list
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						status.className = 'error';
-						status.textContent = "❌ Upload failed: " + error.message;
-						fileInput.value = ''; // Clear the input on error
-					});
-				};
-
-				reader.readAsArrayBuffer(file);
-			} catch (error) {
-				console.error('Error:', error);
-				status.className = 'error';
-				status.textContent = "❌ Error processing file: " + error.message;
-				fileInput.value = ''; // Clear the input
-			}
-		}
+                reader.readAsArrayBuffer(file);
+            } catch (error) {
+                console.error('Error:', error);
+                status.className = 'error';
+                status.textContent = "❌ Error processing file: " + error.message;
+                fileInput.value = '';
+            }
+        }
 
         function deleteFile(filepath) {
             if (!confirm('Are you sure you want to delete this file?')) return;
             
-            // Use the complete filepath directly
             fetch(filepath, {
                 method: "DELETE"
             })
@@ -261,7 +255,7 @@
                 return response.text();
             })
             .then(() => {
-                listFiles(); // Refresh the list after deletion
+                listFiles();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -277,7 +271,7 @@
             const container = document.createElement('div');
 
             if (files.length === 0) {
-                container.innerHTML = '<div class="status">No files uploaded yet.</div>';
+                container.innerHTML = '<div class="status">No files or folders found.</div>';
                 return container;
             }
 
@@ -301,36 +295,66 @@
                 const dateCell = row.insertCell();
                 const actionsCell = row.insertCell();
                 
-                // Get the anchor element properties
                 const hrefValue = file.getAttribute('href');
                 const displayName = file.textContent;
                 
-                // Create the link to the file
-                nameCell.innerHTML = `<a href="${hrefValue}" target="_blank">${displayName}</a>`;
+                // Check if the item is a directory (ends with '/')
+                const isDirectory = hrefValue.endsWith('/');
                 
-                // Extract file information
-                const fileInfo = file.parentElement.textContent.trim();
-                const match = fileInfo.match(/(\d+)\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})/);
-                if (match) {
-                    sizeCell.textContent = formatFileSize(parseInt(match[1]));
-                    dateCell.textContent = match[2];
+                // Create link: directories are clickable to list contents, files open in new tab
+                if (isDirectory) {
+                    nameCell.innerHTML = `<a href="#" onclick="setPathAndList('${hrefValue}')">${displayName}</a>`;
+                    sizeCell.textContent = '-';
+                } else {
+                    nameCell.innerHTML = `<a href="${hrefValue}" target="_blank">${displayName}</a>`;
+                    // Extract file information
+                    const fileInfo = file.parentElement.textContent.trim();
+                    const match = fileInfo.match(/(\d+)\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})/);
+                    if (match) {
+                        sizeCell.textContent = formatFileSize(parseInt(match[1]));
+                        dateCell.textContent = match[2];
+                    } else {
+                        sizeCell.textContent = '-';
+                        dateCell.textContent = '-';
+                    }
                 }
                 
-                // Create delete button using the href value which contains the full path
-                actionsCell.innerHTML = `
-                    <button onclick="deleteFile('${hrefValue}')" class="btn btn-delete">Delete</button>
-                `;
+                // Add delete button for files only (not directories)
+                if (!isDirectory) {
+                    actionsCell.innerHTML = `
+                        <button onclick="deleteFile('${hrefValue}')" class="btn btn-delete">Delete</button>
+                    `;
+                }
             });
 
             container.appendChild(table);
             return container;
         }
 
+        function setPathAndList(path) {
+            const pathInput = document.getElementById("pathInput");
+            pathInput.value = path;
+            listFiles();
+        }
+
         function listFiles() {
             const fileList = document.getElementById("file-list");
+            const pathInput = document.getElementById("pathInput");
+            let path = pathInput.value.trim();
+
+            // Ensure path starts with '/' and ends with '/'
+            if (!path.startsWith('/')) path = '/' + path;
+            if (!path.endsWith('/')) path += '/';
+            
+            // Basic validation to prevent empty or invalid paths
+            if (path === '//') {
+                fileList.innerHTML = '<div class="error">Please enter a valid folder path.</div>';
+                return;
+            }
+
             fileList.textContent = 'Loading...';
 
-            fetch("/uploads/")
+            fetch(path)
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 return response.text();

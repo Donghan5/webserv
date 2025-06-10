@@ -15,21 +15,7 @@ struct LocationConfig : AConfigBase {
 	STR								_alias;
 
 	void							_self_destruct();
-
-	LocationConfig() :
-		_proxy_pass_host(""),
-		_proxy_pass_port(8080),
-        _path(""),
-		_return_code(-1),
-		_return_url(""),
-        _autoindex(false),
-		_upload_store(""),
-		_alias("")
-    {
-		_allowed_methods["GET"] = false;
-		_allowed_methods["POST"] = false;
-		_allowed_methods["DELETE"] = false;
-	}
+	LocationConfig();
 };
 
 #endif
