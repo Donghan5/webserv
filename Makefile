@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = c++
-CFLAGS = -std=c++98 -Iincludes #-Wall -Wextra -Werror
+CFLAGS = -std=c++98 -Iincludes -g3 -Wall -Wextra -Werror
 
 # Target executable name
 NAME = webserv
@@ -38,7 +38,7 @@ $(NAME): $(OBJS)
 
 # Compile object files in srcs/
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(@D) # Create the directory for the object file
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean object files

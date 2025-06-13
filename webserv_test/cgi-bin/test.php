@@ -68,12 +68,6 @@ $project_root = dirname(dirname($script_path));
         <div class="divider"></div>
         <p>Hello from PHP CGI!</p>
         <p class="timestamp">Response generated: <?php echo date('Y-m-d H:i:s'); ?></p>
-        
-        <div class="info">
-            <p><strong>Script Path:</strong> <?php echo htmlspecialchars($script_path); ?></p>
-            <p><strong>Project Root:</strong> <?php echo htmlspecialchars($project_root); ?></p>
-            <p><strong>Request Method:</strong> <?php echo htmlspecialchars($_SERVER['REQUEST_METHOD'] ?? 'Not available'); ?></p>
-        </div>
     </div>
 </body>
 </html>

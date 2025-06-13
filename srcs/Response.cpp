@@ -341,7 +341,7 @@ bool Response::processCgiOutput() {
 
         return false;
     } catch (const std::exception& e) {
-        Logger::log(Logger::ERROR, "Error in processCgiOutput: " + STR(e.what()));
+        Logger::log(Logger::DEBUG, "Error in processCgiOutput: " + STR(e.what()));
 
         _response_buffer = createErrorResponse(500, "text/html", "Internal Server Error", _config);
 

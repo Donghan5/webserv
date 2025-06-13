@@ -75,7 +75,6 @@ int RequestsManager::RegisterCgiFd(int cgi_fd, int client_fd) {
         return 0;
     }
 
-    // Return the special code for PollServer to add this fd
     return 4; // Special code meaning "add CGI fd to epoll"
 }
 
@@ -87,12 +86,136 @@ Response* RequestsManager::getCgiResponse(int client_fd) {
     return NULL;
 }
 
+int RequestsManager::ProcessBufferedData() {
+    ClientState &client_state = _client_states[_client_fd];
+    long long &body_read = client_state.body_read; // init value is -1
+    Request &request = client_state.request;
+    bool done = false;
+
+    try {
+        if (body_read == -1) {
+            size_t header_end_pos = _partial_requests[_client_fd].find("\r\n\r\n");
+            if (header_end_pos != STR::npos) { // find the header delimiter
+                Logger::log(Logger::DEBUG, "Complete headers received in buffer");
+
+                request.clear();
+                if (!request.setRequest(_partial_requests[_client_fd])) {
+                    Logger::log(Logger::DEBUG, "Failed to parse request headers");
+                    _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                    return 2; // change to write mode
+                }
+
+                if (request._body_size > 0) { // if the request has a body
+                    Logger::log(Logger::DEBUG, "Request has body of size " + Utils::intToString(request._body_size));
+                    // the remaining part of the current buffer is the body data
+                    body_read = static_cast<long long>(_partial_requests[_client_fd].size()) - (header_end_pos + 4);
+                    if (body_read < 0) body_read = 0;
+
+                    if (body_read >= (long long)request._body_size) {
+                        done = true;
+                    } else {
+                        Logger::log(Logger::DEBUG, "Body partially received with headers: " +
+                                  Utils::intToString(body_read) + "/" + Utils::intToString(request._body_size));
+                        return 1; // more body data needed - switch to read mode
+                    }
+                } else {
+                    done = true;
+                }
+            } else { // header delimiter is not found
+                return 1;
+            }
+        } else { // body_read != -1
+            if (body_read >= (long long)request._body_size) {
+                done = true;
+            } else {
+                 Logger::log(Logger::DEBUG, "Body still partially received: " +
+                              Utils::intToString(body_read) + "/" + Utils::intToString(request._body_size));
+                return 1;
+            }
+        }
+
+        if (done) {
+            Logger::log(Logger::DEBUG, "Complete request received, processing...");
+
+            request.clear();
+            if (!request.setRequest(_partial_requests[_client_fd])) {
+                Logger::log(Logger::DEBUG, "Failed to parse complete request (second pass)");
+                _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                return 2;
+            }
+
+            if (request._body_size > 0) {
+                if (!request.parseBody()) {
+                    Logger::log(Logger::DEBUG, "Failed to parse request body");
+                    _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
+                    return 2;
+                }
+            }
+
+            // --- actual request processing logic (CGI or normal response) ---
+            // (this part is almost the same as the try-catch block in the original HandleRead function)
+            try {
+                Response* res_obj = new Response(); // change variable name (response -> res_obj)
+                res_obj->setConfig(_config);
+                res_obj->setRequest(request);
+
+                STR response_text = res_obj->getResponse();
+
+                if (response_text.empty() && !res_obj->isResponseReady()) {
+                    // CGI request processing
+                    client_state.processing_cgi = true;
+                    _active_responses[_client_fd] = res_obj;
+                    int cgi_fd = res_obj->getCgiOutputFd();
+                    if (cgi_fd != -1) {
+                        Logger::log(Logger::DEBUG, "Starting CGI processing for client " + Utils::intToString(_client_fd));
+                        return RegisterCgiFd(cgi_fd, _client_fd); // return 4 (register CGI fd)
+                    } else {
+                        Logger::log(Logger::ERROR, "Invalid CGI output fd");
+                        delete res_obj;
+                        _active_responses.erase(_client_fd);
+                        client_state.processing_cgi = false;
+                        _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
+                        return 2;
+                    }
+                } else {
+                    // normal response processing
+                    _partial_responses[_client_fd] = response_text;
+                    delete res_obj;
+
+                    client_state.body_read = -1;
+                    client_state.processing_cgi = false;
+                    // request.clear(); // will be cleared when starting to process the next request
+                    _partial_requests.erase(_client_fd);
+
+                    return 2;
+                }
+            } catch (const std::exception& e) {
+                Logger::log(Logger::ERROR, "Error processing request: " + STR(e.what()));
+                _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
+                client_state.body_read = -1;
+                client_state.processing_cgi = false;
+                _partial_requests.erase(_client_fd);
+                return 2;
+            }
+        }
+        return 1;
+
+    } catch (const std::exception& e) {
+        Logger::log(Logger::DEBUG, "Exception in ProcessBufferedData: " + STR(e.what()));
+        _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
+        client_state.body_read = -1;
+        client_state.processing_cgi = false;
+        _partial_requests.erase(_client_fd);
+        return 2; // change to write mode to send the error response
+    }
+}
+
 int RequestsManager::HandleRead() {
     ClientState &client_state = _client_states[_client_fd];
     long long &body_read = client_state.body_read;
     Request &request = client_state.request;
     bool done = false;
-    
+
     if (_client_fd < 0) {
         Logger::log(Logger::DEBUG, "HandleRead: Invalid client fd");
         return 0;
@@ -101,7 +224,7 @@ int RequestsManager::HandleRead() {
     try {
         char buffer[4096];
         int nbytes = read(_client_fd, buffer, sizeof(buffer));
-        
+
         if (nbytes <= 0) {
             if (nbytes == 0) {
                 Logger::log(Logger::DEBUG, "Client disconnected (read returned 0)");
@@ -110,33 +233,33 @@ int RequestsManager::HandleRead() {
             }
             return 0;
         }
-        
+
         if (body_read != -1) {
             body_read += nbytes;
         }
-        
+
         _partial_requests[_client_fd].append(buffer, nbytes);
-        
+
         int header_end = _partial_requests[_client_fd].find("\r\n\r\n");
         if (body_read == -1 && header_end != CHAR_NOT_FOUND) {
             Logger::log(Logger::DEBUG, "Complete headers received");
-            
+
             request.clear();
             if (!request.setRequest(_partial_requests[_client_fd])) {
                 Logger::log(Logger::ERROR, "Request has invalid headers");
                 _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
                 return 2; // Switch to write mode
             }
-            
+
             // Check if body is needed
             if (request._body_size > 0) {
                 Logger::log(Logger::DEBUG, "Request has body of size " + Utils::intToString(request._body_size));
-                
+
                 // Calculate how much of the body we've already received
                 body_read = _partial_requests[_client_fd].size() - header_end - 4;
-                
+
                 if (body_read < (long long)request._body_size) {
-                    Logger::log(Logger::DEBUG, "Body partially received: " + 
+                    Logger::log(Logger::DEBUG, "Body partially received: " +
                               Utils::intToString(body_read) + "/" + Utils::intToString(request._body_size));
                     return 1; // Keep in read mode until we get the full body
                 } else {
@@ -147,34 +270,34 @@ int RequestsManager::HandleRead() {
                 done = true;
             }
         }
-        
+
         if (done || (body_read != -1 && body_read >= (long long)request._body_size)) {
             Logger::log(Logger::DEBUG, "Complete request received");
-            
+
             request.clear();
             if (!request.setRequest(_partial_requests[_client_fd])) {
                 Logger::log(Logger::DEBUG, "Failed to parse complete request");
                 _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
                 return 2;
             }
-            
+
             if (!request.parseBody()) {
                 Logger::log(Logger::DEBUG, "Failed to parse request body");
                 _partial_responses[_client_fd] = createErrorResponse(400, "text/plain", "Bad Request", NULL);
                 return 2;
             }
-            
+
             try {
                 Response* response = new Response();
                 response->setConfig(_config);
                 response->setRequest(request);
-                
+
                 STR response_text = response->getResponse();
-                
+
                 if (response_text.empty() && !response->isResponseReady()) {
                     client_state.processing_cgi = true;
                     _active_responses[_client_fd] = response;
-                    
+
                     int cgi_fd = response->getCgiOutputFd();
                     if (cgi_fd != -1) {
                         Logger::log(Logger::DEBUG, "Starting CGI processing for client " + Utils::intToString(_client_fd));
@@ -190,25 +313,25 @@ int RequestsManager::HandleRead() {
                 } else {
                     _partial_responses[_client_fd] = response_text;
                     delete response;
-                    
+
                     body_read = -1;
                     client_state.processing_cgi = false;
-                    
+
                     _partial_requests.erase(_client_fd);
-                    
+
                     return 2;
                 }
             } catch (const std::exception& e) {
                 Logger::log(Logger::ERROR, "Error processing request: " + STR(e.what()));
                 _partial_responses[_client_fd] = createErrorResponse(500, "text/plain", "Internal Server Error", NULL);
-                
+
                 body_read = -1;
                 client_state.processing_cgi = false;
-                
+
                 return 2;
             }
         }
-        
+
         return 1;
     } catch (const std::exception& e) {
         body_read = -1;

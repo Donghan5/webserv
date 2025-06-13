@@ -69,12 +69,6 @@ cat << HTML
         <div class="divider"></div>
         <p>Hello from Bash CGI!</p>
         <p class="timestamp">Response generated: ${TIMESTAMP}</p>
-        
-        <div class="info">
-            <p><strong>Script Path:</strong> ${SCRIPT_PATH}</p>
-            <p><strong>Project Root:</strong> ${PROJECT_ROOT}</p>
-            <p><strong>Request Method:</strong> ${REQUEST_METHOD}</p>
-        </div>
     </div>
 </body>
 </html>

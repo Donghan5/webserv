@@ -120,7 +120,7 @@ bool CgiHandler::closeAndExitUnusedPipes(int input_pipe0, int input_pipe1, int o
 }
 
 bool CgiHandler::startCgi() {
-	if (!setUpPipes()) { 
+	if (!setUpPipes()) {
 		return false;
 	}
 
@@ -171,8 +171,7 @@ bool CgiHandler::startCgi() {
             return 1;
         }
 
-        Logger::log(Logger::INFO, "Executing: " + it->second + " " + _scriptPath);
-
+        // Execute the script
         execve(args[0], args, envp);
 
         Logger::log(Logger::ERROR, "Child: execve failed: " + STR(strerror(errno)));
@@ -210,7 +209,7 @@ bool CgiHandler::startCgi() {
             if (close(_input_pipe[1]) == -1) {
                 Logger::log(Logger::ERROR, "Parent: Failed to close input_pipe[1] after writing: " + STR(strerror(errno)));
             }
-            _input_pipe[1] = -1; 
+            _input_pipe[1] = -1;
         }
 
         return true;
@@ -300,7 +299,7 @@ CgiStatus CgiHandler::checkCgiStatus() {
             Logger::log(Logger::WARNING, "CGI process terminated by signal: " +
                       Utils::intToString(WTERMSIG(status_code)));
             _process_running = false;
-            return CGI_CODE_500; 
+            return CGI_CODE_500;
         }
         return CGI_COMPLETED;
     }

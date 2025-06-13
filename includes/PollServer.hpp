@@ -51,7 +51,7 @@ class PollServer {
 		void	processDisconnectOrTimeoutCgis(RequestsManager &manager);
 		void	handleSingleEpollEvent(const epoll_event& current_event, RequestsManager &manager);
 		void	checkingEventError(const epoll_event& current_event, RequestsManager &manager, FdType fd_type, int fd);
-		void	handleClientEventActivity(const epoll_event& current_event, RequestsManager &manager, int fd, int status);
+		void	handleClientEventActivity(RequestsManager &manager, int fd, int status);
 		void	handleEventBasedOnFdType(const epoll_event& current_event, RequestsManager &manager, int fd, FdType fd_type);
 		void	initializeServerSockets(MAP<int, STR>& unique_servers);
 
