@@ -29,7 +29,7 @@ class PollServer {
 	private:
 		HttpConfig 					*config;
 		bool						running;
-		std::map<int, int>			_server_sockets;      // port -> socket_fd
+		std::map<int, int>			_server_sockets;
 		std::map<int, STR>			_partial_requests;
 		std::map<int, STR>			_partial_responses;
 		std::map<int, FdType>       _fd_types;           // Track fd types

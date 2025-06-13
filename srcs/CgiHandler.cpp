@@ -197,6 +197,11 @@ bool CgiHandler::startCgi() {
         _timeout = 3; // 3 seconds timeout
         _process_running = true;
 
+        if (!_body.empty() || _env.count("CONTENT_LENGTH")) {  // to check...
+            Logger::log(Logger::ERROR, "------------ CGI DATA CHECK ------------");
+            Logger::log(Logger::ERROR, "Expected body size (CONTENT_LENGTH): " + _env["CONTENT_LENGTH"] + ", Actual size in _body: " + Utils::intToString(_body.size()));
+        }
+
         if (!_body.empty()) {
             Logger::log(Logger::DEBUG, "Sending body to CGI (size: " + Utils::intToString(_body.size()) + " bytes)");
             if (!writeToCgi(_body.c_str(), _body.size())) {

@@ -143,6 +143,12 @@ int RequestsManager::HandleRead() {
                     // Full body received
                     done = true;
                 }
+            } else if (request._chunked_flag) {  // recently added
+                if (_partial_requests[_client_fd].find("\r\n0\r\n\r\n") != std::string::npos) {
+                    done = true;
+                } else {
+                    return 1;  // not received yet
+                }
             } else {
                 done = true;
             }

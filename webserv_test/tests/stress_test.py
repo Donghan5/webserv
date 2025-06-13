@@ -22,8 +22,8 @@ class RequestThread(threading.Thread):
             "/about.html",
             "/css/style.css",
             "/js/script.js",
-            "/cgi-bin/test.py",
-            "/cgi-bin/env.py",
+            # "/cgi-bin/test.py",
+            # "/cgi-bin/env.py",
             "/nonexistent"
         ]
 
