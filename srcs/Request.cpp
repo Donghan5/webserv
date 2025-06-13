@@ -160,7 +160,6 @@ bool Request::parseBody() {
 
 	if (_content_type.find("multipart/form-data") != STR::npos) {
 		_body = _full_request.substr(body_beginning + 4, _full_request.length() - (body_beginning + 4));
-		// std::cerr << "multipart/form-data\n";
 		return true;
 	}
 	if (_chunked_flag) {
@@ -174,7 +173,6 @@ bool Request::parseBody() {
 		return true;
 	}
 
-	// std::cerr << "DEBUG Request::parseBody _full_request = |" << _full_request << "|\n";
 
 	try {
 		_body = _full_request.substr(body_beginning + 4, _full_request.length() - (body_beginning + 4));
@@ -183,10 +181,6 @@ bool Request::parseBody() {
 		return false;
 	}
 
-	// std::cerr << "endeded body beginning = " << body_beginning << "\n";
-	//if _full_request.length() - (body_beginning + 4) != _body_size 		potential error
-
-	// std::cerr << "DEBUG Requet::parseBody _body = |" << _body << "|\n";
 	return true;
 }
 
@@ -237,7 +231,7 @@ bool Request::processTransferEncoding(const char *data) {
 				if (isxdigit(ch)) {
 					_chunk_buffer += ch;
 				}
-				else if (ch == ';') { // after semicolon is chunk extension
+				else if (ch == ';') {
 					if (_chunk_buffer.empty()) {
 						return false;
 					}
