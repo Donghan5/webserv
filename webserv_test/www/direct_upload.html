@@ -176,7 +176,7 @@
     <script>
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
-            const k = 1024;
+            const k = 1000;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
@@ -304,12 +304,14 @@
                 // Create link: directories are clickable to list contents, files open in new tab
                 if (isDirectory) {
                     nameCell.innerHTML = `<a href="#" onclick="setPathAndList('${hrefValue}')">${displayName}</a>`;
-                    sizeCell.textContent = '-';
-                } else {
+                    // sizeCell.textContent = '-';
+                } 
+                else {
                     nameCell.innerHTML = `<a href="${hrefValue}" target="_blank">${displayName}</a>`;
+                }
                     // Extract file information
-                    const fileInfo = file.parentElement.textContent.trim();
-                    const match = fileInfo.match(/(\d+)\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})/);
+                    const fileInfo = file.parentElement.parentElement.textContent.trim();
+                    const match = fileInfo.match(/(\d+)\s+(\d{2}-\d{2}-\d{4}\s+\d{2}:\d{2})/);
                     if (match) {
                         sizeCell.textContent = formatFileSize(parseInt(match[1]));
                         dateCell.textContent = match[2];
@@ -317,7 +319,7 @@
                         sizeCell.textContent = '-';
                         dateCell.textContent = '-';
                     }
-                }
+                // }
                 
                 // Add delete button for files only (not directories)
                 if (!isDirectory) {

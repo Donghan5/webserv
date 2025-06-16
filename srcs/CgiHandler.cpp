@@ -4,7 +4,7 @@
 
 CgiHandler::CgiHandler(const STR &scriptPath, const MAP<STR, STR> &env, const STR &body):
     _scriptPath(scriptPath), _env(env), _body(body), _cgi_pid(-1), _process_running(false),
-    _start_time(time(NULL)), _timeout(3)
+    _start_time(time(NULL)), _timeout(30)
 {
     _interpreters[".py"] = "/usr/bin/python3";
     _interpreters[".php"] = "/usr/bin/php";
@@ -120,7 +120,8 @@ bool CgiHandler::closeAndExitUnusedPipes(int input_pipe0, int input_pipe1, int o
 }
 
 bool CgiHandler::startCgi() {
-	if (!setUpPipes()) { 
+    Logger::log(Logger::INFO, "Starting CGI script: " + _scriptPath);
+	if (!setUpPipes()) {
 		return false;
 	}
 
@@ -145,7 +146,7 @@ bool CgiHandler::startCgi() {
 
     if (_cgi_pid == 0) {
         _start_time = time(NULL);
-        _timeout = 3;
+        _timeout = 30;
 
 		if (!closeAndExitUnusedPipes(input_pipe0, input_pipe1, output_pipe0, output_pipe1))
             return 1;
@@ -171,8 +172,9 @@ bool CgiHandler::startCgi() {
             return 1;
         }
 
-        Logger::log(Logger::INFO, "Executing: " + it->second + " " + _scriptPath);
-
+        // Logger::log(Logger::INFO, "Executing: " + it->second + " " + _scriptPath);
+        
+        // Execute the script
         execve(args[0], args, envp);
 
         Logger::log(Logger::ERROR, "Child: execve failed: " + STR(strerror(errno)));
@@ -194,13 +196,8 @@ bool CgiHandler::startCgi() {
         _output_pipe[1] = -1;
 
         _start_time = time(NULL);
-        _timeout = 3; // 3 seconds timeout
+        _timeout = 30; // 30 seconds timeout
         _process_running = true;
-
-        if (!_body.empty() || _env.count("CONTENT_LENGTH")) {  // to check...
-            Logger::log(Logger::ERROR, "------------ CGI DATA CHECK ------------");
-            Logger::log(Logger::ERROR, "Expected body size (CONTENT_LENGTH): " + _env["CONTENT_LENGTH"] + ", Actual size in _body: " + Utils::intToString(_body.size()));
-        }
 
         if (!_body.empty()) {
             Logger::log(Logger::DEBUG, "Sending body to CGI (size: " + Utils::intToString(_body.size()) + " bytes)");
@@ -358,6 +355,7 @@ void CgiHandler::closeCgi() {
     _cgi_pid = -1;
     if (pid > 0) {
         Logger::log(Logger::DEBUG, "Terminating CGI process " + Utils::intToString(pid));
+        Logger::log(Logger::INFO, "Closing CGI process: " + _scriptPath);
 
         kill(pid, SIGTERM);
         int status;

@@ -44,8 +44,10 @@ class RequestsManager {
         int RegisterCgiFd(int cgi_fd, int client_fd);
         void CleanupClient(int client_fd);
         int getCurrentCgiFd() const; // Get current CGI fd for the client
-        int HandleCgiOutput(int fd); // Handle CGI output
-        Response* getCgiResponse(int client_fd);
+        int HandleCgiOutput(int fd);    // Handle CGI output ready event - moved to public
+        Response* getCgiResponse(int client_fd);  // Get CGI response for client
+		int PerformSocketRead(void);
+		int ProcessBufferedData(void);
 };
 
 #endif

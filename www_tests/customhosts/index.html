@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A utility page to test server configurations for handling custom hostnames, like virtual hosts, using curl's --resolve flag.">
+    <title>Custom Host Resolution Test</title>
+    <!-- Using Tailwind CSS for modern styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- A custom SVG favicon representing a server handling multiple hosts -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%233B82F6' stroke-width='1.5'><rect x='3' y='5' width='10' height='8' rx='1'/><path d='M3,6.5H1.5a1,1,0,0,0-1,1v0a1,1,0,0,0,1,1H3'/><path d='M13,10.5h1.5a1,1,0,0,1,1,1v0a1,1,0,0,1-1,1H13'/><path d='M8,5V2.5m-3,0h6'/></svg>">
+    <style>
+        /* Small style enhancement for the copy button feedback */
+        .copy-button .copied-text { display: none; }
+        .copy-button.copied .original-text { display: none; }
+        .copy-button.copied .copied-text { display: inline; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+    <div class="container mx-auto flex min-h-screen items-center justify-center p-4">
+        <div class="w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg">
+            
+            <header class="mb-6 border-b pb-4">
+                <h1 class="text-4xl font-bold text-gray-900">Custom Host Resolution Test</h1>
+            </header>
+
+            <section class="mb-8">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-2xl font-semibold text-gray-800">Test Command</h2>
+                    <button id="copy-button" class="copy-button flex items-center gap-2 rounded-md bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-300 active:bg-gray-400">
+                        <!-- Copy Icon SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <span class="original-text">Copy</span>
+                        <span class="copied-text text-green-600">Copied!</span>
+                    </button>
+                </div>
+                <div class="rounded-lg bg-gray-900 p-4 text-white">
+                    <pre class="overflow-x-auto"><code id="code-to-copy">curl --resolve test42.fr:8080:127.0.0.1 http://test42.fr:8080/</code></pre>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- JavaScript for the "Copy to Clipboard" functionality -->
+    <script>
+        const copyButton = document.getElementById('copy-button');
+        const codeToCopy = document.getElementById('code-to-copy');
+
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeToCopy.innerText).then(() => {
+                // Provide visual feedback
+                copyButton.classList.add('copied');
+                
+                // Revert back after 2 seconds
+                setTimeout(() => {
+                    copyButton.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Could not copy command.');
+            });
+        });
+    </script>
+</body>
+</html>

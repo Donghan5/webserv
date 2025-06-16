@@ -31,15 +31,15 @@ class Response {
                                                         // the order is not in reverse as several extentions can have same name
 
         std::map<int, STR>          _all_status_codes;
-        STR                         handleGET(STR best_path, bool isDIR);
+        STR                         handleGET(STR best_path, bool isListing, bool isRedirect);
         STR                         getMime(STR path);
-        STR                         GenerateListing(STR path);
+        STR                         GenerateListing(STR path, bool isRedirect);
         void                        searchIndex(VECTOR<STR> indexes, STR &best_match, float &match_quality, STR dir_path);
         STR                         buildIndex(LocationConfig* location, STR dir_path);
         FileType                    checkFile(const STR& path);
         LocationConfig              *buildDirPath(ServerConfig *matchServer, STR &full_path, bool &isDIR);
         int                         buildIndexPath(LocationConfig *matchLocation, STR &best_file_path, STR dir_path);
-        STR                         matchMethod(STR path, bool isDIR, LocationConfig *matchLocation);
+        STR                         matchMethod(STR path, bool isDIR, LocationConfig *matchLocation, bool isRedirect);
         STR                         checkRedirect(LocationConfig *matchLocation);
         bool                        checkBodySize(LocationConfig *matchLocation);
         bool                        ends_with(const STR &str, const STR &suffix);

@@ -116,7 +116,7 @@ LocationConfig *Response::buildDirPath(ServerConfig *matchServer, STR &full_path
 		Logger::log(Logger::DEBUG, "Response::buildDirPath: absolute path is " + absolute_path);
 		full_path = relative_path;
 	} else {
-		Logger::log(Logger::INFO, "No such file or directory \"" + full_path + "\" for " + _request._file_path + "!");
+		Logger::log(Logger::ERROR, "No such file or directory " + _request._file_path + "!");
 	}
 
 	Logger::log(Logger::DEBUG, "Response::buildDirPath: dir path is " + full_path);

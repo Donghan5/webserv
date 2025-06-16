@@ -43,7 +43,7 @@ void PollServer::getUniqueServers(const HttpConfig *hcf, MAP<int, STR>& unique_s
 	if (!hcf)
 		throw std::runtime_error("Config does not exist");
 
-	// iterate through the servers and add them to the map. changed to map 
+	// iterate through the servers and add them to the map. changed to map
     for (size_t i = 0; i < hcf->_servers.size(); i++) {
 		bool is_port_found = false;
         try {
@@ -418,39 +418,32 @@ void PollServer::HandleCgiOutput(int cgi_fd, RequestsManager &manager) {
 
 // check disconnect or timeout cgis (garbage collection)
 void PollServer::processDisconnectOrTimeoutCgis(RequestsManager &manager) {
-    std::vector<int> completed_cgis;
-    for (MAP<int, int>::iterator it = _cgi_to_client.begin(); it != _cgi_to_client.end(); ++it) {
+    MAP<int, int>::iterator it = _cgi_to_client.begin();
+    while (it != _cgi_to_client.end()) {
         int cgi_fd = it->first;
         int client_fd = it->second;
 
-        if (fcntl(client_fd, F_GETFD) == -1) {
-            completed_cgis.push_back(cgi_fd);
-            continue;
-        }
+        if (fcntl(client_fd, F_GETFD) == -1 || fcntl(cgi_fd, F_GETFD) == -1) {
+            Logger::log(Logger::DEBUG, "Clear CGI_FD: " + Utils::intToString(cgi_fd) + ", Client_FD: " + Utils::intToString(client_fd));
 
-        if (fcntl(cgi_fd, F_GETFD) == -1) {
-            completed_cgis.push_back(cgi_fd);
-            continue;
-        }
+            if (fcntl(cgi_fd, F_GETFD) != -1) {
+                RemoveFd(cgi_fd);
+                close(cgi_fd);
+            }
 
-        try {
-            manager.setClientFd(client_fd);
-            HandleCgiOutput(cgi_fd, manager);
-        } catch (const std::exception& e) {
-            Logger::log(Logger::DEBUG, "Error checking CGI: " + STR(e.what()));
-            completed_cgis.push_back(cgi_fd);
-        }
-    }
+            MAP<int, int>::iterator to_erase = it;
+            ++it;
+            _cgi_to_client.erase(to_erase);
+        } else {
+            MAP<int, int>::iterator current_cgi_iterator = it;
+            ++it;
 
-    for (size_t i = 0; i < completed_cgis.size(); ++i) {
-        int cgi_fd = completed_cgis[i];
-        MAP<int, int>::iterator it = _cgi_to_client.find(cgi_fd);
-        if (it != _cgi_to_client.end()) {
-            int client_fd = it->second;
-            _cgi_to_client.erase(it);
-
-            if (fcntl(client_fd, F_GETFD) != -1) {
-                ModifyFd(client_fd, EPOLLOUT);
+            try {
+                manager.setClientFd(current_cgi_iterator->second);
+                HandleCgiOutput(current_cgi_iterator->first, manager);
+            } catch (const std::exception& e) {
+                Logger::log(Logger::ERROR, "CGI Exception: " + STR(e.what()));
+                CloseClient(current_cgi_iterator->second);
             }
         }
     }
@@ -499,7 +492,7 @@ void PollServer::checkingEventError(const epoll_event& current_event, RequestsMa
 	}
 }
  // --- handle client event activity ---
-void PollServer::handleClientEventActivity(const epoll_event& current_event, RequestsManager &manager, int fd, int status) {
+void PollServer::handleClientEventActivity(RequestsManager &manager, int fd, int status) {
 	switch (status) {
 		case 0: // Remove client
 			CloseClient(fd);
@@ -526,13 +519,13 @@ void PollServer::handleClientEventActivity(const epoll_event& current_event, Req
 // --- handle event based on fd type ---
 void PollServer::handleEventBasedOnFdType(const epoll_event& current_event, RequestsManager &manager, int fd, FdType fd_type) {
 	try {
-		if (fd_type == SERVER_FD && (current_event.events & EPOLLIN)) {
+		if (fd_type == SERVER_FD && (current_event.events & (EPOLLIN | EPOLLOUT))) {
 			AcceptClient(fd);
 		} else if (fd_type == CLIENT_FD) {
 			manager.setClientFd(fd);
 			int status = manager.HandleClient(current_event.events);
-			handleClientEventActivity(current_event, manager, fd, status);
-		} else if (fd_type == CGI_FD && (current_event.events & EPOLLIN)) {
+			handleClientEventActivity(manager, fd, status);
+		} else if (fd_type == CGI_FD && (current_event.events & (EPOLLIN | EPOLLOUT))) {
 			HandleCgiOutput(fd, manager);
 		}
 	} catch (const std::exception& e) {
@@ -592,8 +585,7 @@ void PollServer::handleSingleEpollEvent(const epoll_event& current_event, Reques
 }
 
 bool PollServer::WaitAndService(RequestsManager &manager) {
-    int num_events = epoll_wait(_epoll_fd, &_events[0], MAX_EVENTS, 1000);
-
+    int num_events = epoll_wait(_epoll_fd, &_events[0], MAX_EVENTS, 3000);
 	processDisconnectOrTimeoutCgis(manager);
 
     if (num_events < 0) {

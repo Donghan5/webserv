@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = c++
-CFLAGS = -std=c++98 -Iincludes #-Wall -Wextra -Werror
+CFLAGS = -std=c++98 -Iincludes -Wall -Wextra -Werror
 
 # Target executable name
 NAME = webserv
@@ -22,10 +22,7 @@ SRCS =  $(SRC_DIR)/AConfigBase.cpp $(SRC_DIR)/HttpConfig.cpp $(SRC_DIR)/Location
 		$(SRC_DIR)/Response/Utils.cpp
 
 # Object files (convert .cpp to .o)
-# OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
-
-# Project root source file (serv2.cpp)
 
 # Default target
 all: $(NAME)
@@ -38,22 +35,22 @@ $(NAME): $(OBJS)
 
 # Compile object files in srcs/
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(@D) # Create the directory for the object file
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean object files
 clean:
 	rm -rf $(OBJ_DIR)
-	@echo "\033[0;31mRemove object files\033[0m"
+	@echo "\033[0;31mObject files removed\033[0m"
 
 # Clean object files and executable
 fclean: clean
 	rm -f $(NAME)
-	@echo "\033[0;31mRemove executable file\033[0m"
+	@echo "\033[0;31mExecutable files removed\033[0m"
 
 # Rebuild the project
 re: fclean all
-	@echo "\033[0;31mRebuild project\033[0m"
+	@echo "\033[0;31mProject rebuilded\033[0m"
 
 # Phony targets
 .PHONY: all clean fclean re

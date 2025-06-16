@@ -582,10 +582,12 @@
                 </div>
                 <p class="feature-description">Test the server's error handling capabilities with various HTTP status codes and custom error pages.</p>
                 <div class="feature-links">
-                    <a href="/nonexistent" class="feature-link">404 Page Not Found</a>
+                    <a href="/redirect_folder" class="feature-link">301 Redirect (Not an error)</a>
                     <a href="/forbidden-directory/" class="feature-link">403 Forbidden</a>
-                    <a href="/cgi-bin/error.py" class="feature-link">502 CGI Error</a>
-                    <a href="/cgi-bin/loop.py" class="feature-link">504 CGI Error (3 sec timeout)</a>
+                    <a href="/nonexistent" class="feature-link">404 Page Not Found</a>
+                    <a href="/method_not_allowed" class="feature-link">405 Method Not Allowed</a>
+                    <a href="/cgi-bin/error.py" class="feature-link">502 Bad Gateway</a>
+                    <a href="/cgi-bin/loop.py" class="feature-link">504 Gateway Timeout (30 sec timeout)</a>
                 </div>
             </div>
         </div>

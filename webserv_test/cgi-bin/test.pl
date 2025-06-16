@@ -74,12 +74,6 @@ print <<HTML;
         <div class="divider"></div>
         <p>Hello from Perl CGI!</p>
         <p class="timestamp">Response generated: $timestamp</p>
-        
-        <div class="info">
-            <p><strong>Script Path:</strong> $script_path</p>
-            <p><strong>Project Root:</strong> $project_root</p>
-            <p><strong>Request Method:</strong> $request_method</p>
-        </div>
     </div>
 </body>
 </html>

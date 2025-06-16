@@ -107,9 +107,11 @@ STR	Response::checkRedirect(LocationConfig *matchLocation) {
 			 tempServer = dynamic_cast<ServerConfig*>(back_ref);
 
 			if (tempServer->_return_url != "" && tempServer->_return_code == -1) {
+				Logger::log(Logger::INFO, "Redirect to " + tempServer->_return_url);
 				return createResponse(301, "text/plain", "Redirect", "Location: " + tempServer->_return_url);
 			}
 			if (tempServer->_return_url != "") {
+				Logger::log(Logger::INFO, "Redirect to " + tempServer->_return_url);
 				return createResponse(tempServer->_return_code, "text/plain", "Redirect", "Location: " + tempServer->_return_url);
 			}
 			break;
@@ -117,9 +119,11 @@ STR	Response::checkRedirect(LocationConfig *matchLocation) {
 			 tempLocation = dynamic_cast<LocationConfig*>(back_ref);
 
 			if (tempLocation->_return_url != "" && tempLocation->_return_code == -1) {
+				Logger::log(Logger::INFO, "Redirect to " + tempLocation->_return_url);
 				return createResponse(301, "text/plain", "Redirect", "Location: " + tempLocation->_return_url);
 			}
 			if (tempLocation->_return_url != "") {
+				Logger::log(Logger::INFO, "Redirect to " + tempLocation->_return_url);
 				return createResponse(tempLocation->_return_code, "text/plain", "Redirect", "Location: " + tempLocation->_return_url);
 			}
 			break;
@@ -197,6 +201,9 @@ STR Response::getResponse() {
 		isDIR = true;
 		_request._file_path = _request._file_path.substr(0, _request._file_path.size() - 1);
 		_request._file_name += '\0';
+	} else if (_request._file_path.size() == 1 && _request._file_path.at(0) == '/') {
+		Logger::log(Logger::DEBUG, "Response::getResponse: path is a root directory");
+		isDIR = true;
 	}
 
 	matchLocation = buildDirPath(matchServer, dir_path, isDIR);
@@ -212,7 +219,7 @@ STR Response::getResponse() {
 		return temp_str;
 
 	//if it's a script file - execute it
-	if (ends_with(dir_path, ".py") || ends_with(dir_path, ".php") || ends_with(dir_path, ".pl") || ends_with(dir_path, ".sh")) {
+	if ((ends_with(dir_path, ".py") || ends_with(dir_path, ".php") || ends_with(dir_path, ".pl") || ends_with(dir_path, ".sh")) && !isDIR) {
 		MAP<STR, STR> env;
 
 		env["REQUEST_METHOD"] = _request._method;
@@ -243,9 +250,14 @@ STR Response::getResponse() {
         } else {
             delete _cgi_handler;
             _cgi_handler = NULL;
+			Logger::log(Logger::ERROR, "Failed to start CGI process " + dir_path);
             return createErrorResponse(500, "text/plain", "Failed to start CGI process", matchServer);
         }
+	} else if (ends_with(dir_path, ".py") || ends_with(dir_path, ".php") || ends_with(dir_path, ".pl") || ends_with(dir_path, ".sh")) {
+		//if file path has trailing slash - it's incorrect path
+		return createErrorResponse(404, "text/plain", "Not Found", matchServer);
 	}
+
 	if (_request._method == "POST") {
 		try {
 			if (matchLocation->_upload_store != "") {
@@ -264,18 +276,22 @@ STR Response::getResponse() {
 	file_path = dir_path;
 
 	//serve file if path is a file
-	if (checkFile(file_path) == NormalFile) {
-		return (matchMethod(file_path, false, matchLocation));
+	if (checkFile(file_path) == NormalFile && !isDIR) {
+		return (matchMethod(file_path, false, matchLocation, false));
+	} else if (checkFile(file_path) == NormalFile) {
+		//if file path has trailing slash - it's incorrect path
+		Logger::log(Logger::WARNING, "File not found: " + dir_path);
+		return createErrorResponse(404, "text/plain", "Not Found", matchServer);
 	}
 	//--server file
 
 	//if it's not a directory return error
 	if (checkFile(dir_path) != Directory && !isDIR) {
-		Logger::log(Logger::INFO, "File not found: " + dir_path);
+		Logger::log(Logger::WARNING, "File not found: " + dir_path);
 		return createErrorResponse(404, "text/plain", "Not Found", matchServer);
 	}
 	else if (checkFile(dir_path) != Directory && isDIR) {
-		Logger::log(Logger::INFO, "File is not a directory: " + dir_path);
+		Logger::log(Logger::WARNING, "File is not a directory: " + dir_path);
 		return createErrorResponse(403, "text/plain", "Forbidden", matchLocation);
 	}
 	//--check dir
@@ -285,15 +301,18 @@ STR Response::getResponse() {
 
 	//index file exists - serve it
 	if (checkFile(file_path) == NormalFile) {
-		return (matchMethod(file_path, false, matchLocation));
+		return (matchMethod(file_path, false, matchLocation, false));
 	}
 
 	//index file doesn't exist - create directory if autoindex is on
-	if (matchLocation->_autoindex || isDIR) {
-		//return directory listing		
-		return matchMethod(dir_path, true, matchLocation);
+	if (matchLocation->_autoindex) {
+		//return directory listing
+		if (!isDIR)
+			return matchMethod(dir_path, true, matchLocation, true);
+		return matchMethod(dir_path, true, matchLocation, false);
 	} else {
 		//autoindex is off
+		Logger::log(Logger::ERROR, "Directory listing is not allowed: " + dir_path);
 		return createErrorResponse(403, "text/plain", "Forbidden", matchLocation);
 	}
 
@@ -328,7 +347,7 @@ bool Response::processCgiOutput() {
 			_state = COMPLETE;
 			return true;
 		} else if (status == CGI_TIMED_OUT) {
-			Logger::log(Logger::ERROR, "CGI process has timed out");
+			Logger::log(Logger::WARNING, "CGI process has timed out");
 			_response_buffer = createErrorResponse(504, "text/html", "Gateway Timeout", _config);
 			_state = COMPLETE;
 			return true;
@@ -341,8 +360,9 @@ bool Response::processCgiOutput() {
 
         return false;
     } catch (const std::exception& e) {
-        Logger::log(Logger::ERROR, "Error in processCgiOutput: " + STR(e.what()));
+        Logger::log(Logger::DEBUG, "Error in processCgiOutput: " + STR(e.what()));
 
+		Logger::log(Logger::ERROR, "Failed to process CGI output: " + STR(e.what()));
         _response_buffer = createErrorResponse(500, "text/html", "Internal Server Error", _config);
 
         _state = COMPLETE;
@@ -459,6 +479,7 @@ STR Response::getFinalResponse() {
 
         _response_buffer.clear();
         _state = READY;
+		Logger::log(Logger::ERROR, "Failed to generate final response: " + STR(e.what()));
         return createErrorResponse(500, "text/plain", "Internal Server Error", _config);
     }
 }
